@@ -1,5 +1,5 @@
 /**
-<archivo>
+vectorizador.cpp
 
 Copyright 2013 Debora Elisa Martin <debbie1new.world@gmail.com>
                Gaston Alberto Martinez <Gaston.martinez.90@gmail.com>
@@ -30,6 +30,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses>
 #include <algorithm>    // std::sort
 
 #include "vectorizador.h"
+#include "Porter.c"
+#include "Porter.h"
 
 using std::string;
 using std::vector;
@@ -92,6 +94,26 @@ void contar (string archivo,map<string,vector<int> >& palabras_archivos,int i)
             continue;
         }
         palabras[res] = palabras[res] + 1;
+     }
+
+     map<string,int> palabras_reducidas = map<string,int>();
+
+     for (map<string,int>::iterator it=palabras.begin();it!=palabras.end();++it)
+     {
+        char* palabra = (char*) it->first.c_str();
+        stemmer_t* z = create_stemmer();
+        stemword(z,palabra,it->first.size());
+
+        string res = string(palabra);
+
+        int cant = palabras_reducidas.count(res);
+
+        if (cant == 0)
+        {
+            palabras_reducidas[res] = it->second;
+            continue;
+        }
+        palabras[res] = palabras[res] + it->second;
 
         cant = palabras_archivos.count(res);
         if (cant == 0)
@@ -107,11 +129,13 @@ void contar (string archivo,map<string,vector<int> >& palabras_archivos,int i)
             palabras_archivos[res][0] = palabras_archivos[res][0] + 1;
             palabras_archivos[res][1] = i;
         }
+
      }
 
      ofstream out;
      out.open((archivo+".res").c_str());
-     for (map<string,int>::iterator it=palabras.begin();it!=palabras.end();++it)
+     for (map<string,int>::iterator it=palabras_reducidas.begin();
+                                    it!=palabras_reducidas.end();++it)
      {
         out << it->first << "=" << it->second << endl;
      }
@@ -130,7 +154,7 @@ void generar_bases(vector<string>& archivos)
      out.open("./Total.res");
      for (map<string,vector<int> >::iterator it=palabras_archivos.begin();it!=palabras_archivos.end();++it)
      {
-        if (it->second[0] < 0.1* archivos.size()) continue;
+        if (it->second[0] == 1) continue;
         out << it->first << "=" << it->second[0] << endl;
      }
      out.close();
