@@ -30,7 +30,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses>
 #include <algorithm>    // std::sort
 
 #include "vectorizador.h"
-#include "Porter.c"
 #include "Porter.h"
 
 using std::string;
