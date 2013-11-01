@@ -17,3 +17,4 @@ Susanoo: Susanoo.cpp $(OBJECTS)
 	
 clean:
 	rm *.o *.save *~ Susanoo
+	rm -r temp
