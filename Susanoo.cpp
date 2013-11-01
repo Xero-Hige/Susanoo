@@ -45,6 +45,12 @@ void print_help()
     );
 }
 
+void indexar(char* optarg)
+{
+	string directorio = string(optarg);
+    vectorizar(directorio);
+}
+
 int main (int argc, char **argv)
 {
     int c;
@@ -79,9 +85,8 @@ int main (int argc, char **argv)
             break;
 
         case 'd':
-            printf ("option %c with value '%s'\n",c,optarg);
-            vectorizar(optarg);
-            break;
+        	indexar(optarg);
+        	break;
 
         case 'g':
             printf ("option %c\n",c);
