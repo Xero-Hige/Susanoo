@@ -256,7 +256,7 @@ void generar_vectores(const vector<string>& archivos,
  * 	Genera los archivos de vectores a utilizar
  */
 
-void vectorizar(const string& directorio) {
+vector<string> vectorizar(const string& directorio) {
 	vector<string> archivos = vector<string>();
 
 	obtener_archivos(directorio, archivos);
@@ -267,4 +267,6 @@ void vectorizar(const string& directorio) {
 
 	generar_carpeta(CARPETA_VECTORES);
 	generar_vectores(archivos,palabras_archivos);
+
+	return archivos;
 }

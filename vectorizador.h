@@ -22,10 +22,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses>
 #ifndef VECTORIZADOR_H
 #define VECTORIZADOR_H
 #include <string>
+#include <vector>
 
 #define CARPETA_VECTORES "./temp_vects"
 #define EXTENSION_VECTORES  ".vec"
 
-void vectorizar (const std::string& directorio);
+std::vector<std::string> vectorizar (const std::string& directorio);
 
 #endif

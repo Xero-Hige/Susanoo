@@ -27,6 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses>
 
 using std::cout;
 using std::string;
+using std::vector;
 
 void print_help()
 {
@@ -45,10 +46,17 @@ void print_help()
     );
 }
 
+void clusterizar (int n_clusters,const vector<string>& archivos)
+{
+	//Clusterizador c = Clusterizador(n_clusters,CARPETA_VECTORES,archivos);
+	//c.clusterizar();
+}
+
 void indexar(char* optarg)
 {
 	string directorio = string(optarg);
-    vectorizar(directorio);
+	vector<string> archivos = vectorizar(directorio);
+    clusterizar(4,archivos);
 }
 
 int main (int argc, char **argv)
