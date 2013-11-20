@@ -19,21 +19,22 @@
  along with this program.  If not, see <http://www.gnu.org/licenses>
  */
 
-#include <sys/types.h>
-#include <dirent.h>
-#include <string.h>
-
-#include <map>          // std::map
-#include <vector>       // std::vector
-#include <string>       // std::string
-#include <iostream>     // std::cout|cerr|endl
-#include <fstream>      // std::ifstream|ofstream
-
-#include <algorithm>    // std::sort
-
 #include "vectorizador.h"
-#include "vector_modelo.h"
+
+#include <stddef.h>
+#include <algorithm>    // std::sort
+#include <cctype>
+#include <cstdlib>
+#include <iostream>     // std::cout|cerr|endl
+#include <iterator>
+//#include <map>          // std::map
+#include <utility>
+
 #include "Porter.h"
+
+#include <dirent.h>
+
+//#include "vector_modelo.h"
 
 using std::string;
 using std::vector;
@@ -62,14 +63,8 @@ bool es_caracter(char caracter) {
 			or ('a' <= caracter and caracter <= 'z'));
 }
 
-void imprimir_archivos(vector<string>& archivos) {
-	for (unsigned int i = 0; i < archivos.size(); i++) {
-		cout << archivos[i] << endl;
-	}
-}
-
-void contar(const string& directorio, const string& archivo,
-		map<string, vector<int> >& palabras_archivos, int numero_archivo) {
+void Vectorizador::contar(const string& directorio, const string& archivo,
+		int numero_archivo) {
 	ifstream arch;
 
 	string path_archivo = directorio + "/";
@@ -89,7 +84,7 @@ void contar(const string& directorio, const string& archivo,
 		if (res.size() < 3)
 			continue; //funcion es palabra valida
 		//que valida eso y saca palabras
-		//chotas tipo if in on out at etc.
+		//cortas tipo if in on out at etc.
 
 		a_minuscula(res);
 
@@ -100,8 +95,6 @@ void contar(const string& directorio, const string& archivo,
 		}
 		palabras[res] = palabras[res] + 1;
 	}
-
-	map<string, int> palabras_reducidas = map<string, int>();
 
 	for (map<string, int>::iterator it = palabras.begin(); it != palabras.end();
 			++it) {
@@ -145,12 +138,11 @@ void contar(const string& directorio, const string& archivo,
 	out.close();
 }
 
-map<string, vector<int> > generar_bases(const string& directorio,
+map<string, vector<int> > Vectorizador::generar_bases(const string& directorio,
 		const vector<string>& archivos) {
-	map<string, vector<int> > palabras_archivos = map<string, vector<int> >();
 
 	for (unsigned int i = 0; i < archivos.size(); i++) {
-		contar(directorio, archivos[i], palabras_archivos, i);
+		contar(directorio, archivos[i], i);
 	}
 
 	ofstream out;
@@ -170,7 +162,8 @@ map<string, vector<int> > generar_bases(const string& directorio,
 	return palabras_archivos;
 }
 
-void obtener_archivos(string directorio, vector<string>& archivos) {
+void Vectorizador::obtener_archivos(string directorio,
+		vector<string>& archivos) {
 	DIR *dp;
 	struct dirent *dirp;
 
@@ -190,16 +183,15 @@ void obtener_archivos(string directorio, vector<string>& archivos) {
  * Genera una carpeta en el sistema para agrupar
  * diferentes archivos intermedios
  */
-void generar_carpeta(const string& path_carpeta) {
+void Vectorizador::generar_carpeta(const string& path_carpeta) {
 	string comando_carpeta_temporal = "mkdir ";
 	comando_carpeta_temporal += path_carpeta;
 	system(comando_carpeta_temporal.c_str());
 }
 
-void generar_vector(const string& archivo, Vector_Modelo modelo)
-{
+void Vectorizador::generar_vector(const string& archivo, Vector_Modelo modelo) {
 	string path_base = CARPETA_TEMPORAL;
-	path_base += "/"+archivo + EXTENSION_BASES;
+	path_base += "/" + archivo + EXTENSION_BASES;
 
 	ifstream arch;
 	arch.open(path_base.c_str());
@@ -207,17 +199,17 @@ void generar_vector(const string& archivo, Vector_Modelo modelo)
 	char buffer[BUFFSIZE];
 
 	while (arch.good()) {
-		arch.getline(buffer,BUFFSIZE-1);
+		arch.getline(buffer, BUFFSIZE - 1);
 		string datos = string(buffer);
 
 		size_t separador = datos.find("=");
-		string clave = datos.substr(0,separador);
-		string valor = datos.substr(separador+1);
-		modelo.set_coordenada(clave,atoi(valor.c_str()));
+		string clave = datos.substr(0, separador);
+		string valor = datos.substr(separador + 1);
+		modelo.set_coordenada(clave, atoi(valor.c_str()));
 	}
 
 	string path_vector = CARPETA_VECTORES;
-	path_vector += "/"+ archivo + EXTENSION_VECTORES;
+	path_vector += "/" + archivo + EXTENSION_VECTORES;
 
 	ofstream vect;
 	vect.open(path_vector.c_str());
@@ -228,16 +220,16 @@ void generar_vector(const string& archivo, Vector_Modelo modelo)
 /**
  * Genera los archivos de vectores que se van a utilizar
  */
-void generar_vectores(const vector<string>& archivos,
+void Vectorizador::generar_vectores(const vector<string>& archivos,
 		map<string, vector<int> > palabras_archivos) {
 
 	vector<string> coordenadas;
 	vector<int> valores;
 
 	for (map<string, vector<int> >::iterator it = palabras_archivos.begin();
-			it != palabras_archivos.end(); ++it)
-	{
-		if (it->second[0] < 2) continue;
+			it != palabras_archivos.end(); ++it) {
+		if (it->second[0] < 2)
+			continue;
 		coordenadas.push_back(it->first);
 		//TODO: el map esta mal formado y hay que sacar de esta manera el
 		//valor
@@ -256,17 +248,22 @@ void generar_vectores(const vector<string>& archivos,
  * 	Genera los archivos de vectores a utilizar
  */
 
-vector<string> vectorizar(const string& directorio) {
-	vector<string> archivos = vector<string>();
+vector<string> Vectorizador::vectorizar(const string& directorio) {
+	vector<string>();
 
 	obtener_archivos(directorio, archivos);
 	sort(archivos.begin(), archivos.end());
 
 	generar_carpeta(CARPETA_TEMPORAL);//TODO: eliminar los datos innecesarios del vector
-	map<string, vector<int> > palabras_archivos = generar_bases(directorio, archivos);
+	map<string, vector<int> > palabras_archivos = generar_bases(directorio,
+			archivos);
 
 	generar_carpeta(CARPETA_VECTORES);
-	generar_vectores(archivos,palabras_archivos);
+	generar_vectores(archivos, palabras_archivos);
 
 	return archivos;
+}
+
+Vectorizador::Vectorizador() {
+	archivos = vector<string>();
 }
