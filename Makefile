@@ -22,8 +22,7 @@ Susanoo: Susanoo.cpp $(OBJECTS)
 	$(CC) $(CPPFLAGS) $(OBJECTS) Susanoo.cpp -o Susanoo
 
 clean:
-	rm *.o *.save *~ Susanoo
-	rm -r temp
+	rm *.o *.save *~ Susanoo -r temp temp_vects
 
 run: Susanoo
 	./Susanoo -d ./Pruebas

@@ -26,7 +26,7 @@
 #include <algorithm>    // std::sort
 #include <cctype>
 #include <cstdlib>
-#include <iostream>     // std::cout|cerr|endl
+//#include <iostream>     // std::cout|cerr|endl
 #include <iterator>
 #include <utility>
 
@@ -152,8 +152,13 @@ void Vectorizador::contar(const string& directorio, const string& archivo,
 void Vectorizador::generar_bases(const string& directorio,
 		const vector<string>& archivos) {
 
+	double completado = 0;
+	double porcentaje_por_archivo = 100.0/archivos.size();
+	printf ("Iniciando generacion de bases\n");
 	for (unsigned int i = 0; i < archivos.size(); i++) {
 		contar(directorio, archivos[i], i);
+		completado += porcentaje_por_archivo;
+		printf("%3.2f%% - Generado:%s \n",completado,archivos[i].c_str());
 	}
 
 	ofstream out;
@@ -267,9 +272,9 @@ vector<string> Vectorizador::vectorizar(const string& directorio) {
 	generar_carpeta(CARPETA_TEMPORAL);//TODO: eliminar los datos innecesarios del vector
 	generar_bases(directorio, archivos);
 
-	/*generar_carpeta(CARPETA_VECTORES);
-	 generar_vectores(archivos, palabras_archivos);
-	 */
+	generar_carpeta(CARPETA_VECTORES);
+	generar_vectores(archivos, palabras_archivos);
+
 	return archivos;
 }
 
