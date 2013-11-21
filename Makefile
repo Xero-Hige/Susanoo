@@ -25,5 +25,5 @@ clean:
 	rm *.o *.save *~ Susanoo
 	rm -r temp
 
-run:
-	./Susanoo -d ./ArchivosPrueba
+run: Susanoo
+	./Susanoo -d ./Pruebas

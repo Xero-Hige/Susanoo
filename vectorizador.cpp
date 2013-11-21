@@ -21,18 +21,16 @@
 
 #include "vectorizador.h"
 
+#include <dirent.h>
 #include <stddef.h>
 #include <algorithm>    // std::sort
 #include <cctype>
 #include <cstdlib>
 #include <iostream>     // std::cout|cerr|endl
 #include <iterator>
-//#include <map>          // std::map
 #include <utility>
 
 #include "Porter.h"
-
-#include <dirent.h>
 
 //#include "vector_modelo.h"
 
@@ -63,29 +61,20 @@ bool es_caracter(char caracter) {
 			or ('a' <= caracter and caracter <= 'z'));
 }
 
-void Vectorizador::contar(const string& directorio, const string& archivo,
-		int numero_archivo) {
-	ifstream arch;
-
-	string path_archivo = directorio + "/";
-	path_archivo += archivo;
-
-	arch.open(path_archivo.c_str());
-	map<string, int> palabras = map<string, int>();
+void Vectorizador::contar_palabras(ifstream& arch, map<string, int>& palabras) {
 	while (arch.good()) {
+
 		char c = arch.get();
 		string res = string("");
 
-		while (arch.good() and es_caracter(c)) {
+		while (arch.good() && es_caracter(c)) {
 			res += c;
 			c = arch.get();
 		}
-
 		if (res.size() < 3)
 			continue; //funcion es palabra valida
 		//que valida eso y saca palabras
 		//cortas tipo if in on out at etc.
-
 		a_minuscula(res);
 
 		int cant = palabras.count(res);
@@ -95,9 +84,25 @@ void Vectorizador::contar(const string& directorio, const string& archivo,
 		}
 		palabras[res] = palabras[res] + 1;
 	}
+}
+
+void Vectorizador::contar(const string& directorio, const string& archivo,
+		int numero_archivo) {
+	ifstream arch;
+
+	string path_archivo = directorio + "/";
+	path_archivo += archivo;
+
+	arch.open(path_archivo.c_str());
+	map<string, int> palabras = map<string, int>();
+
+	contar_palabras(arch, palabras);
+
+	std::map<std::string, int> palabras_reducidas;
 
 	for (map<string, int>::iterator it = palabras.begin(); it != palabras.end();
 			++it) {
+
 		char* palabra = (char*) it->first.c_str();
 		stemmer_t* z = create_stemmer();
 		stemword(z, palabra, it->first.size());
@@ -105,23 +110,29 @@ void Vectorizador::contar(const string& directorio, const string& archivo,
 		string res = string(palabra);
 
 		int cant = palabras_reducidas.count(res);
-		//TODO VER
+		//FIXME
 		if (cant == 0) {
-			palabras_reducidas[res] = it->second;
-			continue;
+			palabras_reducidas[res]  = it->second;
+		} else {
+			palabras_reducidas[res] += it->second;
 		}
-		palabras[res] = palabras[res] + it->second;
+	}
 
-		cant = palabras_archivos.count(res);
+	for (map<string, int>::iterator it = palabras_reducidas.begin();
+			it != palabras_reducidas.end(); ++it) {
+		string res = it->first;
+
+		int cant = palabras_archivos.count(res);
+
 		if (cant == 0) {
 			palabras_archivos[res] = vector<int>();
 			palabras_archivos[res].push_back(1);
 			palabras_archivos[res].push_back(numero_archivo);
 			continue;
 		} else {
-			if (palabras_archivos[res][1] >= numero_archivo)
+			if (palabras_archivos[res][1] == numero_archivo)
 				continue;
-			palabras_archivos[res][0] = palabras_archivos[res][0] + 1;
+			palabras_archivos[res][0]++;
 			palabras_archivos[res][1] = numero_archivo;
 		}
 
@@ -138,7 +149,7 @@ void Vectorizador::contar(const string& directorio, const string& archivo,
 	out.close();
 }
 
-map<string, vector<int> > Vectorizador::generar_bases(const string& directorio,
+void Vectorizador::generar_bases(const string& directorio,
 		const vector<string>& archivos) {
 
 	for (unsigned int i = 0; i < archivos.size(); i++) {
@@ -154,12 +165,11 @@ map<string, vector<int> > Vectorizador::generar_bases(const string& directorio,
 
 	for (map<string, vector<int> >::iterator it = palabras_archivos.begin();
 			it != palabras_archivos.end(); ++it) {
-		if (it->second[0] == 1)
+		if (it->second[0] <2 )
 			continue;
 		out << it->first << "=" << it->second[0] << endl;
 	}
 	out.close();
-	return palabras_archivos;
 }
 
 void Vectorizador::obtener_archivos(string directorio,
@@ -255,12 +265,11 @@ vector<string> Vectorizador::vectorizar(const string& directorio) {
 	sort(archivos.begin(), archivos.end());
 
 	generar_carpeta(CARPETA_TEMPORAL);//TODO: eliminar los datos innecesarios del vector
-	map<string, vector<int> > palabras_archivos = generar_bases(directorio,
-			archivos);
+	generar_bases(directorio, archivos);
 
-	generar_carpeta(CARPETA_VECTORES);
-	generar_vectores(archivos, palabras_archivos);
-
+	/*generar_carpeta(CARPETA_VECTORES);
+	 generar_vectores(archivos, palabras_archivos);
+	 */
 	return archivos;
 }
 
