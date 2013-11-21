@@ -25,8 +25,8 @@
 #include <stddef.h>
 #include <algorithm>    // std::sort
 #include <cctype>
+#include <cstdio>
 #include <cstdlib>
-//#include <iostream>     // std::cout|cerr|endl
 #include <iterator>
 #include <utility>
 
@@ -103,16 +103,27 @@ void Vectorizador::contar(const string& directorio, const string& archivo,
 	for (map<string, int>::iterator it = palabras.begin(); it != palabras.end();
 			++it) {
 
-		char* palabra = (char*) it->first.c_str();
-		stemmer_t* z = create_stemmer();
-		stemword(z, palabra, it->first.size());
+		string res;
 
-		string res = string(palabra);
+		if (reduccion_palabras.count(it->first) == 0) {
+			char* palabra = (char*) it->first.c_str();
+			stemmer_t* z = create_stemmer();
+			stemword(z, palabra, it->first.size());
+
+			res = string(palabra);
+
+			reduccion_palabras[it->first] = res;
+		}else
+		{
+			res = reduccion_palabras[it->first];
+		}
+
+		if (res == " ") continue;
 
 		int cant = palabras_reducidas.count(res);
 		//FIXME
 		if (cant == 0) {
-			palabras_reducidas[res]  = it->second;
+			palabras_reducidas[res] = it->second;
 		} else {
 			palabras_reducidas[res] += it->second;
 		}
@@ -152,14 +163,20 @@ void Vectorizador::contar(const string& directorio, const string& archivo,
 void Vectorizador::generar_bases(const string& directorio,
 		const vector<string>& archivos) {
 
+	/* TODO: agregar al diccionario las stopwords con
+	 * reduccion_palabras[<stopwords>] = " ";
+     */
+
 	double completado = 0;
-	double porcentaje_por_archivo = 100.0/archivos.size();
-	printf ("Iniciando generacion de bases\n");
+	double porcentaje_por_archivo = 100.0 / archivos.size();
+	printf("Iniciando generacion de bases\n");
 	for (unsigned int i = 0; i < archivos.size(); i++) {
 		contar(directorio, archivos[i], i);
 		completado += porcentaje_por_archivo;
-		printf("%3.2f%% - Generado:%s \n",completado,archivos[i].c_str());
+		printf("[%3.2f%%] - Generado:%s\n", completado, archivos[i].c_str());
 	}
+
+	printf("\n");
 
 	ofstream out;
 
@@ -170,7 +187,7 @@ void Vectorizador::generar_bases(const string& directorio,
 
 	for (map<string, vector<int> >::iterator it = palabras_archivos.begin();
 			it != palabras_archivos.end(); ++it) {
-		if (it->second[0] <2 )
+		if (it->second[0] < 2)
 			continue;
 		out << it->first << "=" << it->second[0] << endl;
 	}
@@ -253,9 +270,14 @@ void Vectorizador::generar_vectores(const vector<string>& archivos,
 
 	Vector_Modelo modelo = Vector_Modelo(coordenadas);
 
+	double completado = 0;
+	double porcentaje_por_archivo = 100.0 / archivos.size();
+	printf("Iniciando generacion de vectores\n");
 	for (size_t i = 0; i < archivos.size(); i++) {
 		//TODO: hacer de a mas y con threads
 		generar_vector(archivos[i], modelo);
+		completado += porcentaje_por_archivo;
+		printf("[%3.2f%%] - Generado:%s \n", completado, archivos[i].c_str());
 	}
 }
 
