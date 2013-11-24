@@ -29,7 +29,6 @@
 
 #include "vector_modelo.h"
 
-
 #define CARPETA_VECTORES "./temp_vects"
 #define EXTENSION_VECTORES  ".vec"
 
@@ -42,13 +41,13 @@ private:
 	std::map<std::string, std::vector<int> > palabras_archivos;
 	std::map<std::string, std::string> reduccion_palabras;
 
+	std::map<std::string, int> coordenadas_vector;
+
 private:
-	void contar(const std::string& directorio,
-			const std::string& archivo,
+	void contar(const std::string& directorio, const std::string& archivo,
 			int numero_archivo);
 
-	void generar_bases(
-			const std::string& directorio,
+	void generar_bases(const std::string& directorio,
 			const std::vector<std::string>& archivos);
 
 	void obtener_archivos(std::string directorio,
@@ -60,16 +59,16 @@ private:
 	 */
 	void generar_carpeta(const std::string& path_carpeta);
 
+	void contar_palabras(std::ifstream& arch,
+			std::map<std::string, int>& palabras);
 
-	void contar_palabras(std::ifstream& arch, std::map<std::string, int>& palabras);
-
-
-
-	void generar_vectores(
-			const std::vector<std::string>& archivos,
+	void generar_vectores(const std::vector<std::string>& archivos,
 			std::map<std::string, std::vector<int> > palabras_archivos);
 
 	void generar_vector(const std::string & archivo, Vector_Modelo modelo);
+
+	void reducir_palabras(std::map<std::string, int>& palabras,
+			std::map<std::string, int>& palabras_reducidas);
 
 public:
 

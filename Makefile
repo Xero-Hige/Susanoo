@@ -4,7 +4,7 @@ CPPFLAGS = -Wall -Wextra -g -pedantic -lstdc++ -lm
 
 OBJECTS = Porter.o vectorizador.o vector_modelo.o medidor_distancia.o
 
-all: Susanoo
+all: run
 
 Porter.o: Porter.c Porter.h
 	$(CC) $(CFLAGS) -c Porter.c

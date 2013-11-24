@@ -86,6 +86,33 @@ void Vectorizador::contar_palabras(ifstream& arch, map<string, int>& palabras) {
 	}
 }
 
+void Vectorizador::reducir_palabras(map<string, int>& palabras,
+		map<string, int>& palabras_reducidas) {
+	for (map<string, int>::iterator it = palabras.begin(); it != palabras.end();
+			++it) {
+		string res;
+		if (reduccion_palabras.count(it->first) == 0) {
+			char* palabra = (char*) (it->first.c_str());
+			stemmer_t* z = create_stemmer();
+			stemword(z, palabra, it->first.size());
+			res = string(palabra);
+			reduccion_palabras[it->first] = res;
+		} else {
+			res = reduccion_palabras[it->first];
+		}
+		if (res == " ")
+			continue;
+
+		int cant = palabras_reducidas.count(res);
+		//FIXME
+		if (cant == 0) {
+			palabras_reducidas[res] = it->second;
+		} else {
+			palabras_reducidas[res] += it->second;
+		}
+	}
+}
+
 void Vectorizador::contar(const string& directorio, const string& archivo,
 		int numero_archivo) {
 	ifstream arch;
@@ -98,36 +125,9 @@ void Vectorizador::contar(const string& directorio, const string& archivo,
 
 	contar_palabras(arch, palabras);
 
-	std::map<std::string, int> palabras_reducidas;
+	map<string, int> palabras_reducidas;
 
-	for (map<string, int>::iterator it = palabras.begin(); it != palabras.end();
-			++it) {
-
-		string res;
-
-		if (reduccion_palabras.count(it->first) == 0) {
-			char* palabra = (char*) it->first.c_str();
-			stemmer_t* z = create_stemmer();
-			stemword(z, palabra, it->first.size());
-
-			res = string(palabra);
-
-			reduccion_palabras[it->first] = res;
-		}else
-		{
-			res = reduccion_palabras[it->first];
-		}
-
-		if (res == " ") continue;
-
-		int cant = palabras_reducidas.count(res);
-		//FIXME
-		if (cant == 0) {
-			palabras_reducidas[res] = it->second;
-		} else {
-			palabras_reducidas[res] += it->second;
-		}
-	}
+	reducir_palabras(palabras, palabras_reducidas);
 
 	for (map<string, int>::iterator it = palabras_reducidas.begin();
 			it != palabras_reducidas.end(); ++it) {
@@ -165,7 +165,7 @@ void Vectorizador::generar_bases(const string& directorio,
 
 	/* TODO: agregar al diccionario las stopwords con
 	 * reduccion_palabras[<stopwords>] = " ";
-     */
+	 */
 
 	double completado = 0;
 	double porcentaje_por_archivo = 100.0 / archivos.size();
@@ -178,6 +178,7 @@ void Vectorizador::generar_bases(const string& directorio,
 
 	printf("\n");
 
+#ifdef _DEBUG
 	ofstream out;
 
 	string path_salida = CARPETA_TEMPORAL;
@@ -188,10 +189,20 @@ void Vectorizador::generar_bases(const string& directorio,
 	for (map<string, vector<int> >::iterator it = palabras_archivos.begin();
 			it != palabras_archivos.end(); ++it) {
 		if (it->second[0] < 2)
-			continue;
+		continue;
 		out << it->first << "=" << it->second[0] << endl;
 	}
 	out.close();
+#endif //_DEBUG
+
+	int i=0;
+	for (map<string, vector<int> >::iterator it = palabras_archivos.begin();
+			it != palabras_archivos.end(); ++it) {
+		if (it->second[0] < 2)
+			continue;
+		coordenadas_vector[it->first] = i;
+		i++;
+	}
 }
 
 void Vectorizador::obtener_archivos(string directorio,
@@ -222,11 +233,19 @@ void Vectorizador::generar_carpeta(const string& path_carpeta) {
 }
 
 void Vectorizador::generar_vector(const string& archivo, Vector_Modelo modelo) {
+	//----------------Archivo Datos----------------------
 	string path_base = CARPETA_TEMPORAL;
 	path_base += "/" + archivo + EXTENSION_BASES;
 
 	ifstream arch;
 	arch.open(path_base.c_str());
+	//----------------Archivo Vector---------------------
+	string path_vector = CARPETA_VECTORES;
+	path_vector += "/" + archivo + EXTENSION_VECTORES;
+
+	ofstream vect;
+	vect.open(path_vector.c_str());
+	//----------------------------------------------------
 
 	char buffer[BUFFSIZE];
 
@@ -237,16 +256,19 @@ void Vectorizador::generar_vector(const string& archivo, Vector_Modelo modelo) {
 		size_t separador = datos.find("=");
 		string clave = datos.substr(0, separador);
 		string valor = datos.substr(separador + 1);
-		modelo.set_coordenada(clave, atoi(valor.c_str()));
+
+		int frecuencia_documento = atoi(valor.c_str());
+
+		if(coordenadas_vector.count(clave) == 0) continue;
+
+		//TODO: pasar a valores normalizados
+
+		//TODO: escribirlo en binario de la forma: 4bytes coordenada,4bytes valor
+		vect << coordenadas_vector[clave] << "-" <<frecuencia_documento << endl;
 	}
 
-	string path_vector = CARPETA_VECTORES;
-	path_vector += "/" + archivo + EXTENSION_VECTORES;
-
-	ofstream vect;
-	vect.open(path_vector.c_str());
-
-	modelo.guardar_en_archivo(vect);
+	arch.close();
+	vect.close();
 }
 
 /**
