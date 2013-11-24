@@ -65,10 +65,11 @@ private:
 	void generar_vectores(const std::vector<std::string>& archivos,
 			std::map<std::string, std::vector<int> > palabras_archivos);
 
-	void generar_vector(const std::string & archivo, Vector_Modelo modelo);
+	void generar_vector(const std::string & archivo);
 
 	void reducir_palabras(std::map<std::string, int>& palabras,
 			std::map<std::string, int>& palabras_reducidas);
+	void agregar_stopwords();
 
 public:
 

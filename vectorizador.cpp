@@ -32,7 +32,7 @@
 
 #include "Porter.h"
 
-//#include "vector_modelo.h"
+#define _DEBUG
 
 using std::string;
 using std::vector;
@@ -49,6 +49,8 @@ using std::ofstream;
 
 #define CARPETA_TEMPORAL "./temp"
 #define EXTENSION_BASES  ".res"
+
+#define STOP_WORDS "stopwords"
 
 #define BUFFSIZE 200
 
@@ -195,7 +197,7 @@ void Vectorizador::generar_bases(const string& directorio,
 	out.close();
 #endif //_DEBUG
 
-	int i=0;
+	int i = 0;
 	for (map<string, vector<int> >::iterator it = palabras_archivos.begin();
 			it != palabras_archivos.end(); ++it) {
 		if (it->second[0] < 2)
@@ -232,7 +234,7 @@ void Vectorizador::generar_carpeta(const string& path_carpeta) {
 	system(comando_carpeta_temporal.c_str());
 }
 
-void Vectorizador::generar_vector(const string& archivo, Vector_Modelo modelo) {
+void Vectorizador::generar_vector(const string& archivo) {
 	//----------------Archivo Datos----------------------
 	string path_base = CARPETA_TEMPORAL;
 	path_base += "/" + archivo + EXTENSION_BASES;
@@ -259,12 +261,14 @@ void Vectorizador::generar_vector(const string& archivo, Vector_Modelo modelo) {
 
 		int frecuencia_documento = atoi(valor.c_str());
 
-		if(coordenadas_vector.count(clave) == 0) continue;
+		if (coordenadas_vector.count(clave) == 0)
+			continue;
 
 		//TODO: pasar a valores normalizados
 
-		//TODO: escribirlo en binario de la forma: 4bytes coordenada,4bytes valor
-		vect << coordenadas_vector[clave] << "-" <<frecuencia_documento << endl;
+		//TODO: escribirlo en binario de la forma: 4bytes coordenada,4/8bytes valor
+		vect << coordenadas_vector[clave] << "-" << frecuencia_documento
+				<< endl;
 	}
 
 	arch.close();
@@ -284,23 +288,37 @@ void Vectorizador::generar_vectores(const vector<string>& archivos,
 			it != palabras_archivos.end(); ++it) {
 		if (it->second[0] < 2)
 			continue;
+
 		coordenadas.push_back(it->first);
 		//TODO: el map esta mal formado y hay que sacar de esta manera el
 		//valor
 		valores.push_back(it->second[0]);
 	}
 
-	Vector_Modelo modelo = Vector_Modelo(coordenadas);
-
 	double completado = 0;
 	double porcentaje_por_archivo = 100.0 / archivos.size();
 	printf("Iniciando generacion de vectores\n");
 	for (size_t i = 0; i < archivos.size(); i++) {
 		//TODO: hacer de a mas y con threads
-		generar_vector(archivos[i], modelo);
+		generar_vector(archivos[i]);
 		completado += porcentaje_por_archivo;
 		printf("[%3.2f%%] - Generado:%s \n", completado, archivos[i].c_str());
 	}
+}
+
+void Vectorizador::agregar_stopwords() {
+	string path_archivo_stopwords = "./";
+	path_archivo_stopwords += STOP_WORDS;
+	ifstream arch;
+	arch.open(path_archivo_stopwords.c_str());
+	char buffer[BUFFSIZE];
+	while (arch.good()) {
+		arch.getline(buffer, BUFFSIZE - 1);
+		string stopword = string(buffer);
+
+		this->reduccion_palabras[stopword] = " ";
+	}
+	arch.close();
 }
 
 /**
@@ -312,6 +330,8 @@ vector<string> Vectorizador::vectorizar(const string& directorio) {
 
 	obtener_archivos(directorio, archivos);
 	sort(archivos.begin(), archivos.end());
+
+	agregar_stopwords();
 
 	generar_carpeta(CARPETA_TEMPORAL);//TODO: eliminar los datos innecesarios del vector
 	generar_bases(directorio, archivos);
