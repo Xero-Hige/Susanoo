@@ -246,7 +246,7 @@ void Vectorizador::generar_vector(const string& archivo) {
 	path_vector += "/" + archivo + EXTENSION_VECTORES;
 
 	ofstream vect;
-	vect.open(path_vector.c_str());
+	vect.open(path_vector.c_str(),std::ios::binary);
 	//----------------------------------------------------
 
 	char buffer[BUFFSIZE];
@@ -266,9 +266,11 @@ void Vectorizador::generar_vector(const string& archivo) {
 
 		//TODO: pasar a valores normalizados
 
-		//TODO: escribirlo en binario de la forma: 4bytes coordenada,4/8bytes valor
-		vect << coordenadas_vector[clave] << "-" << frecuencia_documento
-				<< endl;
+		int coordenada = coordenadas_vector[clave];
+		float frecuencia = frecuencia_documento;
+
+		vect.write((char*)&coordenada,sizeof(int));
+		vect.write((char*)&frecuencia,sizeof(float));
 	}
 
 	arch.close();

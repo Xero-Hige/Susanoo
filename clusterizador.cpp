@@ -16,19 +16,26 @@
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses
  */
+
 #include "clusterizador.h"
 
+#include <cstdlib>
 #include <fstream>
-#include <stdlib.h>
-
+#include <iostream>
+#include <map>
 
 using std::vector;
 using std::string;
+using std::map;
 using std::ifstream;
+using std::cout;
+using std::endl;
+using std::ios;
 
 #define BUFFSIZE 200
 
-Clusterizador::Clusterizador(int n_clusters, const string& carpeta_vectores) {
+Clusterizador::Clusterizador(int n_clusters, const string& carpeta_vectores,
+		const std::vector<std::string>& archivos, int dimensiones) {
 
 	centroides_viejos = new vector<double> [n_clusters]();
 	centroides_nuevos = new vector<double> [n_clusters]();
@@ -38,6 +45,7 @@ Clusterizador::Clusterizador(int n_clusters, const string& carpeta_vectores) {
 	clusters = n_clusters;
 	carpeta_origen = carpeta_vectores;
 	this->archivos = archivos;
+	this->dimensiones = dimensiones;
 }
 
 Clusterizador::~Clusterizador() {
@@ -47,30 +55,39 @@ Clusterizador::~Clusterizador() {
 	delete[] clusters_nuevos;
 }
 
-void Clusterizador::inicializar()
-{
-	char* buff = new char[BUFFSIZE]();
+void Clusterizador::inicializar() {
 
-	for (int i = 0;i<clusters;i++)
-	{
-		ifstream vector;
-		string path = carpeta_origen + "/" +archivos[i];
-		vector.open(path.c_str());
-		while (vector.good())
-		{
-			vector.getline(buff,BUFFSIZE-1);
-			double numero = atof(buff);
-			centroides_viejos[i]->push_back(numero);
+	for (int i = 0; i < clusters; i++) {
+		for (int x = 0; x < dimensiones; x++) {
+			centroides_viejos[i].push_back((rand() % 1000) / 1000.0);
 		}
-		vector.close();
 	}
 }
 
-void Clusterizador::hacer_clusters(){
+void Clusterizador::hacer_clusters() {
+	cout << "Inicializando" << endl;
 	inicializar();
-	//TODO: cambiar por la distancia
-	for (int i=0,i<4)
-	{
 
+	//TODO: cambiar por la distancia
+	for (int i = 0; i < 4; i++) {
+		for (int n_archivo = 0; n_archivo < archivos.size(); n_archivo++){
+			map<int,float> coordenadas = map<int,float>();
+
+			string path_archivo = carpeta_origen + "/" + archivos[n_archivo];
+			ifstream arch (path_archivo.c_str(),ios::in | ios::binary);
+
+			while (arch.good())
+			{
+				char buff[10];
+
+				arch.get(buff,4);
+				int coordenada = atoi(buff);
+
+				arch.get(buff,4);
+				float valor = atof(buff);
+
+				coordenadas[coordenada] = valor;
+			}
+		}
 	}
 }

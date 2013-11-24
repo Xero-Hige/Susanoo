@@ -21,9 +21,6 @@
 
 #include <string>
 #include <vector>
-#include <math.h>
-
-#include "medidor_distancia.h"
 
 class Clusterizador {
 
@@ -33,6 +30,7 @@ class Clusterizador {
 	std::vector<std::string>* clusters_nuevos;
 
 	int clusters;
+	int dimensiones;
 	std::string carpeta_origen;
 	std::vector<std::string> archivos;
 
@@ -40,7 +38,8 @@ private:
 	void inicializar();
 
 public:
-	Clusterizador(int n_clusters,const std::string& carpeta_vectores, const std::vector<std::string>& archivos);
+	Clusterizador(int n_clusters, const std::string& carpeta_vectores,
+			const std::vector<std::string>& archivos, int dimensiones);
 	virtual ~Clusterizador();
 	void hacer_clusters();
 };

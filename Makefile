@@ -2,7 +2,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -g -pedantic
 CPPFLAGS = -Wall -Wextra -g -pedantic -lstdc++ -lm
 
-OBJECTS = Porter.o vectorizador.o vector_modelo.o medidor_distancia.o
+OBJECTS = Porter.o vectorizador.o vector_modelo.o medidor_distancia.o clusterizador.o
 
 all: run
 
@@ -17,12 +17,15 @@ vectorizador.o: vectorizador.cpp vectorizador.h Porter.o vector_modelo.o
 
 medidor_distancia.o: medidor_distancia.cpp medidor_distancia.h
 	$(CC) $(CPPFLAGS) -c medidor_distancia.cpp
+
+clusterizador.o: clusterizador.cpp clusterizador.h
+	$(CC) $(CPPFLAGS) -c clusterizador.cpp
 	
 Susanoo: Susanoo.cpp $(OBJECTS)
 	$(CC) $(CPPFLAGS) $(OBJECTS) Susanoo.cpp -o Susanoo
 
 clean:
-	rm *.o *.save *~ Susanoo -r temp temp_vects
+	rm -r  *.o *.save *~ Susanoo temp temp_vects
 
 run: Susanoo
 	./Susanoo -d ./Pruebas

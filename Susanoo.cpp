@@ -24,9 +24,9 @@
 #include <string>
 #include <vector>
 
+#include "clusterizador.h"
 #include "vectorizador.h"
 
-//using std::cout;
 using std::string;
 using std::vector;
 
@@ -47,8 +47,8 @@ void print_help() {
 }
 
 void clusterizar(int n_clusters, const vector<string>& archivos) {
-	//Clusterizador c = Clusterizador(n_clusters,CARPETA_VECTORES,archivos);
-	//c.clusterizar();
+	Clusterizador c = Clusterizador(n_clusters,CARPETA_VECTORES,archivos,15);
+	c.hacer_clusters();
 }
 
 void indexar(char* optarg) {
