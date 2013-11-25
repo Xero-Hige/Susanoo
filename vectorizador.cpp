@@ -54,6 +54,8 @@ using std::ofstream;
 
 #define BUFFSIZE 200
 
+#define TOTAL_PALABRAS_TOKEN "<<TOTAL>>"
+
 void a_minuscula(string& cadena) {
 	transform(cadena.begin(), cadena.end(), cadena.begin(), ::tolower);
 }
@@ -64,6 +66,7 @@ bool es_caracter(char caracter) {
 }
 
 void Vectorizador::contar_palabras(ifstream& arch, map<string, int>& palabras) {
+	unsigned int palabras_totales = 0;
 	while (arch.good()) {
 
 		char c = arch.get();
@@ -82,10 +85,14 @@ void Vectorizador::contar_palabras(ifstream& arch, map<string, int>& palabras) {
 		int cant = palabras.count(res);
 		if (cant == 0) {
 			palabras[res] = 1;
-			continue;
+		} else {
+			palabras[res] = palabras[res] + 1;
 		}
-		palabras[res] = palabras[res] + 1;
+
+		palabras_totales++;
+
 	}
+	palabras[string(TOTAL_PALABRAS_TOKEN)] = palabras_totales;
 }
 
 void Vectorizador::reducir_palabras(map<string, int>& palabras,
@@ -135,6 +142,9 @@ void Vectorizador::contar(const string& directorio, const string& archivo,
 			it != palabras_reducidas.end(); ++it) {
 		string res = it->first;
 
+		if (res[0] == TOTAL_PALABRAS_TOKEN[0])
+			continue;
+
 		int cant = palabras_archivos.count(res);
 
 		if (cant == 0) {
@@ -165,10 +175,6 @@ void Vectorizador::contar(const string& directorio, const string& archivo,
 void Vectorizador::generar_bases(const string& directorio,
 		const vector<string>& archivos) {
 
-	/* TODO: agregar al diccionario las stopwords con
-	 * reduccion_palabras[<stopwords>] = " ";
-	 */
-
 	double completado = 0;
 	double porcentaje_por_archivo = 100.0 / archivos.size();
 	printf("Iniciando generacion de bases\n");
@@ -191,7 +197,7 @@ void Vectorizador::generar_bases(const string& directorio,
 	for (map<string, vector<int> >::iterator it = palabras_archivos.begin();
 			it != palabras_archivos.end(); ++it) {
 		if (it->second[0] < 2)
-		continue;
+			continue;
 		out << it->first << "=" << it->second[0] << endl;
 	}
 	out.close();
@@ -246,10 +252,16 @@ void Vectorizador::generar_vector(const string& archivo) {
 	path_vector += "/" + archivo + EXTENSION_VECTORES;
 
 	ofstream vect;
-	vect.open(path_vector.c_str(),std::ios::binary);
+	vect.open(path_vector.c_str(), std::ios::binary);
 	//----------------------------------------------------
 
 	char buffer[BUFFSIZE];
+
+	arch.getline(buffer, BUFFSIZE - 1);
+	string datos = string(buffer);
+
+	size_t separador = datos.find("=");
+	unsigned int palabras_totales = atoi(datos.substr(separador + 1).c_str());
 
 	while (arch.good()) {
 		arch.getline(buffer, BUFFSIZE - 1);
@@ -267,10 +279,16 @@ void Vectorizador::generar_vector(const string& archivo) {
 		//TODO: pasar a valores normalizados
 
 		int coordenada = coordenadas_vector[clave];
-		float frecuencia = frecuencia_documento;
+		float frecuencia = frecuencia_documento / (palabras_totales + 0.0);
 
+#ifdef _DEBUG
+		vect << clave << "::" << coordenada << "-" << frecuencia << endl;
+#endif //_DEBUG
+
+#ifndef _DEBUG
 		vect.write((char*)&coordenada,sizeof(int));
 		vect.write((char*)&frecuencia,sizeof(float));
+#endif //_DEBUG
 	}
 
 	arch.close();

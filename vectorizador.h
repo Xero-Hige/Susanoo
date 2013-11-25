@@ -43,6 +43,7 @@ private:
 
 	std::map<std::string, int> coordenadas_vector;
 
+
 private:
 	void contar(const std::string& directorio, const std::string& archivo,
 			int numero_archivo);
