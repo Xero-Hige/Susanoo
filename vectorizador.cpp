@@ -32,7 +32,7 @@
 
 #include "Porter.h"
 
-#define _DEBUG
+//#define _DEBUG
 
 using std::string;
 using std::vector;
@@ -197,7 +197,7 @@ void Vectorizador::generar_bases(const string& directorio,
 	for (map<string, vector<int> >::iterator it = palabras_archivos.begin();
 			it != palabras_archivos.end(); ++it) {
 		if (it->second[0] < 2)
-			continue;
+		continue;
 		out << it->first << "=" << it->second[0] << endl;
 	}
 	out.close();
@@ -286,8 +286,8 @@ void Vectorizador::generar_vector(const string& archivo) {
 #endif //_DEBUG
 
 #ifndef _DEBUG
-		vect.write((char*)&coordenada,sizeof(int));
-		vect.write((char*)&frecuencia,sizeof(float));
+		vect.write((char*) &coordenada, sizeof(int));
+		vect.write((char*) &frecuencia, sizeof(float));
 #endif //_DEBUG
 	}
 
@@ -324,6 +324,8 @@ void Vectorizador::generar_vectores(const vector<string>& archivos,
 		completado += porcentaje_por_archivo;
 		printf("[%3.2f%%] - Generado:%s \n", completado, archivos[i].c_str());
 	}
+	printf("\n");
+
 }
 
 void Vectorizador::agregar_stopwords() {

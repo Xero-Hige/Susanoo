@@ -47,7 +47,7 @@ void print_help() {
 }
 
 void clusterizar(int n_clusters, const vector<string>& archivos) {
-	Clusterizador c = Clusterizador(n_clusters,CARPETA_VECTORES,archivos,15);
+	Clusterizador c = Clusterizador(n_clusters,CARPETA_VECTORES,archivos,100000);
 	c.hacer_clusters();
 }
 

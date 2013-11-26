@@ -2,7 +2,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -g -pedantic
 CPPFLAGS = -Wall -Wextra -g -pedantic -lstdc++ -lm
 
-OBJECTS = Porter.o vectorizador.o vector_modelo.o medidor_distancia.o clusterizador.o
+OBJECTS = Porter.o vectorizador.o vector_modelo.o medidor_distancia.o clusterizador.o centroide.o
 
 all: run
 
@@ -20,6 +20,9 @@ medidor_distancia.o: medidor_distancia.cpp medidor_distancia.h
 
 clusterizador.o: clusterizador.cpp clusterizador.h
 	$(CC) $(CPPFLAGS) -c clusterizador.cpp
+	
+centroide.o: centroide.cpp centroide.h
+	$(CC) $(CPPFLAGS) -c centroide.cpp
 	
 Susanoo: Susanoo.cpp $(OBJECTS)
 	$(CC) $(CPPFLAGS) $(OBJECTS) Susanoo.cpp -o Susanoo

@@ -22,15 +22,20 @@
 #include <string>
 #include <vector>
 
+#include "centroide.h"
+
 class Clusterizador {
 
-	std::vector<double>* centroides_viejos;
+	std::vector<Centroide> centroides_viejos;
+	std::vector<Centroide> centroides_nuevos;
+
+	//TODO: ver
 	std::vector<std::string>* clusters_viejos;
-	std::vector<double>* centroides_nuevos;
 	std::vector<std::string>* clusters_nuevos;
 
 	int clusters;
 	int dimensiones;
+
 	std::string carpeta_origen;
 	std::vector<std::string> archivos;
 

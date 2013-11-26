@@ -19,21 +19,34 @@
 #ifndef CENTROIDE_H_
 #define CENTROIDE_H_
 
+#include <map>
+#include <vector>
+
 class Centroide {
 
 private:
-	std::vector<float> coordenadas;
 	std::vector<float> promedios;
 
 	float modulo_cuadrado;
 	int vectores_asociados;
 
 public:
-	Centroide(int dimensiones,bool random=true);
+	Centroide(int dimensiones, bool random = true);
 
-	float calcular_coseno(std::map<int,float> vector_reducido);
+	/**
+	 * Calcula el coseno contra un vector representado por un map
+	 * (el vector esta normalizado)
+	 */
+	float calcular_coseno(std::map<int, float> vector_reducido);
 
-	void agregar_vector(std::map<int,float> vector_reducido);
+	/**
+	 * Calcula el coseno contra otro centroide
+	 * (ambos centroides deben estar normalizados)
+	 */
+	float calcular_coseno(Centroide otro_centroide);
+
+	void agregar_vector(std::map<int, float> vector_reducido);
+	void normalizar();
 };
 
 #endif /* CENTROIDE_H_ */

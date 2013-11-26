@@ -36,9 +36,14 @@ using std::ios;
 
 Clusterizador::Clusterizador(int n_clusters, const string& carpeta_vectores,
 		const std::vector<std::string>& archivos, int dimensiones) {
+	cout << "Inicializacionm" << endl;
 
-	centroides_viejos = new vector<double> [n_clusters]();
-	centroides_nuevos = new vector<double> [n_clusters]();
+	for (int i = 0; i < n_clusters; i++) {
+		cout << "Inicializando centroide: " << i << endl;
+
+		centroides_viejos.push_back(Centroide(dimensiones, true));
+	}
+
 	clusters_viejos = new vector<string> [n_clusters]();
 	clusters_nuevos = new vector<string> [n_clusters]();
 
@@ -46,48 +51,55 @@ Clusterizador::Clusterizador(int n_clusters, const string& carpeta_vectores,
 	carpeta_origen = carpeta_vectores;
 	this->archivos = archivos;
 	this->dimensiones = dimensiones;
+
+	cout << "Fin inicializacion" << endl;
 }
 
 Clusterizador::~Clusterizador() {
-	delete[] centroides_viejos;
-	delete[] centroides_nuevos;
-	delete[] clusters_viejos;
-	delete[] clusters_nuevos;
 }
 
 void Clusterizador::inicializar() {
-
-	for (int i = 0; i < clusters; i++) {
-		for (int x = 0; x < dimensiones; x++) {
-			centroides_viejos[i].push_back((rand() % 1000) / 1000.0);
-		}
-	}
 }
 
 void Clusterizador::hacer_clusters() {
-	cout << "Inicializando" << endl;
-	inicializar();
+	cout << "Inicializando K-Means" << endl;
 
 	//TODO: cambiar por la distancia
 	for (int i = 0; i < 4; i++) {
-		for (int n_archivo = 0; n_archivo < archivos.size(); n_archivo++){
-			map<int,float> coordenadas = map<int,float>();
+		for (int n_archivo = 0; n_archivo < archivos.size(); n_archivo++) {
+			map<int, float> coordenadas = map<int, float>();
 
 			string path_archivo = carpeta_origen + "/" + archivos[n_archivo];
-			ifstream arch (path_archivo.c_str(),ios::in | ios::binary);
+			ifstream arch(path_archivo.c_str(), ios::in | ios::binary);
 
-			while (arch.good())
-			{
+			while (arch.good()) {
 				char buff[10];
 
-				arch.get(buff,4);
+				arch.get(buff, 4);
 				int coordenada = atoi(buff);
 
-				arch.get(buff,4);
+				arch.get(buff, 4);
 				float valor = atof(buff);
 
 				coordenadas[coordenada] = valor;
 			}
+
+			float minimo_coseno = 100;
+			int centroide = 0;
+
+			for (int i = 0; i < centroides_viejos.size(); i++) {
+				float coseno = centroides_viejos[i].calcular_coseno(
+						coordenadas);
+
+				//TODO: Modificar para tolerancia
+				if (coseno < minimo_coseno) {
+					centroide = i;
+				}
+			}
+
+			centroides_viejos[centroide].agregar_vector(coordenadas);
+			//TODO: agregar el nombre del archivo al vector del cluster
 		}
+		//TODO: cambiar los centroides para recalcular la distancia entre ellos al principio del for
 	}
 }

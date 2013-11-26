@@ -21,18 +21,18 @@
 
 #include <cmath>
 #include <cstdlib>
-#include <map>
-#include <vector>
+#include <utility>
 
 using std::map;
+using std::vector;
 
 Centroide::Centroide(int dimensiones, bool random) {
-	for (int x=0;x<dimensiones;x++)
-	{
+	vector<float> coordenadas;
+
+	for (int x = 0; x < dimensiones; x++) {
 		float valor = 0;
-		if (random)
-		{
-			valor = (rand%1000) / 1000.0;
+		if (random) {
+			valor = (rand() % 1000) / 1000.0;
 		}
 
 		modulo_cuadrado += (valor * valor);
@@ -44,37 +44,49 @@ Centroide::Centroide(int dimensiones, bool random) {
 
 	modulo_cuadrado = 0;
 
-	for (int x=0;x<dimensiones;x++)
-	{
-		coordenadas[x] = (coordenadas[x]/modulo);
+	for (int x = 0; x < dimensiones; x++) {
+		coordenadas[x] = (coordenadas[x] / modulo);
 		promedios.push_back(coordenadas[x]);
 		modulo_cuadrado += (coordenadas[x] * coordenadas[x]);
 	}
 
-	vectores_asociados = random ? 1:0;
+	vectores_asociados = random ? 1 : 0;
 }
 
 float Centroide::calcular_coseno(map<int, float> vector_reducido) {
 	double resultado = 0;
-	for(map<int, float>::iterator it = vector_reducido.begin();it != vector_reducido.end() ; ++it)
-	{
-		int coordenada = it->first();
-		float valor = it->second();
+	for (map<int, float>::iterator it = vector_reducido.begin();
+			it != vector_reducido.end(); ++it) {
+		int coordenada = it->first;
+		float valor = it->second;
 
-		resultado += ((promedios[coordenada]/vectores_asociados) * valor);
+		resultado += ((promedios[coordenada] / vectores_asociados) * valor);
 	}
 
-	double modulo = modulo_cuadrado * (1/(vectores_asociados * vectores_asociados));
+	double modulo = modulo_cuadrado
+			* (1 / (vectores_asociados * vectores_asociados));
 	modulo = sqrt(modulo);
 
 	return (resultado / modulo);
 }
 
+float Centroide::calcular_coseno(Centroide otro_centroide) {
+	double resultado = 0;
+	for (int i = 0; i < promedios.size(); i++) {
+		float valor_propio = promedios[i];
+		float valor_otro_centroide = otro_centroide.promedios[i];
+
+		resultado += (valor_propio * valor_otro_centroide);
+	}
+
+	return resultado;
+}
+
 void Centroide::agregar_vector(map<int, float> vector_reducido) {
-	for(map<int, float>::iterator it = vector_reducido.begin();it != vector_reducido.end() ; ++it)
-	{
-		int coordenada = it->first();
-		float valor = it->second();
+	for (map<int, float>::iterator it = vector_reducido.begin();
+			it != vector_reducido.end(); ++it) {
+		int coordenada = it->first;
+		float valor = it->second;
 
 		float anterior = promedios[coordenada];
 		promedios[coordenada] += valor;
@@ -85,4 +97,15 @@ void Centroide::agregar_vector(map<int, float> vector_reducido) {
 	vectores_asociados++;
 }
 
+void Centroide::normalizar() {
+	double modulo = modulo_cuadrado
+			* (1 / (vectores_asociados * vectores_asociados));
+	modulo = sqrt(modulo);
 
+	for (int i = 0; i < promedios.size(); i++) {
+		promedios[i] = promedios[i] / modulo;
+	}
+
+	//TODO: mmmmm, esto es matematicamente asi?
+	modulo_cuadrado = 1;
+}
