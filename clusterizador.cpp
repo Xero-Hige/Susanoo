@@ -92,8 +92,12 @@ void Clusterizador::hacer_clusters() {
 				float coseno = centroides_viejos[i].calcular_coseno(
 						coordenadas);
 
+				//FIXME: Sacar
+				cout << "Coseno: " << coseno << " Minimo: " << minimo_coseno << endl;
+
 				//TODO: Modificar para tolerancia
 				if (coseno < minimo_coseno) {
+					minimo_coseno = coseno;
 					centroide = i;
 				}
 			}
@@ -120,9 +124,11 @@ void Clusterizador::hacer_clusters() {
 		}
 	}
 
-	cout << "Cluster 0:" << endl;
+	for (int i = 0; i < clusters; i++) {
+		cout << "Cluster " << i << ":" << endl;
 
-	for (int archivo = 0; archivo < clusters_viejos[0].size(); archivo++) {
-		cout << clusters_viejos[0][archivo] << endl;
+		for (int archivo = 0; archivo < clusters_viejos[i].size(); archivo++) {
+			cout << clusters_viejos[i][archivo] << endl;
+		}
 	}
 }
