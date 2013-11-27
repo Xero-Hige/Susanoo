@@ -19,6 +19,7 @@
 #ifndef CLUSTERIZADOR_H_
 #define CLUSTERIZADOR_H_
 
+#include <map>
 #include <string>
 #include <vector>
 
@@ -40,7 +41,7 @@ class Clusterizador {
 	std::vector<std::string> archivos;
 
 private:
-	void inicializar();
+	void cargar_vector(std::map<int, float> coordenadas, int n_archivo);
 
 public:
 	Clusterizador(int n_clusters, const std::string& carpeta_vectores,

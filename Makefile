@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -g -pedantic
-CPPFLAGS = -Wall -Wextra -g -pedantic -lstdc++ -lm
+CPPFLAGS = -std=c++11 -Wall -Wextra -g -pedantic -lstdc++ -lm
 
 OBJECTS = Porter.o vectorizador.o vector_modelo.o medidor_distancia.o clusterizador.o centroide.o
 

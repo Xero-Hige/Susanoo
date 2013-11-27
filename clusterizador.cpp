@@ -58,31 +58,33 @@ Clusterizador::Clusterizador(int n_clusters, const string& carpeta_vectores,
 Clusterizador::~Clusterizador() {
 }
 
-void Clusterizador::inicializar() {
+void Clusterizador::cargar_vector(map<int, float> coordenadas, int n_archivo)
+{
+	string path_archivo = carpeta_origen + "/" + archivos[n_archivo];
+	ifstream arch(path_archivo.c_str(), ios::in | ios::binary);
+
+	while (arch.good()) {
+		char buff[10];
+
+		arch.get(buff, 4);
+		int coordenada = atoi(buff);
+
+		arch.get(buff, 4);
+		float valor = atof(buff);
+
+		coordenadas[coordenada] = valor;
+	}
 }
 
 void Clusterizador::hacer_clusters() {
 	cout << "Inicializando K-Means" << endl;
 
 	//TODO: cambiar por la distancia
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < 20; i++) {
 		for (int n_archivo = 0; n_archivo < archivos.size(); n_archivo++) {
 			map<int, float> coordenadas = map<int, float>();
 
-			string path_archivo = carpeta_origen + "/" + archivos[n_archivo];
-			ifstream arch(path_archivo.c_str(), ios::in | ios::binary);
-
-			while (arch.good()) {
-				char buff[10];
-
-				arch.get(buff, 4);
-				int coordenada = atoi(buff);
-
-				arch.get(buff, 4);
-				float valor = atof(buff);
-
-				coordenadas[coordenada] = valor;
-			}
+			cargar_vector(coordenadas,n_archivo);
 
 			float minimo_coseno = 100;
 			int centroide = 0;

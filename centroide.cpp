@@ -20,19 +20,31 @@
 #include "centroide.h"
 
 #include <cmath>
-#include <cstdlib>
 #include <utility>
+#include <random>
+
 
 using std::map;
 using std::vector;
 
+typedef std::mt19937 GeneradorNumerosRandom;  // Mersenne Twister
+uint32_t semilla;            // crea una semilla con lo que sea
+
+GeneradorNumerosRandom generador;
+std::uniform_int_distribution<int> distribucion(0,1000);
+
 Centroide::Centroide(int dimensiones, bool random) {
 	vector<float> coordenadas;
+
+	if (random)
+	{
+		generador.seed(semilla);
+	}
 
 	for (int x = 0; x < dimensiones; x++) {
 		float valor = 0;
 		if (random) {
-			valor = (rand() % 1000) / 1000.0;
+			valor = (distribucion(generador)) / 1000.0;
 		}
 
 		modulo_cuadrado += (valor * valor);
