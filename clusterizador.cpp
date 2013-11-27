@@ -36,16 +36,13 @@ using std::ios;
 
 Clusterizador::Clusterizador(int n_clusters, const string& carpeta_vectores,
 		const std::vector<std::string>& archivos, int dimensiones) {
-	cout << "Inicializacionm" << endl;
+	cout << "Inicializacion" << endl;
 
 	for (int i = 0; i < n_clusters; i++) {
 		cout << "Inicializando centroide: " << i << endl;
 
 		centroides_viejos.push_back(Centroide(dimensiones, true));
 	}
-
-	clusters_viejos = new vector<string> [n_clusters]();
-	clusters_nuevos = new vector<string> [n_clusters]();
 
 	clusters = n_clusters;
 	carpeta_origen = carpeta_vectores;
@@ -58,9 +55,8 @@ Clusterizador::Clusterizador(int n_clusters, const string& carpeta_vectores,
 Clusterizador::~Clusterizador() {
 }
 
-void Clusterizador::cargar_vector(map<int, float> coordenadas, int n_archivo)
-{
-	string path_archivo = carpeta_origen + "/" + archivos[n_archivo];
+void Clusterizador::cargar_vector(map<int, float> coordenadas, string archivo) {
+	string path_archivo = carpeta_origen + "/" + archivo;
 	ifstream arch(path_archivo.c_str(), ios::in | ios::binary);
 
 	while (arch.good()) {
@@ -81,10 +77,13 @@ void Clusterizador::hacer_clusters() {
 
 	//TODO: cambiar por la distancia
 	for (int i = 0; i < 20; i++) {
+		clusters_viejos.clear();
+		clusters_viejos.resize(clusters);
+
 		for (int n_archivo = 0; n_archivo < archivos.size(); n_archivo++) {
 			map<int, float> coordenadas = map<int, float>();
 
-			cargar_vector(coordenadas,n_archivo);
+			cargar_vector(coordenadas, archivos[n_archivo]);
 
 			float minimo_coseno = 100;
 			int centroide = 0;
@@ -100,8 +99,30 @@ void Clusterizador::hacer_clusters() {
 			}
 
 			centroides_viejos[centroide].agregar_vector(coordenadas);
-			//TODO: agregar el nombre del archivo al vector del cluster
+			clusters_viejos[centroide].push_back(archivos[n_archivo]);
 		}
 		//TODO: cambiar los centroides para recalcular la distancia entre ellos al principio del for
+
+		centroides_viejos.clear();
+		for (int centroide = 0; centroide < clusters; centroide++) {
+			Centroide nuevo_centroide = Centroide(dimensiones, false);
+			for (int archivo = 0; archivo < clusters_viejos[centroide].size();
+					archivo++) {
+
+				map<int, float> coordenadas = map<int, float>();
+
+				cargar_vector(coordenadas, clusters_viejos[centroide][archivo]);
+
+				nuevo_centroide.agregar_vector(coordenadas);
+			}
+			nuevo_centroide.normalizar();
+			centroides_viejos.push_back(nuevo_centroide);
+		}
+	}
+
+	cout << "Cluster 0:" << endl;
+
+	for (int archivo = 0; archivo < clusters_viejos[0].size(); archivo++) {
+		cout << clusters_viejos[0][archivo] << endl;
 	}
 }

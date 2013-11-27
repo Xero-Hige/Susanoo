@@ -25,9 +25,23 @@
 class Centroide {
 
 private:
+	/**
+	 * Vector que almacena la suma de los vectores asociados
+	 * el valor de cada coordenada del vector real es igual
+	 * al valor de su coordenada en este vector dividido por
+	 * la cantidad de vectores asociados.
+	 */
 	std::vector<float> promedios;
 
-	float modulo_cuadrado;
+	/**
+	 * Almacena la suma de cada uno de los valores del vector
+	 * promedios al cuadrado
+	 */
+	float suma_acumulados_cuadrado;
+
+	/**
+	 * Cantidad de vectores asociados
+	 */
 	int vectores_asociados;
 
 public:

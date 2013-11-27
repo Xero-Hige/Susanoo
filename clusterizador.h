@@ -31,8 +31,8 @@ class Clusterizador {
 	std::vector<Centroide> centroides_nuevos;
 
 	//TODO: ver
-	std::vector<std::string>* clusters_viejos;
-	std::vector<std::string>* clusters_nuevos;
+	std::vector<std::vector<std::string>> clusters_viejos;
+	std::vector<std::vector<std::string>> clusters_nuevos;
 
 	int clusters;
 	int dimensiones;
@@ -41,7 +41,7 @@ class Clusterizador {
 	std::vector<std::string> archivos;
 
 private:
-	void cargar_vector(std::map<int, float> coordenadas, int n_archivo);
+	void cargar_vector(std::map<int, float> coordenadas, std::string archivo);
 
 public:
 	Clusterizador(int n_clusters, const std::string& carpeta_vectores,

@@ -20,24 +20,23 @@
 #include "centroide.h"
 
 #include <cmath>
-#include <utility>
 #include <random>
-
+#include <utility>
 
 using std::map;
 using std::vector;
 
 typedef std::mt19937 GeneradorNumerosRandom;  // Mersenne Twister
-uint32_t semilla;            // crea una semilla con lo que sea
+uint32_t semilla;    // crea una semilla con lo que sea
 
 GeneradorNumerosRandom generador;
-std::uniform_int_distribution<int> distribucion(0,1000);
+std::uniform_int_distribution<int> distribucion(0, 1000);
 
 Centroide::Centroide(int dimensiones, bool random) {
 	vector<float> coordenadas;
+	suma_acumulados_cuadrado = 0;
 
-	if (random)
-	{
+	if (random) {
 		generador.seed(semilla);
 	}
 
@@ -47,19 +46,20 @@ Centroide::Centroide(int dimensiones, bool random) {
 			valor = (distribucion(generador)) / 1000.0;
 		}
 
-		modulo_cuadrado += (valor * valor);
+		suma_acumulados_cuadrado += (valor * valor);
 
 		coordenadas.push_back(valor);
 	}
 
-	float modulo = sqrt(modulo_cuadrado);
+	float modulo = random ? sqrt(suma_acumulados_cuadrado) : 1;
+	suma_acumulados_cuadrado = 0;
 
-	modulo_cuadrado = 0;
-
-	for (int x = 0; x < dimensiones; x++) {
-		coordenadas[x] = (coordenadas[x] / modulo);
-		promedios.push_back(coordenadas[x]);
-		modulo_cuadrado += (coordenadas[x] * coordenadas[x]);
+	if (random){
+		for (int x = 0; x < dimensiones; x++) {
+			coordenadas[x] = (coordenadas[x] / modulo);
+			promedios.push_back(coordenadas[x]);
+			suma_acumulados_cuadrado += (coordenadas[x] * coordenadas[x]);
+		}
 	}
 
 	vectores_asociados = random ? 1 : 0;
@@ -75,7 +75,7 @@ float Centroide::calcular_coseno(map<int, float> vector_reducido) {
 		resultado += ((promedios[coordenada] / vectores_asociados) * valor);
 	}
 
-	double modulo = modulo_cuadrado
+	double modulo = suma_acumulados_cuadrado
 			* (1 / (vectores_asociados * vectores_asociados));
 	modulo = sqrt(modulo);
 
@@ -103,14 +103,14 @@ void Centroide::agregar_vector(map<int, float> vector_reducido) {
 		float anterior = promedios[coordenada];
 		promedios[coordenada] += valor;
 
-		modulo_cuadrado -= (anterior * anterior);
-		modulo_cuadrado += (valor * valor);
+		suma_acumulados_cuadrado -= (anterior * anterior);
+		suma_acumulados_cuadrado += (valor * valor);
 	}
 	vectores_asociados++;
 }
 
 void Centroide::normalizar() {
-	double modulo = modulo_cuadrado
+	double modulo = suma_acumulados_cuadrado
 			* (1 / (vectores_asociados * vectores_asociados));
 	modulo = sqrt(modulo);
 
@@ -119,5 +119,5 @@ void Centroide::normalizar() {
 	}
 
 	//TODO: mmmmm, esto es matematicamente asi?
-	modulo_cuadrado = 1;
+	suma_acumulados_cuadrado = vectores_asociados * vectores_asociados;
 }

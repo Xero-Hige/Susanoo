@@ -55,7 +55,7 @@ void indexar(char* optarg) {
 	string directorio = string(optarg);
 	Vectorizador vectorizador = Vectorizador();
 	vector<string> archivos = vectorizador.vectorizar(directorio);
-	clusterizar(4, archivos);
+	clusterizar(3, archivos);
 }
 
 int main(int argc, char **argv) {
