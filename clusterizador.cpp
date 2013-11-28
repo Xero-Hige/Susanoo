@@ -55,20 +55,23 @@ Clusterizador::Clusterizador(int n_clusters, const string& carpeta_vectores,
 Clusterizador::~Clusterizador() {
 }
 
-void Clusterizador::cargar_vector(map<int, float> coordenadas, string archivo) {
-	string path_archivo = carpeta_origen + "/" + archivo;
+void Clusterizador::cargar_vector(map<int, float>& coordenadas, string archivo) {
+	string path_archivo = carpeta_origen + "/" + archivo + ".vec";
 	ifstream arch(path_archivo.c_str(), ios::in | ios::binary);
 
+	int coordenada=1;
+	float valor=1;
+
 	while (arch.good()) {
-		char buff[10];
+		char buff[23];
+		arch.get(buff,sizeof(int));
+		//arch.get(coord_buff, sizeof(int));
+		//arch.get(valor_buff, sizeof(float));
 
-		arch.get(buff, 4);
-		int coordenada = atoi(buff);
+		//int coordenada = atoi(buff); MAL
+		//float valor = atof(buff); MAL
 
-		arch.get(buff, 4);
-		float valor = atof(buff);
-
-		coordenadas[coordenada] = valor;
+		coordenadas[coordenada++] = valor++;
 	}
 }
 
@@ -80,10 +83,13 @@ void Clusterizador::hacer_clusters() {
 		clusters_viejos.clear();
 		clusters_viejos.resize(clusters);
 
-		for (int n_archivo = 0; n_archivo < archivos.size(); n_archivo++) {
+		for (size_t n_archivo = 0; n_archivo < archivos.size(); n_archivo++) {
 			map<int, float> coordenadas = map<int, float>();
 
 			cargar_vector(coordenadas, archivos[n_archivo]);
+
+			//FIXME
+			cout << coordenadas.size() << endl;
 
 			float minimo_coseno = 100;
 			int centroide = 0;
@@ -107,7 +113,7 @@ void Clusterizador::hacer_clusters() {
 		}
 		//TODO: cambiar los centroides para recalcular la distancia entre ellos al principio del for
 
-		centroides_viejos.clear();
+		/*centroides_viejos.clear();
 		for (int centroide = 0; centroide < clusters; centroide++) {
 			Centroide nuevo_centroide = Centroide(dimensiones, false);
 			for (int archivo = 0; archivo < clusters_viejos[centroide].size();
@@ -121,6 +127,10 @@ void Clusterizador::hacer_clusters() {
 			}
 			nuevo_centroide.normalizar();
 			centroides_viejos.push_back(nuevo_centroide);
+		}*/
+		for (int i = 0; i<clusters;i++)
+		{
+			centroides_viejos[i].normalizar();
 		}
 	}
 
