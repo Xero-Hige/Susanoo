@@ -114,8 +114,10 @@ void Centroide::agregar_vector(map<int, double>& vector_reducido) {
 
 		promedios[coordenada] += valor;
 
+		double actual = promedios[coordenada];
+
 		suma_acumulados_cuadrado -= (anterior * anterior);
-		suma_acumulados_cuadrado += (valor * valor);
+		suma_acumulados_cuadrado += (actual * actual);
 	}
 	vectores_asociados++;
 }

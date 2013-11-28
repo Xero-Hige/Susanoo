@@ -63,12 +63,11 @@ void Clusterizador::cargar_vector(map<int, double>& coordenadas,
 	ifstream arch(path_archivo.c_str(), ios::in | ios::binary);
 
 	int coordenada = 1;
-	double valor = 1;
+	double valor = .000001;
 
 	while (arch.good()) {
 		char buff_a[sizeof(int)];
 		char buff_b[sizeof(double)];
-
 
 		arch.get(buff_a, sizeof(int));
 		//memcpy(&coordenada, buff_a, sizeof(int));
@@ -76,9 +75,7 @@ void Clusterizador::cargar_vector(map<int, double>& coordenadas,
 		arch.get(buff_b, sizeof(double));
 		//memcpy(&valor, buff_b, sizeof(double));
 
-		cout << coordenada << "---" << valor << endl;
-
-		coordenadas[coordenada++] = valor++;
+		coordenadas[coordenada++] = valor;
 	}
 }
 
@@ -116,23 +113,20 @@ void Clusterizador::hacer_clusters() {
 		}
 		//TODO: cambiar los centroides para recalcular la distancia entre ellos al principio del for
 
-		/*centroides_viejos.clear();
-		 for (int centroide = 0; centroide < clusters; centroide++) {
-		 Centroide nuevo_centroide = Centroide(dimensiones, false);
-		 for (int archivo = 0; archivo < clusters_viejos[centroide].size();
-		 archivo++) {
+		centroides_viejos.clear(); //FIXME: ROMPE SI ALGUNO SE HACE 0
+		for (int centroide = 0; centroide < clusters; centroide++) {
+			Centroide nuevo_centroide = Centroide(dimensiones, false);
+			for (int archivo = 0; archivo < clusters_viejos[centroide].size();
+					archivo++) {
 
-		 map<int, float> coordenadas = map<int, float>();
+				map<int, double> coordenadas;
 
-		 cargar_vector(coordenadas, clusters_viejos[centroide][archivo]);
+				cargar_vector(coordenadas, clusters_viejos[centroide][archivo]);
 
-		 nuevo_centroide.agregar_vector(coordenadas);
-		 }
-		 nuevo_centroide.normalizar();
-		 centroides_viejos.push_back(nuevo_centroide);
-		 }*/
-		for (int i = 0; i < clusters; i++) {
-			//centroides_viejos[i].normalizar();
+				nuevo_centroide.agregar_vector(coordenadas);
+			}
+			nuevo_centroide.normalizar();
+			centroides_viejos.push_back(nuevo_centroide);
 		}
 	}
 
