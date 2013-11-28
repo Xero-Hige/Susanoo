@@ -28,17 +28,16 @@ using std::map;
 using std::vector;
 
 typedef std::mt19937 GeneradorNumerosRandom;  // Mersenne Twister
-uint32_t semilla;    // crea una semilla con lo que sea
 
 GeneradorNumerosRandom generador;
-std::uniform_int_distribution<int> distribucion(0, 1000);
+std::uniform_real_distribution<double> distribucion(0, 1000);
 
 Centroide::Centroide(int dimensiones, bool random) {
 	vector<double> coordenadas;
 	suma_acumulados_cuadrado = 0;
 
 	if (random) {
-		generador.seed(semilla);
+		generador.seed(semilla++);
 	}
 
 	for (int x = 0; x < dimensiones; x++) {

@@ -44,6 +44,8 @@ private:
 	 */
 	double vectores_asociados;
 
+	uint32_t semilla;    // crea una semilla con lo que sea
+
 	Centroide(){};
 
 public:
