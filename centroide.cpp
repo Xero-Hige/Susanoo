@@ -66,7 +66,7 @@ Centroide::Centroide(int dimensiones, bool random) {
 }
 
 double Centroide::calcular_coseno(map<int, double> vector_reducido) {
-	if (suma_acumulados_cuadrado == 0) return 115;
+	if (suma_acumulados_cuadrado == 0) return 0;
 
 	double resultado = 0;
 	for (map<int, double>::iterator it = vector_reducido.begin();
@@ -102,9 +102,9 @@ void Centroide::agregar_vector(map<int, double> vector_reducido) {
 	for (map<int, double>::iterator it = vector_reducido.begin();
 			it != vector_reducido.end(); ++it) {
 		int coordenada = it->first;
-		float valor = it->second;
+		double valor = it->second;
 
-		float anterior = promedios[coordenada];
+		double anterior = promedios[coordenada];
 		promedios[coordenada] += valor;
 
 		suma_acumulados_cuadrado -= (anterior * anterior);

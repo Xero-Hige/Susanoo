@@ -33,7 +33,7 @@
 
 #include "Porter.h"
 
-//#define _DEBUG
+#define _DEBUG
 
 using std::string;
 using std::vector;
@@ -268,7 +268,7 @@ void Vectorizador::generar_vector(const string& archivo) {
   vector<coordenada_t> pesos_vector;
   // modulo del vector que se actualiza en cada pasada
   double modulo = 0;
-  
+
 	while (arch.good()) {
 		arch.getline(buffer, BUFFSIZE - 1);
 		string datos = string(buffer);
@@ -287,26 +287,21 @@ void Vectorizador::generar_vector(const string& archivo) {
     double terminos_totales = coordenadas_vector.size();
     double peso = frecuencia_termino * log10(terminos_totales / frecuencia_documento) / log10(2);
     modulo += pow(peso,2);
-    
+
     coordenada_t coordenada_actual;
     coordenada_actual.peso = peso;
     coordenada_actual.coordenada = coordenada;
     pesos_vector.push_back(coordenada_actual);
-    
-#ifdef _DEBUG
-		vect << clave << "::" << coordenada << "-" << peso << endl;
-#endif //_DEBUG
-
 	}
-  
+
   guardar_vector(modulo, pesos_vector, vect);
 
 	arch.close();
 	vect.close();
 }
 
-void Vectorizador::guardar_vector(double modulo, 
-                                  std::vector<coordenada_t> &pesos_vector, 
+void Vectorizador::guardar_vector(double modulo,
+                                  std::vector<coordenada_t> &pesos_vector,
                                   ofstream &vect){
   while (pesos_vector.size() != 0){
     coordenada_t actual = pesos_vector[pesos_vector.size() - 1];
@@ -315,6 +310,9 @@ void Vectorizador::guardar_vector(double modulo,
     actual.peso = actual.peso / modulo;
 
 #ifdef _DEBUG
+		vect << actual.coordenada << "-" << actual.peso << endl;
+#endif //_DEBUG
+#ifndef _DEBUG
 		vect.write((char*) &actual.coordenada, sizeof(int));
 		vect.write((char*) &actual.peso, sizeof(double));
 #endif //_DEBUG
