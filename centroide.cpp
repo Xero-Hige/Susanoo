@@ -123,15 +123,6 @@ void Centroide::agregar_vector(map<int, double>& vector_reducido) {
 }
 
 void Centroide::normalizar() {
-	if (suma_acumulados_cuadrado == 0)
-	{
-		for (size_t i = 0; i < promedios.size(); i++) {
-			promedios[i] = 1.0/promedios.size();
-		}
-		suma_acumulados_cuadrado += 1;
-		vectores_asociados = 1;
-	};
-
 	double modulo = suma_acumulados_cuadrado
 			* (1 / (vectores_asociados * vectores_asociados));
 	modulo = sqrt(modulo);
