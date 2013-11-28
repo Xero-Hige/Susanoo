@@ -19,10 +19,12 @@
 
 #include "clusterizador.h"
 
-#include <cstdlib>
+#include <stddef.h>
+//#include <cstdlib>
+#include <cstring>
 #include <fstream>
 #include <iostream>
-#include <map>
+//#include <map>
 
 using std::vector;
 using std::string;
@@ -64,14 +66,14 @@ void Clusterizador::cargar_vector(map<int, double>& coordenadas, string archivo)
 
 	while (arch.good()) {
 		char buff[23];
+
 		arch.get(buff,sizeof(int));
-		//arch.get(coord_buff, sizeof(int));
-		//arch.get(valor_buff, sizeof(float));
+		memcpy(&coordenada, buff, sizeof(int));
 
-		//int coordenada = atoi(buff); MAL
-		//float valor = atof(buff); MAL
+		arch.get(buff,sizeof(double));
+		memcpy(&valor, buff, sizeof(double));
 
-		coordenadas[coordenada++] = valor++;
+		coordenadas[coordenada] = valor;
 	}
 }
 
