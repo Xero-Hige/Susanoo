@@ -42,7 +42,7 @@ private:
 	/**
 	 * Cantidad de vectores asociados
 	 */
-	int vectores_asociados;
+	double vectores_asociados;
 
 	Centroide(){};
 
@@ -53,7 +53,7 @@ public:
 	 * Calcula el coseno contra un vector representado por un map
 	 * (el vector esta normalizado)
 	 */
-	double calcular_coseno(std::map<int, double> vector_reducido);
+	double calcular_coseno(std::map<int, double>& vector_reducido);
 
 	/**
 	 * Calcula el coseno contra otro centroide
@@ -61,7 +61,7 @@ public:
 	 */
 	double calcular_coseno(Centroide otro_centroide);
 
-	void agregar_vector(std::map<int, double> vector_reducido);
+	void agregar_vector(std::map<int, double>& vector_reducido);
 	void normalizar();
 };
 

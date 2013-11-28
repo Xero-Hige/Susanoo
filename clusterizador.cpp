@@ -66,13 +66,17 @@ void Clusterizador::cargar_vector(map<int, double>& coordenadas,
 	double valor = 1;
 
 	while (arch.good()) {
-		char buff[23];
+		char buff_a[sizeof(int)];
+		char buff_b[sizeof(double)];
 
-		arch.get(buff, sizeof(int));
-		//		memcpy(&coordenada, buff, sizeof(int));
 
-		arch.get(buff, sizeof(double));
-		//		memcpy(&valor, buff, sizeof(double));
+		arch.get(buff_a, sizeof(int));
+		//memcpy(&coordenada, buff_a, sizeof(int));
+
+		arch.get(buff_b, sizeof(double));
+		//memcpy(&valor, buff_b, sizeof(double));
+
+		cout << coordenada << "---" << valor << endl;
 
 		coordenadas[coordenada++] = valor++;
 	}
@@ -91,9 +95,6 @@ void Clusterizador::hacer_clusters() {
 
 			cargar_vector(coordenadas, archivos[n_archivo]);
 
-			//FIXME
-//			cout << coordenadas.size() << endl;
-
 			float minimo_coseno = 100;
 			int centroide = 0;
 
@@ -101,9 +102,7 @@ void Clusterizador::hacer_clusters() {
 				float coseno = centroides_viejos[i].calcular_coseno(
 						coordenadas);
 
-				//FIXME: Sacar
-//				cout << "Coseno: " << coseno << " Minimo: " << minimo_coseno
-//						<< endl;
+				cout << coseno << " ? " << minimo_coseno << endl;
 
 				//TODO: Modificar para tolerancia
 				if (coseno < minimo_coseno) {
@@ -133,7 +132,7 @@ void Clusterizador::hacer_clusters() {
 		 centroides_viejos.push_back(nuevo_centroide);
 		 }*/
 		for (int i = 0; i < clusters; i++) {
-			centroides_viejos[i].normalizar();
+			//centroides_viejos[i].normalizar();
 		}
 	}
 

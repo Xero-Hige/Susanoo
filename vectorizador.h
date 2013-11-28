@@ -33,8 +33,8 @@
 #define EXTENSION_VECTORES  ".vec"
 
 typedef struct _coordenada {
-	double peso;
 	int coordenada;
+	double peso;
 } coordenada_t;
 
 class Vectorizador {

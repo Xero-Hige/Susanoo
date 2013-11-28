@@ -34,7 +34,7 @@
 
 #include "Porter.h"
 
-#define _DEBUG
+//#define _DEBUG
 
 using std::string;
 using std::vector;
@@ -254,7 +254,7 @@ void Vectorizador::generar_vector(const string& archivo) {
 	path_vector += "/" + archivo + EXTENSION_VECTORES;
 
 	ofstream vect;
-	vect.open(path_vector.c_str(), std::ios::binary);
+	vect.open(path_vector.c_str(), std::ios::out | std::ios::binary);
 	//----------------------------------------------------
 
 	char buffer[BUFFSIZE];

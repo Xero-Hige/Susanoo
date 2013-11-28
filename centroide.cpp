@@ -21,7 +21,6 @@
 
 #include <stddef.h>
 #include <cmath>
-#include <iostream>
 #include <random>
 #include <utility>
 
@@ -43,7 +42,7 @@ Centroide::Centroide(int dimensiones, bool random) {
 	}
 
 	for (int x = 0; x < dimensiones; x++) {
-		float valor = 0;
+		double valor = 0;
 		if (random) {
 			valor = (distribucion(generador)) / 1000.0;
 		}
@@ -54,6 +53,8 @@ Centroide::Centroide(int dimensiones, bool random) {
 	}
 
 	float modulo = random ? sqrt(suma_acumulados_cuadrado) : 1;
+
+	vectores_asociados = random ? 1 : 0;
 	suma_acumulados_cuadrado = random ? 1 : 0 ;
 
 	if (random){
@@ -68,10 +69,9 @@ Centroide::Centroide(int dimensiones, bool random) {
 		promedios = coordenadas;
 	}
 
-	vectores_asociados = random ? 1 : 0;
 }
 
-double Centroide::calcular_coseno(map<int, double> vector_reducido) {
+double Centroide::calcular_coseno(map<int, double>& vector_reducido) {
 	if (suma_acumulados_cuadrado == 0) return 0;
 
 	double resultado = 0;
@@ -104,28 +104,20 @@ double Centroide::calcular_coseno(Centroide otro_centroide) {
 	return resultado;
 }
 
-void Centroide::agregar_vector(map<int, double> vector_reducido) {
+void Centroide::agregar_vector(map<int, double>& vector_reducido) {
 	for (map<int, double>::iterator it = vector_reducido.begin();
 			it != vector_reducido.end(); ++it) {
 		int coordenada = it->first;
 		double valor = it->second;
 
-//		std::cout << "Agrega: " << coordenada << "-->" << valor << std::endl;
-
 		double anterior = promedios[coordenada];
 
-//		std::cout << "Anterior: " << anterior << std::endl;
-
 		promedios[coordenada] += valor;
-
-//		std::cout << "Actual: " << promedios[coordenada] << std::endl;
 
 		suma_acumulados_cuadrado -= (anterior * anterior);
 		suma_acumulados_cuadrado += (valor * valor);
 	}
 	vectores_asociados++;
-
-	std::cout << "Actual: " << promedios[1] << std::endl;
 }
 
 void Centroide::normalizar() {
@@ -140,5 +132,6 @@ void Centroide::normalizar() {
 	}
 
 	//TODO: mmmmm, esto es matematicamente asi?
-	suma_acumulados_cuadrado = vectores_asociados * vectores_asociados;
+	suma_acumulados_cuadrado = 1;//vectores_asociados * vectores_asociados;
+	vectores_asociados = 1;
 }
