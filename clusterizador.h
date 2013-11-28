@@ -50,7 +50,7 @@ public:
 			const std::vector<std::string>& archivos, int dimensiones);
 	virtual ~Clusterizador();
 	void hacer_clusters();
-	void guardarClusters(std::string& ruta_carp_cluster);
+	void guardarClusters(const std::string& ruta_carp_cluster);
 };
 
 #endif /* CLUSTERIZADOR_H_ */

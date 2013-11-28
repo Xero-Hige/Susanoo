@@ -46,16 +46,20 @@ void print_help() {
              (a partir de aqui debería aparecer al listad con -l o -g)\n\n");
 }
 
-void clusterizar(int n_clusters, const vector<string>& archivos) {
-	Clusterizador c = Clusterizador(n_clusters,CARPETA_VECTORES,archivos,100000);
+void clusterizar(int n_clusters, const vector<string>& archivos,
+		size_t dimensiones) {
+	Clusterizador c = Clusterizador(n_clusters, CARPETA_VECTORES, archivos,
+			dimensiones);
 	c.hacer_clusters();
+	c.guardarClusters("./Clusters");
 }
 
 void indexar(char* optarg) {
 	string directorio = string(optarg);
 	Vectorizador vectorizador = Vectorizador();
-	vector<string> archivos = vectorizador.vectorizar(directorio);
-	clusterizar(3, archivos);
+	size_t dimensiones = 0;
+	vector<string> archivos = vectorizador.vectorizar(directorio, dimensiones);
+	clusterizar(10, archivos, dimensiones);
 }
 
 int main(int argc, char **argv) {

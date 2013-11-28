@@ -68,7 +68,7 @@ void Clusterizador::cargar_vector(map<int, double>& coordenadas,
 
 	int coordenada = 1;
 	double valor = 1;
-  std::cout << "ARCHIVO = " << archivo << std::endl;
+ // std::cout << "ARCHIVO = " << archivo << std::endl;
   int pos = arch.tellg();
   if (arch.get() != EOF){
     arch.seekg(pos);
@@ -87,10 +87,10 @@ void Clusterizador::cargar_vector(map<int, double>& coordenadas,
     }
 		memcpy(&valor, buff_b, sizeof(double));
 
-		cout << coordenada << "---" << valor << endl;
+		//cout << coordenada << "---" << valor << endl;
 
 		coordenadas[coordenada] = valor;
-    
+
     int pos = arch.tellg();
     if (arch.get() != EOF){
       arch.seekg(pos);
@@ -117,8 +117,6 @@ void Clusterizador::hacer_clusters() {
 			for (size_t i = 0; i < centroides_viejos.size(); i++) {
 				float coseno = centroides_viejos[i].calcular_coseno(
 						coordenadas);
-
-				cout << coseno << " ? " << minimo_coseno << endl;
 
 				//TODO: Modificar para tolerancia
 				if (coseno < minimo_coseno) {
@@ -170,11 +168,11 @@ void Clusterizador::crearCarpeta(const string& path_carpeta){
 }
 
 
-void Clusterizador::guardarClusters(string& ruta_carp_cluster){
+void Clusterizador::guardarClusters(const string& ruta_carp_cluster){
     crearCarpeta(ruta_carp_cluster);
 
     int nro_vector = 0;
-    for(vector<vector<string>>::iterator it_todos = clusters_nuevos.begin(); it_todos != clusters_nuevos.end(); ++it_todos){
+    for(vector<vector<string>>::iterator it_todos = clusters_viejos.begin(); it_todos != clusters_viejos.end(); ++it_todos){
         std::stringstream ss;
         ss << nro_vector++;
         string ruta_cluster = ruta_carp_cluster;

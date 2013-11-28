@@ -87,7 +87,7 @@ public:
 
 	Vectorizador();
 
-	std::vector<std::string> vectorizar(const std::string& directorio);
+	std::vector<std::string> vectorizar(const std::string& directorio, size_t& dimensiones);
 
 };
 #endif

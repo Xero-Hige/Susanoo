@@ -312,7 +312,7 @@ void Vectorizador::guardar_vector(double modulo,
 		pesos_vector.pop_back();
 
 		actual.peso = actual.peso / modulo;
-    cout << actual.coordenada << "-" << actual.peso << endl;
+   // cout << actual.coordenada << "-" << actual.peso << endl;
 
 #ifdef _DEBUG
 		vect << actual.coordenada << "-" << actual.peso << endl;
@@ -376,7 +376,7 @@ void Vectorizador::agregar_stopwords() {
  * 	Genera los archivos de vectores a utilizar
  */
 
-vector<string> Vectorizador::vectorizar(const string& directorio) {
+vector<string> Vectorizador::vectorizar(const string& directorio,size_t& dimensiones) {
 	vector<string>();
 
 	obtener_archivos(directorio, archivos);
@@ -391,6 +391,7 @@ vector<string> Vectorizador::vectorizar(const string& directorio) {
 	generar_carpeta(CARPETA_VECTORES);
 	generar_vectores(archivos, palabras_archivos);
 
+	dimensiones = palabras_archivos.size();
 	return archivos;
 }
 
