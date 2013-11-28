@@ -94,7 +94,7 @@ void Clusterizador::hacer_clusters() {
 			float minimo_coseno = 100;
 			int centroide = 0;
 
-			for (int i = 0; i < centroides_viejos.size(); i++) {
+			for (size_t i = 0; i < centroides_viejos.size(); i++) {
 				float coseno = centroides_viejos[i].calcular_coseno(
 						coordenadas);
 
@@ -137,7 +137,7 @@ void Clusterizador::hacer_clusters() {
 	for (int i = 0; i < clusters; i++) {
 		cout << "Cluster " << i << ":" << endl;
 
-		for (int archivo = 0; archivo < clusters_viejos[i].size(); archivo++) {
+		for (size_t archivo = 0; archivo < clusters_viejos[i].size(); archivo++) {
 			cout << clusters_viejos[i][archivo] << endl;
 		}
 	}

@@ -294,6 +294,8 @@ void Vectorizador::generar_vector(const string& archivo) {
     pesos_vector.push_back(coordenada_actual);
 	}
 
+  modulo = sqrt(modulo);
+  
   guardar_vector(modulo, pesos_vector, vect);
 
 	arch.close();

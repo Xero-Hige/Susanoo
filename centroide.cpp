@@ -88,7 +88,7 @@ double Centroide::calcular_coseno(Centroide otro_centroide) {
 	if (suma_acumulados_cuadrado == 0) return 0;
 
 	double resultado = 0;
-	for (int i = 0; i < promedios.size(); i++) {
+	for (size_t i = 0; i < promedios.size(); i++) {
 		float valor_propio = promedios[i];
 		float valor_otro_centroide = otro_centroide.promedios[i];
 
@@ -120,7 +120,7 @@ void Centroide::normalizar() {
 			* (1 / (vectores_asociados * vectores_asociados));
 	modulo = sqrt(modulo);
 
-	for (int i = 0; i < promedios.size(); i++) {
+	for (size_t i = 0; i < promedios.size(); i++) {
 		promedios[i] = promedios[i] / modulo;
 	}
 
