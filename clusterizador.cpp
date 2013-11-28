@@ -102,7 +102,7 @@ void Clusterizador::hacer_clusters() {
 	cout << "Inicializando K-Means" << endl;
 
 	//TODO: cambiar por la distancia
-	for (int i = 0; i < 20; i++) {
+	for (int i = 0; i < 300; i++) {
 		clusters_viejos.clear();
 		clusters_viejos.resize(clusters);
 
