@@ -31,13 +31,13 @@ private:
 	 * al valor de su coordenada en este vector dividido por
 	 * la cantidad de vectores asociados.
 	 */
-	std::vector<float> promedios;
+	std::vector<double> promedios;
 
 	/**
 	 * Almacena la suma de cada uno de los valores del vector
 	 * promedios al cuadrado
 	 */
-	float suma_acumulados_cuadrado;
+	double suma_acumulados_cuadrado;
 
 	/**
 	 * Cantidad de vectores asociados
@@ -51,15 +51,15 @@ public:
 	 * Calcula el coseno contra un vector representado por un map
 	 * (el vector esta normalizado)
 	 */
-	float calcular_coseno(std::map<int, float> vector_reducido);
+	double calcular_coseno(std::map<int, double> vector_reducido);
 
 	/**
 	 * Calcula el coseno contra otro centroide
 	 * (ambos centroides deben estar normalizados)
 	 */
-	float calcular_coseno(Centroide otro_centroide);
+	double calcular_coseno(Centroide otro_centroide);
 
-	void agregar_vector(std::map<int, float> vector_reducido);
+	void agregar_vector(std::map<int, double> vector_reducido);
 	void normalizar();
 };
 

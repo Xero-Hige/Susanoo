@@ -55,7 +55,7 @@ Clusterizador::Clusterizador(int n_clusters, const string& carpeta_vectores,
 Clusterizador::~Clusterizador() {
 }
 
-void Clusterizador::cargar_vector(map<int, float>& coordenadas, string archivo) {
+void Clusterizador::cargar_vector(map<int, double>& coordenadas, string archivo) {
 	string path_archivo = carpeta_origen + "/" + archivo + ".vec";
 	ifstream arch(path_archivo.c_str(), ios::in | ios::binary);
 
@@ -84,7 +84,7 @@ void Clusterizador::hacer_clusters() {
 		clusters_viejos.resize(clusters);
 
 		for (size_t n_archivo = 0; n_archivo < archivos.size(); n_archivo++) {
-			map<int, float> coordenadas = map<int, float>();
+			map<int, double> coordenadas = map<int, double>();
 
 			cargar_vector(coordenadas, archivos[n_archivo]);
 

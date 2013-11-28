@@ -33,7 +33,7 @@ GeneradorNumerosRandom generador;
 std::uniform_int_distribution<int> distribucion(0, 1000);
 
 Centroide::Centroide(int dimensiones, bool random) {
-	vector<float> coordenadas;
+	vector<double> coordenadas;
 	suma_acumulados_cuadrado = 0;
 
 	if (random) {
@@ -65,14 +65,14 @@ Centroide::Centroide(int dimensiones, bool random) {
 	vectores_asociados = random ? 1 : 0;
 }
 
-float Centroide::calcular_coseno(map<int, float> vector_reducido) {
+double Centroide::calcular_coseno(map<int, double> vector_reducido) {
 	if (suma_acumulados_cuadrado == 0) return 115;
 
 	double resultado = 0;
-	for (map<int, float>::iterator it = vector_reducido.begin();
+	for (map<int, double>::iterator it = vector_reducido.begin();
 			it != vector_reducido.end(); ++it) {
 		int coordenada = it->first;
-		float valor = it->second;
+		double valor = it->second;
 
 		resultado += ((promedios[coordenada] / vectores_asociados) * valor);
 	}
@@ -84,7 +84,7 @@ float Centroide::calcular_coseno(map<int, float> vector_reducido) {
 	return (resultado / modulo);
 }
 
-float Centroide::calcular_coseno(Centroide otro_centroide) {
+double Centroide::calcular_coseno(Centroide otro_centroide) {
 	if (suma_acumulados_cuadrado == 0) return 0;
 
 	double resultado = 0;
@@ -98,8 +98,8 @@ float Centroide::calcular_coseno(Centroide otro_centroide) {
 	return resultado;
 }
 
-void Centroide::agregar_vector(map<int, float> vector_reducido) {
-	for (map<int, float>::iterator it = vector_reducido.begin();
+void Centroide::agregar_vector(map<int, double> vector_reducido) {
+	for (map<int, double>::iterator it = vector_reducido.begin();
 			it != vector_reducido.end(); ++it) {
 		int coordenada = it->first;
 		float valor = it->second;
