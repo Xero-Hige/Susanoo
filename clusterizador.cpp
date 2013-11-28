@@ -36,6 +36,10 @@ using std::ios;
 
 #define BUFFSIZE 200
 
+#define VECTOR_STR "vector"
+#define VECTOR_EXT ".res"
+#define ALPHA 0.000
+
 Clusterizador::Clusterizador(int n_clusters, const string& carpeta_vectores,
 		const std::vector<std::string>& archivos, int dimensiones) {
 	cout << "Inicializacion" << endl;
@@ -156,4 +160,32 @@ void Clusterizador::hacer_clusters() {
 			cout << clusters_viejos[i][archivo] << endl;
 		}
 	}
+}
+
+
+void Clusterizador::crearCarpeta(const string& path_carpeta){
+    string comando_carpeta_temporal = "mkdir ";
+    comando_carpeta_temporal += path_carpeta;
+    system(comando_carpeta_temporal.c_str());
+}
+
+
+void Clusterizador::guardarClusters(string& ruta_carp_cluster){
+    crearCarpeta(ruta_carp_cluster);
+
+    int nro_vector = 0;
+    for(vector<vector<string>>::iterator it_todos = clusters_nuevos.begin(); it_todos != clusters_nuevos.end(); ++it_todos){
+        std::stringstream ss;
+        ss << nro_vector++;
+        string ruta_cluster = ruta_carp_cluster;
+        ruta_cluster += "/";
+        ruta_cluster += VECTOR_STR + ss.str();
+        ruta_cluster += VECTOR_EXT;
+
+        std::ofstream arch_cluster;
+        arch_cluster.open(ruta_cluster.c_str(), std::ios::binary);
+        for(vector<string>::iterator it_cluster = it_todos->begin(); it_cluster != it_todos->end(); ++it_cluster)
+            arch_cluster << *it_cluster << std::endl;
+        arch_cluster.close();
+    }
 }
