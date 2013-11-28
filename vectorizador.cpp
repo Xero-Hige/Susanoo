@@ -314,8 +314,10 @@ void Vectorizador::guardar_vector(double modulo,
 
     actual.peso = actual.peso / modulo;
 
-		vect.write((char*) &actual.coordenada, sizeof(actual.coordenada));
-		vect.write((char*) &actual.peso, sizeof(actual.peso));
+#ifdef _DEBUG
+		vect.write((char*) &actual.coordenada, sizeof(int));
+		vect.write((char*) &actual.peso, sizeof(double));
+#endif //_DEBUG
   }
 }
 
@@ -379,7 +381,8 @@ vector<string> Vectorizador::vectorizar(const string& directorio) {
 
 	agregar_stopwords();
 
-	generar_carpeta(CARPETA_TEMPORAL);//TODO: eliminar los datos innecesarios del vector
+	generar_carpeta(CARPETA_TEMPORAL);
+  //TODO: eliminar los datos innecesarios del vector
 	generar_bases(directorio, archivos);
 
 	generar_carpeta(CARPETA_VECTORES);
