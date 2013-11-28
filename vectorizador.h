@@ -32,17 +32,24 @@
 #define CARPETA_VECTORES "./temp_vects"
 #define EXTENSION_VECTORES  ".vec"
 
+typedef struct _coordenada{
+  double peso;
+  int coordenada;
+}coordenada_t;
+
 class Vectorizador {
 
 private:
 	std::string _directorio;
 	std::vector<std::string> archivos;
 
-	std::map<std::string, std::vector<int> > palabras_archivos;
-	std::map<std::string, std::string> reduccion_palabras;
+	std::map<std::string, std::vector<int> > palabras_archivos; 
+  // clave: palabra, valor [ cantidad total de documentos en los que aparece , marca para saber si ya se leyo ]
+  // DF es el primer subindice
+	std::map<std::string, std::string> reduccion_palabras; // porter
 
-	std::map<std::string, int> coordenadas_vector;
-
+	std::map<std::string, int> coordenadas_vector; 
+  // palabra y devuelve coordenada del vector, cantidad de claves es M
 
 private:
 	void contar(const std::string& directorio, const std::string& archivo,
@@ -71,6 +78,11 @@ private:
 	void reducir_palabras(std::map<std::string, int>& palabras,
 			std::map<std::string, int>& palabras_reducidas);
 	void agregar_stopwords();
+  
+  // almacena el contenido del pesos_vector en el archivo abierto vect.
+  void guardar_vector(double modulo, 
+                      std::vector<coordenada_t> &pesos_vector, 
+                      std::ofstream &vect);
 
 public:
 

@@ -29,6 +29,7 @@
 #include <cstdlib>
 #include <iterator>
 #include <utility>
+#include <math.h>
 
 #include "Porter.h"
 
@@ -263,6 +264,11 @@ void Vectorizador::generar_vector(const string& archivo) {
 	size_t separador = datos.find("=");
 	unsigned int palabras_totales = atoi(datos.substr(separador + 1).c_str());
 
+  // vector donde se guardara el peso de la correspondiente coordenada
+  vector<coordenada_t> pesos_vector;
+  // modulo del vector que se actualiza en cada pasada
+  double modulo = 0;
+  
 	while (arch.good()) {
 		arch.getline(buffer, BUFFSIZE - 1);
 		string datos = string(buffer);
@@ -271,28 +277,46 @@ void Vectorizador::generar_vector(const string& archivo) {
 		string clave = datos.substr(0, separador);
 		string valor = datos.substr(separador + 1);
 
-		int frecuencia_documento = atoi(valor.c_str());
+		double frecuencia_documento = atoi(valor.c_str());
 
 		if (coordenadas_vector.count(clave) == 0)
 			continue;
 
-		//TODO: pasar a valores normalizados
-
 		int coordenada = coordenadas_vector[clave];
-		float frecuencia = frecuencia_documento / (palabras_totales + 0.0);
-
+		float frecuencia_termino = frecuencia_documento / (palabras_totales + 0.0);
+    double terminos_totales = coordenadas_vector.size();
+    double peso = frecuencia_termino * log10(terminos_totales / frecuencia_documento) / log10(2);
+    modulo += pow(peso,2);
+    
+    coordenada_t coordenada_actual;
+    coordenada_actual.peso = peso;
+    coordenada_actual.coordenada = coordenada;
+    pesos_vector.push_back(coordenada_actual);
+    
 #ifdef _DEBUG
-		vect << clave << "::" << coordenada << "-" << frecuencia << endl;
+		vect << clave << "::" << coordenada << "-" << peso << endl;
 #endif //_DEBUG
 
-#ifndef _DEBUG
-		vect.write((char*) &coordenada, sizeof(int));
-		vect.write((char*) &frecuencia, sizeof(float));
-#endif //_DEBUG
 	}
+  
+  guardar_vector(modulo, pesos_vector, vect);
 
 	arch.close();
 	vect.close();
+}
+
+void Vectorizador::guardar_vector(double modulo, 
+                                  std::vector<coordenada_t> &pesos_vector, 
+                                  ofstream &vect){
+  while (pesos_vector.size() != 0){
+    coordenada_t actual = pesos_vector[pesos_vector.size() - 1];
+    pesos_vector.pop_back();
+
+    actual.peso = actual.peso / modulo;
+
+		vect.write((char*) &actual.coordenada, sizeof(actual.coordenada));
+		vect.write((char*) &actual.peso, sizeof(actual.peso));
+  }
 }
 
 /**
