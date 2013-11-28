@@ -47,6 +47,7 @@ private:
 	Centroide(){};
 
 public:
+  
 	Centroide(int dimensiones, bool random = true);
 
 	/**

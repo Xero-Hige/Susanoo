@@ -312,6 +312,7 @@ void Vectorizador::guardar_vector(double modulo,
 		pesos_vector.pop_back();
 
 		actual.peso = actual.peso / modulo;
+    cout << actual.coordenada << "-" << actual.peso << endl;
 
 #ifdef _DEBUG
 		vect << actual.coordenada << "-" << actual.peso << endl;
