@@ -23,6 +23,7 @@
 #include <cmath>
 #include <random>
 #include <utility>
+#include <time.h>
 
 using std::map;
 using std::vector;
@@ -54,24 +55,23 @@ Centroide::Centroide(int dimensiones, bool random) {
 	float modulo = random ? sqrt(suma_acumulados_cuadrado) : 1;
 
 	vectores_asociados = random ? 1 : 0;
-	suma_acumulados_cuadrado = random ? 1 : 0 ;
+	suma_acumulados_cuadrado = random ? 1 : 0;
 
-	if (random){
+	if (random) {
 		for (int x = 0; x < dimensiones; x++) {
 			coordenadas[x] = (coordenadas[x] / modulo);
 			promedios.push_back(coordenadas[x]);
 			suma_acumulados_cuadrado += (coordenadas[x] * coordenadas[x]);
 		}
-	}
-	else
-	{
+	} else {
 		promedios = coordenadas;
 	}
 
 }
 
 double Centroide::calcular_coseno(map<int, double>& vector_reducido) {
-	if (suma_acumulados_cuadrado == 0) return 0;
+	if (suma_acumulados_cuadrado == 0)
+		return 0;
 
 	double resultado = 0;
 	for (map<int, double>::iterator it = vector_reducido.begin();
@@ -90,7 +90,9 @@ double Centroide::calcular_coseno(map<int, double>& vector_reducido) {
 }
 
 double Centroide::calcular_coseno(Centroide otro_centroide) {
-	if (suma_acumulados_cuadrado == 0) return 0;
+	if (suma_acumulados_cuadrado == 0
+			&& otro_centroide.suma_acumulados_cuadrado == 0)
+		return 1;
 
 	double resultado = 0;
 	for (size_t i = 0; i < promedios.size(); i++) {
@@ -122,17 +124,18 @@ void Centroide::agregar_vector(map<int, double>& vector_reducido) {
 }
 
 void Centroide::normalizar() {
+	if (vectores_asociados == 0) return;
+
 	double modulo = suma_acumulados_cuadrado
 			* (1 / (vectores_asociados * vectores_asociados));
 	modulo = sqrt(modulo);
 
 	for (size_t i = 0; i < promedios.size(); i++) {
-    promedios[i] = promedios[i] / modulo;
-  }
-
-
+		promedios[i] = promedios[i] / (vectores_asociados) * modulo;
+		suma_acumulados_cuadrado += (promedios[i] * promedios[i]);
+	}
 
 	//TODO: mmmmm, esto es matematicamente asi?
-	suma_acumulados_cuadrado = 1;//vectores_asociados * vectores_asociados;
+	//suma_acumulados_cuadrado = 1;//vectores_asociados * vectores_asociados;
 	vectores_asociados = 1;
 }

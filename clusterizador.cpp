@@ -101,8 +101,15 @@ void Clusterizador::cargar_vector(map<int, double>& coordenadas,
 void Clusterizador::hacer_clusters() {
 	cout << "Inicializando K-Means" << endl;
 
-	//TODO: cambiar por la distancia
-	for (int i = 0; i < 300; i++) {
+	size_t iteracion = 0;
+
+	double distancia_maxima = 0;
+	while (distancia_maxima < 0.95){
+
+		cout << "Inicio teracion: " << iteracion++ << " con " << distancia_maxima << endl;
+
+		distancia_maxima = 0;
+
 		clusters_viejos.clear();
 		clusters_viejos.resize(clusters);
 
@@ -130,7 +137,7 @@ void Clusterizador::hacer_clusters() {
 		}
 		//TODO: cambiar los centroides para recalcular la distancia entre ellos al principio del for
 
-		centroides_viejos.clear();
+		centroides_nuevos.clear();
 		for (int centroide = 0; centroide < clusters; centroide++) {
 			Centroide nuevo_centroide = Centroide(dimensiones, false);
 			for (int archivo = 0; archivo < clusters_viejos[centroide].size();
@@ -143,11 +150,25 @@ void Clusterizador::hacer_clusters() {
 				nuevo_centroide.agregar_vector(coordenadas);
 			}
 			nuevo_centroide.normalizar();
-			centroides_viejos.push_back(nuevo_centroide);
+			centroides_nuevos.push_back(nuevo_centroide);
 		}
 		for (int i = 0; i < clusters; i++) {
 			centroides_viejos[i].normalizar();
+			centroides_nuevos[i].normalizar();
+			Centroide& viejo = centroides_viejos[i];
+			Centroide& nuevo = centroides_nuevos[i];
+
+			double coseno = nuevo.calcular_coseno(viejo);
+
+			if (i==0 || coseno < distancia_maxima)
+			{
+				cout << coseno << endl;
+				distancia_maxima = coseno;
+			}
+
 		}
+		centroides_viejos = centroides_nuevos;
+		cout << "Finaliza iteracion: " << iteracion << " con " << distancia_maxima << endl;
 	}
 
 	for (int i = 0; i < clusters; i++) {
