@@ -44,6 +44,8 @@ private:
 	 */
 	int vectores_asociados;
 
+	Centroide(){};
+
 public:
 	Centroide(int dimensiones, bool random = true);
 

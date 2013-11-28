@@ -30,6 +30,7 @@
 #include <iterator>
 #include <utility>
 #include <math.h>
+#include <fstream>
 
 #include "Porter.h"
 
@@ -198,7 +199,7 @@ void Vectorizador::generar_bases(const string& directorio,
 	for (map<string, vector<int> >::iterator it = palabras_archivos.begin();
 			it != palabras_archivos.end(); ++it) {
 		if (it->second[0] < 2)
-		continue;
+			continue;
 		out << it->first << "=" << it->second[0] << endl;
 	}
 	out.close();
@@ -264,10 +265,10 @@ void Vectorizador::generar_vector(const string& archivo) {
 	size_t separador = datos.find("=");
 	unsigned int palabras_totales = atoi(datos.substr(separador + 1).c_str());
 
-  // vector donde se guardara el peso de la correspondiente coordenada
-  vector<coordenada_t> pesos_vector;
-  // modulo del vector que se actualiza en cada pasada
-  double modulo = 0;
+	// vector donde se guardara el peso de la correspondiente coordenada
+	vector<coordenada_t> pesos_vector;
+	// modulo del vector que se actualiza en cada pasada
+	double modulo = 0;
 
 	while (arch.good()) {
 		arch.getline(buffer, BUFFSIZE - 1);
@@ -283,33 +284,34 @@ void Vectorizador::generar_vector(const string& archivo) {
 			continue;
 
 		int coordenada = coordenadas_vector[clave];
-		float frecuencia_termino = frecuencia_documento / (palabras_totales + 0.0);
-    double terminos_totales = coordenadas_vector.size();
-    double peso = frecuencia_termino * log10(terminos_totales / frecuencia_documento) / log10(2);
-    modulo += pow(peso,2);
+		float frecuencia_termino = frecuencia_documento
+				/ (palabras_totales + 0.0);
+		double terminos_totales = coordenadas_vector.size();
+		double peso = frecuencia_termino
+				* log10(terminos_totales / frecuencia_documento) / log10(2);
+		modulo += pow(peso, 2);
 
-    coordenada_t coordenada_actual;
-    coordenada_actual.peso = peso;
-    coordenada_actual.coordenada = coordenada;
-    pesos_vector.push_back(coordenada_actual);
+		coordenada_t coordenada_actual;
+		coordenada_actual.peso = peso;
+		coordenada_actual.coordenada = coordenada;
+		pesos_vector.push_back(coordenada_actual);
 	}
 
-  modulo = sqrt(modulo);
-  
-  guardar_vector(modulo, pesos_vector, vect);
+	modulo = sqrt(modulo);
+
+	guardar_vector(modulo, pesos_vector, vect);
 
 	arch.close();
 	vect.close();
 }
 
 void Vectorizador::guardar_vector(double modulo,
-                                  std::vector<coordenada_t> &pesos_vector,
-                                  ofstream &vect){
-  while (pesos_vector.size() != 0){
-    coordenada_t actual = pesos_vector[pesos_vector.size() - 1];
-    pesos_vector.pop_back();
+		std::vector<coordenada_t> &pesos_vector, ofstream &vect) {
+	while (pesos_vector.size() != 0) {
+		coordenada_t actual = pesos_vector[pesos_vector.size() - 1];
+		pesos_vector.pop_back();
 
-    actual.peso = actual.peso / modulo;
+		actual.peso = actual.peso / modulo;
 
 #ifdef _DEBUG
 		vect << actual.coordenada << "-" << actual.peso << endl;
@@ -318,7 +320,7 @@ void Vectorizador::guardar_vector(double modulo,
 		vect.write((char*) &actual.coordenada, sizeof(int));
 		vect.write((char*) &actual.peso, sizeof(double));
 #endif //_DEBUG
-  }
+	}
 }
 
 /**
@@ -382,7 +384,7 @@ vector<string> Vectorizador::vectorizar(const string& directorio) {
 	agregar_stopwords();
 
 	generar_carpeta(CARPETA_TEMPORAL);
-  //TODO: eliminar los datos innecesarios del vector
+	//TODO: eliminar los datos innecesarios del vector
 	generar_bases(directorio, archivos);
 
 	generar_carpeta(CARPETA_VECTORES);

@@ -19,7 +19,9 @@
 
 #include "centroide.h"
 
+#include <stddef.h>
 #include <cmath>
+#include <iostream>
 #include <random>
 #include <utility>
 
@@ -52,7 +54,7 @@ Centroide::Centroide(int dimensiones, bool random) {
 	}
 
 	float modulo = random ? sqrt(suma_acumulados_cuadrado) : 1;
-	suma_acumulados_cuadrado = random ? (vectores_asociados * vectores_asociados) : 0 ;
+	suma_acumulados_cuadrado = random ? 1 : 0 ;
 
 	if (random){
 		for (int x = 0; x < dimensiones; x++) {
@@ -60,6 +62,10 @@ Centroide::Centroide(int dimensiones, bool random) {
 			promedios.push_back(coordenadas[x]);
 			suma_acumulados_cuadrado += (coordenadas[x] * coordenadas[x]);
 		}
+	}
+	else
+	{
+		promedios = coordenadas;
 	}
 
 	vectores_asociados = random ? 1 : 0;
@@ -89,8 +95,8 @@ double Centroide::calcular_coseno(Centroide otro_centroide) {
 
 	double resultado = 0;
 	for (size_t i = 0; i < promedios.size(); i++) {
-		float valor_propio = promedios[i];
-		float valor_otro_centroide = otro_centroide.promedios[i];
+		double valor_propio = promedios[i];
+		double valor_otro_centroide = otro_centroide.promedios[i];
 
 		resultado += (valor_propio * valor_otro_centroide);
 	}
@@ -104,13 +110,22 @@ void Centroide::agregar_vector(map<int, double> vector_reducido) {
 		int coordenada = it->first;
 		double valor = it->second;
 
+//		std::cout << "Agrega: " << coordenada << "-->" << valor << std::endl;
+
 		double anterior = promedios[coordenada];
+
+//		std::cout << "Anterior: " << anterior << std::endl;
+
 		promedios[coordenada] += valor;
+
+//		std::cout << "Actual: " << promedios[coordenada] << std::endl;
 
 		suma_acumulados_cuadrado -= (anterior * anterior);
 		suma_acumulados_cuadrado += (valor * valor);
 	}
 	vectores_asociados++;
+
+	std::cout << "Actual: " << promedios[1] << std::endl;
 }
 
 void Centroide::normalizar() {
