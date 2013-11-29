@@ -47,7 +47,7 @@ Clusterizador::Clusterizador(int n_clusters, const string& carpeta_vectores,
 	for (int i = 0; i < n_clusters; i++) {
 		cout << "Inicializando centroide: " << i << endl;
 
-		centroides_viejos.push_back(Centroide(dimensiones, true));
+		centroides_nuevos.push_back(Centroide(dimensiones, true));
 	}
 
 	clusters = n_clusters;
@@ -104,14 +104,16 @@ void Clusterizador::hacer_clusters() {
 	size_t iteracion = 0;
 
 	double distancia_maxima = 0;
-	while (distancia_maxima < 0.95){
+	while (distancia_maxima < 0.95 && iteracion<20){
+
+		centroides_viejos = centroides_nuevos;
 
 		cout << "Inicio teracion: " << iteracion++ << " con " << distancia_maxima << endl;
 
 		distancia_maxima = 0;
 
-		clusters_viejos.clear();
-		clusters_viejos.resize(clusters);
+		clusters_nuevos.clear();
+		clusters_nuevos.resize(dimensiones);
 
 		for (size_t n_archivo = 0; n_archivo < archivos.size(); n_archivo++) {
 			map<int, double> coordenadas = map<int, double>();
@@ -121,8 +123,8 @@ void Clusterizador::hacer_clusters() {
 			float maximo_coseno = 0;
 			int centroide = 0;
 
-			for (size_t i = 0; i < centroides_viejos.size(); i++) {
-				float coseno = centroides_viejos[i].calcular_coseno(
+			for (size_t i = 0; i < centroides_nuevos.size(); i++) {
+				float coseno = centroides_nuevos[i].calcular_coseno(
 						coordenadas);
 
 				//TODO: Modificar para tolerancia
@@ -131,28 +133,12 @@ void Clusterizador::hacer_clusters() {
 					centroide = i;
 				}
 			}
-
-			centroides_viejos[centroide].agregar_vector(coordenadas);
-			clusters_viejos[centroide].push_back(archivos[n_archivo]);
+			centroides_nuevos[centroide].agregar_vector(coordenadas);
+			clusters_nuevos[centroide].push_back(archivos[n_archivo]);
 		}
-		//TODO: cambiar los centroides para recalcular la distancia entre ellos al principio del for
 
-		centroides_nuevos.clear();
-		for (int centroide = 0; centroide < clusters; centroide++) {
-			Centroide nuevo_centroide = Centroide(dimensiones, false);
-			for (int archivo = 0; archivo < clusters_viejos[centroide].size();
-					archivo++) {
-
-				map<int, double> coordenadas = map<int, double>();
-
-				cargar_vector(coordenadas, clusters_viejos[centroide][archivo]);
-
-				nuevo_centroide.agregar_vector(coordenadas);
-			}
-			nuevo_centroide.normalizar();
-			centroides_nuevos.push_back(nuevo_centroide);
-		}
 		for (int i = 0; i < clusters; i++) {
+
 			centroides_viejos[i].normalizar();
 			centroides_nuevos[i].normalizar();
 			Centroide& viejo = centroides_viejos[i];
@@ -167,16 +153,16 @@ void Clusterizador::hacer_clusters() {
 			}
 
 		}
-		centroides_viejos = centroides_nuevos;
+
 		cout << "Finaliza iteracion: " << iteracion << " con " << distancia_maxima << endl;
 	}
 
 	for (int i = 0; i < clusters; i++) {
 		cout << "Cluster " << i << ":" << endl;
 
-		for (size_t archivo = 0; archivo < clusters_viejos[i].size();
+		for (size_t archivo = 0; archivo < clusters_nuevos[i].size();
 				archivo++) {
-			cout << clusters_viejos[i][archivo] << endl;
+			cout << clusters_nuevos[i][archivo] << endl;
 		}
 	}
 }

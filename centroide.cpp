@@ -38,7 +38,7 @@ Centroide::Centroide(int dimensiones, bool random) {
 	suma_acumulados_cuadrado = 0;
 
 	if (random) {
-		generador.seed(semilla++);
+		generador.seed(time(NULL));
 	}
 
 	for (int x = 0; x < dimensiones; x++) {
@@ -102,7 +102,13 @@ double Centroide::calcular_coseno(Centroide otro_centroide) {
 		resultado += (valor_propio * valor_otro_centroide);
 	}
 
-	return resultado;
+	double mod_a = suma_acumulados_cuadrado /(vectores_asociados * vectores_asociados);
+	mod_a = sqrt(mod_a);
+
+	double mod_b = otro_centroide.suma_acumulados_cuadrado /(otro_centroide.vectores_asociados * otro_centroide.vectores_asociados);
+	mod_b = sqrt(mod_b);
+
+	return (resultado/(mod_a * mod_b));
 }
 
 void Centroide::agregar_vector(map<int, double>& vector_reducido) {
