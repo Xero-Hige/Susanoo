@@ -68,7 +68,7 @@ void Clusterizador::cargar_vector(map<int, double>& coordenadas,
 
 	int coordenada = 1;
 	double valor = 1;
-	// std::cout << "ARCHIVO = " << archivo << std::endl;
+
 	int pos = arch.tellg();
 	if (arch.get() != EOF) {
 		arch.seekg(pos);
@@ -86,8 +86,6 @@ void Clusterizador::cargar_vector(map<int, double>& coordenadas,
 			buff_b[i] = arch.get();
 		}
 		memcpy(&valor, buff_b, sizeof(double));
-
-		//cout << coordenada << "---" << valor << endl;
 
 		coordenadas[coordenada] = valor;
 
@@ -120,12 +118,14 @@ void Clusterizador::hacer_clusters() {
 
 			cargar_vector(coordenadas, archivos[n_archivo]);
 
-			float maximo_coseno = 0;
+			double maximo_coseno = 0;
 			int centroide = 0;
 
 			for (size_t i = 0; i < centroides_nuevos.size(); i++) {
-				float coseno = centroides_nuevos[i].calcular_coseno(
+				double coseno = centroides_nuevos[i].calcular_coseno(
 						coordenadas);
+
+				cout << "Coseno: " << coseno << endl;
 
 				//TODO: Modificar para tolerancia
 				if (coseno > maximo_coseno) {
@@ -139,7 +139,7 @@ void Clusterizador::hacer_clusters() {
 
 		for (int i = 0; i < clusters; i++) {
 
-			centroides_viejos[i].normalizar();
+			//centroides_viejos[i].normalizar(); ya estan normalizados
 			centroides_nuevos[i].normalizar();
 			Centroide& viejo = centroides_viejos[i];
 			Centroide& nuevo = centroides_nuevos[i];

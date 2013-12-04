@@ -74,9 +74,9 @@ double Centroide::calcular_coseno(map<int, double>& vector_reducido) {
 		resultado += ((promedios[coordenada] / vectores_asociados) * valor);
 	}
 
-	double modulo = suma_acumulados_cuadrado
-			* (1 / (vectores_asociados * vectores_asociados));
+	double modulo = suma_acumulados_cuadrado;
 	modulo = sqrt(modulo);
+	modulo = modulo/vectores_asociados;
 
 	return (resultado / modulo);
 }
@@ -124,18 +124,16 @@ void Centroide::agregar_vector(map<int, double>& vector_reducido) {
 void Centroide::normalizar() {
 	if (vectores_asociados == 0) return;
 
-	double modulo = suma_acumulados_cuadrado
-			* (1 / (vectores_asociados * vectores_asociados));
+	double modulo = suma_acumulados_cuadrado;
 	modulo = sqrt(modulo);
 
 	suma_acumulados_cuadrado = 0;
 
 	for (size_t i = 0; i < promedios.size(); i++) {
-		promedios[i] = promedios[i] / (vectores_asociados) * modulo;
+		promedios[i] = promedios[i] / modulo;
 		suma_acumulados_cuadrado += (promedios[i] * promedios[i]);
 	}
 
-	//suma_acumulados_cuadrado = 1;
 	std::cout << "Acumulado cuadrado: " << suma_acumulados_cuadrado << std::endl;
 	vectores_asociados = 1;
 }
