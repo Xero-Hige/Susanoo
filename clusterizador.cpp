@@ -108,7 +108,7 @@ void Clusterizador::hacer_clusters() {
 
 		centroides_viejos = centroides_nuevos;
 
-		cout << "Inicio teracion: " << iteracion++ << " con " << distancia_maxima << endl;
+		cout << "Inicio teracion: " << ++iteracion << " con " << distancia_maxima << endl;
 
 		distancia_maxima = 1;
 

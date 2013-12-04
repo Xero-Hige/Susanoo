@@ -128,12 +128,14 @@ void Centroide::normalizar() {
 			* (1 / (vectores_asociados * vectores_asociados));
 	modulo = sqrt(modulo);
 
+	suma_acumulados_cuadrado = 0;
+
 	for (size_t i = 0; i < promedios.size(); i++) {
 		promedios[i] = promedios[i] / (vectores_asociados) * modulo;
 		suma_acumulados_cuadrado += (promedios[i] * promedios[i]);
 	}
 
-	//TODO: mmmmm, esto es matematicamente asi?
-	//suma_acumulados_cuadrado = 1;//vectores_asociados * vectores_asociados;
+	//suma_acumulados_cuadrado = 1;
+	std::cout << "Acumulado cuadrado: " << suma_acumulados_cuadrado << std::endl;
 	vectores_asociados = 1;
 }
