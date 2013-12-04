@@ -287,9 +287,9 @@ void Vectorizador::generar_vector(const string& archivo) {
 		int coordenada = coordenadas_vector[clave];
 		float frecuencia_termino = frecuencia_documento
 				/ (palabras_totales + 0.0);
-		double terminos_totales = coordenadas_vector.size();
+		double documentos_totales = archivos.size();
 		double peso = frecuencia_termino
-				* log10(terminos_totales / frecuencia_documento) / log10(2);
+				* log10(documentos_totales / frecuencia_documento) / log10(2);
 		modulo += pow(peso, 2);
 
 		coordenada_t coordenada_actual;
