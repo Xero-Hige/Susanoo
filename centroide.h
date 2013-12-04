@@ -66,7 +66,7 @@ public:
 	double calcular_coseno(Centroide& otro_centroide);
 
 	void agregar_vector(std::map<int, double>& vector_reducido);
-private:
+
 	void normalizar();
 };
 
