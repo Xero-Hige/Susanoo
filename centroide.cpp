@@ -22,30 +22,21 @@
 #include <stddef.h>
 #include <time.h>
 #include <cmath>
+#include <cstdlib>
 #include <iostream>
-#include <random>
 #include <utility>
 
 using std::map;
 using std::vector;
 
-typedef std::mt19937 GeneradorNumerosRandom;  // Mersenne Twister
-
-GeneradorNumerosRandom generador;
-std::uniform_real_distribution<double> distribucion(0, 1000);
-
 Centroide::Centroide(int dimensiones, bool random) {
 	vector<double> coordenadas;
 	suma_acumulados_cuadrado = 0;
 
-	if (random) {
-		generador.seed(time(NULL));
-	}
-
 	for (int x = 0; x < dimensiones; x++) {
 		double valor = 0;
 		if (random) {
-			valor = (distribucion(generador)+x) / 1000.0;
+			valor = ( rand()%1000 ) / 1000.0;
 		}
 
 		suma_acumulados_cuadrado += (valor * valor);

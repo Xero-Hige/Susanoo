@@ -20,7 +20,10 @@
  */
 
 #include <getopt.h>
+#include <stddef.h>
 #include <cstdio>
+#include <cstdlib>
+#include <ctime>
 #include <string>
 #include <vector>
 
@@ -63,6 +66,8 @@ void indexar(char* optarg) {
 }
 
 int main(int argc, char **argv) {
+	srand(time(NULL)); //inicializo el random
+
 	int c;
 
 	static struct option long_options[] = { { "directorio", 1, 0, 0 }, {
