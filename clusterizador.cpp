@@ -146,7 +146,7 @@ void Clusterizador::hacer_clusters() {
 
 			double coseno = nuevo.calcular_coseno(viejo);
 
-			if (coseno >= distancia_maxima)
+			if (coseno <= distancia_maxima)
 			{
 				cout << "Maximo centroide n:" << i << endl;
 				distancia_maxima = coseno;
@@ -154,7 +154,7 @@ void Clusterizador::hacer_clusters() {
 
 		}
 
-		cout << "Finaliza iteracion: " << iteracion++ << " con " << distancia_maxima << endl;
+		cout << "Finaliza iteracion: " << iteracion << " con " << distancia_maxima << endl;
 	}
 
 	for (int i = 0; i < clusters; i++) {
