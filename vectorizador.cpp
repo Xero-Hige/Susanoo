@@ -376,7 +376,7 @@ void Vectorizador::agregar_stopwords() {
 /**
  * 	Genera los archivos de vectores a utilizar
  */
-
+ 
 vector<string> Vectorizador::vectorizar(const string& directorio,size_t& dimensiones) {
 	vector<string>();
 
@@ -398,4 +398,20 @@ vector<string> Vectorizador::vectorizar(const string& directorio,size_t& dimensi
 
 Vectorizador::Vectorizador() {
 	archivos = vector<string>();
+}
+
+vector<string> Vectorizador::agregar_archivo(const string &archivo){
+  // agregar_stopwords();      ?????????????????????????????
+  
+  generar_vector(archivo);  
+  
+  // ESTA CROTADA LA HICE PARA PROBAR NADA MAS, HAY QUE PREGUNTARLE A GASTON SI MODIFICAR EL OBTENER_ARCHIVOS
+  obtener_archivos(CARPETA_VECTORES, archivos);
+  for (size_t i = 0; i < archivos.size(); i++){
+    string archivo_temp = archivos[i];
+    archivos[i] = archivo_temp.substr(0,archivo_temp.size() - 4);
+  }
+  // LA CROTADA TERMINA AQUI
+  
+  return archivos;
 }

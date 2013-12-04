@@ -88,6 +88,8 @@ public:
 	Vectorizador();
 
 	std::vector<std::string> vectorizar(const std::string& directorio, size_t& dimensiones);
+  
+  std::vector<std::string> agregar_archivo(const std::string &archivo);
 
 };
 #endif

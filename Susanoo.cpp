@@ -63,7 +63,30 @@ void indexar(char* optarg) {
 	Vectorizador vectorizador = Vectorizador();
 	size_t dimensiones = 0;
 	vector<string> archivos = vectorizador.vectorizar(directorio, dimensiones);
-	clusterizar(sqrt(archivos.size()/2), archivos, dimensiones);
+
+  // BORRAR LO SGUIENTE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  for (size_t i = 0; i < archivos.size(); i++){
+    std::cout << archivos[i] << std::endl;
+  }
+
+	clusterizar(10,archivos,dimensiones);//sqrt(archivos.size()/2), archivos, dimensiones);
+}
+
+//
+void agregar_archivo(char *optarg){
+  string archivo = string(optarg);
+  Vectorizador vectorizador = Vectorizador();
+  vector<string> archivos = vectorizador.agregar_archivo(archivo);
+
+
+// BORRAR LO SGUIENTE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  for (size_t i = 0; i < archivos.size(); i++){
+    std::cout << archivos[i] << std::endl;
+  }
+
+
+  size_t dimensiones = 0;                               //  va igual que el anterior?
+  clusterizar(10,archivos,dimensiones);
 }
 
 int main(int argc, char **argv) {
@@ -71,10 +94,12 @@ int main(int argc, char **argv) {
 
 	int c;
 
-	static struct option long_options[] = { { "directorio", 1, 0, 0 }, {
-			"categorias", 1, 0, 0 }, { "multi", 1, 0, 0 },
-			{ "agregar", 1, 0, 0 }, { "listar", 0, 0, 0 },
-			{ "grupos", 0, 0, 0 }, { "help", 0, 0, 0 }, { NULL, 0, NULL, 0 } };
+	static struct option long_options[] = { 
+    { "directorio", 1, 0, 0 },{"categorias", 1, 0, 0 }, 
+    { "multi", 1, 0, 0 }, { "agregar", 1, 0, 0 }, 
+    { "listar", 0, 0, 0 }, { "grupos", 0, 0, 0 }, 
+    { "help", 0, 0, 0 }, { NULL, 0, NULL, 0 } 
+  };
 
 	int option_index = 0;
 
@@ -87,7 +112,8 @@ int main(int argc, char **argv) {
 		switch (c) {
 
 		case 'a':
-			printf("option %c with value '%s'\n", c, optarg);
+      printf("option %c with value '%s'\n", c, optarg);
+			agregar_archivo(optarg);
 			break;
 
 		case 'c':
