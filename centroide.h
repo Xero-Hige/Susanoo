@@ -31,18 +31,23 @@ private:
 	 * al valor de su coordenada en este vector dividido por
 	 * la cantidad de vectores asociados.
 	 */
-	std::vector<double> promedios;
+	std::vector<double> acumulados;
 
 	/**
 	 * Almacena la suma de cada uno de los valores del vector
 	 * promedios al cuadrado
 	 */
-	double suma_acumulados_cuadrado;
+//	double suma_acumulados_cuadrado;
 
 	/**
 	 * Cantidad de vectores asociados
 	 */
 	double vectores_asociados;
+
+	/**
+	 * modulo
+	 */
+	double modulo;
 
 public:
   
@@ -61,6 +66,7 @@ public:
 	double calcular_coseno(Centroide& otro_centroide);
 
 	void agregar_vector(std::map<int, double>& vector_reducido);
+private:
 	void normalizar();
 };
 

@@ -44,6 +44,11 @@ Clusterizador::Clusterizador(int n_clusters, const string& carpeta_vectores,
 		const std::vector<std::string>& archivos, int dimensiones) {
 	cout << "Inicializacion" << endl;
 
+	clusters = n_clusters;
+	carpeta_origen = carpeta_vectores;
+	this->archivos = archivos;
+	this->dimensiones = dimensiones;
+
 	for (int i = 0; i < n_clusters; i++) {
 		cout << "Inicializando centroide: " << i << endl;
 
@@ -51,19 +56,14 @@ Clusterizador::Clusterizador(int n_clusters, const string& carpeta_vectores,
 
 		cargar_vector(coordenadas, archivos[rand()%archivos.size()]);
 		Centroide cent = Centroide(dimensiones,false);
-		cout << "Agregando" << endl;
+//		cout << "Agregando" << endl;
 		cent.agregar_vector(coordenadas);
-		cent.normalizar();
+//		cent.normalizar();
 
 		centroides_nuevos.push_back(cent);
 
 		//centroides_nuevos.push_back(Centroide(dimensiones, true));
 	}
-
-	clusters = n_clusters;
-	carpeta_origen = carpeta_vectores;
-	this->archivos = archivos;
-	this->dimensiones = dimensiones;
 
 	cout << "Fin inicializacion" << endl;
 }
@@ -147,8 +147,8 @@ void Clusterizador::hacer_clusters() {
 
 		for (int i = 0; i < clusters; i++) {
 
-			centroides_viejos[i].normalizar();
-			centroides_nuevos[i].normalizar();
+			//centroides_viejos[i].normalizar();
+			//centroides_nuevos[i].normalizar();
 			Centroide& viejo = centroides_viejos[i];
 			Centroide& nuevo = centroides_nuevos[i];
 
