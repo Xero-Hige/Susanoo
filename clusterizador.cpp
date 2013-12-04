@@ -132,6 +132,7 @@ void Clusterizador::hacer_clusters() {
 			int centroide = 0;
 
 			for (size_t i = 0; i < centroides_nuevos.size(); i++) {
+				//cout << "Archivo: " << archivos[n_archivo] << endl;
 				double coseno = centroides_nuevos[i].calcular_coseno(
 						coordenadas);
 
