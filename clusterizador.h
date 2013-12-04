@@ -32,6 +32,7 @@ class Clusterizador {
 	std::vector<Centroide> centroides_viejos;
 	std::vector<Centroide> centroides_nuevos;
 
+
 	//TODO: ver
 	std::vector<std::vector<std::string> > clusters_viejos;
 	std::vector<std::vector<std::string> > clusters_nuevos;

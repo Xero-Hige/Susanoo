@@ -62,7 +62,7 @@ public:
 	 * Calcula el coseno contra otro centroide
 	 * (ambos centroides deben estar normalizados)
 	 */
-	double calcular_coseno(Centroide otro_centroide);
+	double calcular_coseno(Centroide& otro_centroide);
 
 	void agregar_vector(std::map<int, double>& vector_reducido);
 	void normalizar();

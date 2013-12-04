@@ -20,10 +20,11 @@
 #include "centroide.h"
 
 #include <stddef.h>
+#include <time.h>
 #include <cmath>
+#include <iostream>
 #include <random>
 #include <utility>
-#include <time.h>
 
 using std::map;
 using std::vector;
@@ -44,29 +45,29 @@ Centroide::Centroide(int dimensiones, bool random) {
 	for (int x = 0; x < dimensiones; x++) {
 		double valor = 0;
 		if (random) {
-			valor = (distribucion(generador)) / 1000.0;
+			valor = (distribucion(generador)+x) / 1000.0;
 		}
 
 		suma_acumulados_cuadrado += (valor * valor);
-
 		coordenadas.push_back(valor);
 	}
 
-	float modulo = random ? sqrt(suma_acumulados_cuadrado) : 1;
+	long double modulo = random ? sqrt(suma_acumulados_cuadrado) : 1;
 
 	vectores_asociados = random ? 1 : 0;
-	suma_acumulados_cuadrado = random ? 1 : 0;
+	suma_acumulados_cuadrado = 0;
 
 	if (random) {
 		for (int x = 0; x < dimensiones; x++) {
 			coordenadas[x] = (coordenadas[x] / modulo);
 			promedios.push_back(coordenadas[x]);
-			suma_acumulados_cuadrado += (coordenadas[x] * coordenadas[x]);
+			suma_acumulados_cuadrado += (promedios[x] * promedios[x]);
 		}
 	} else {
 		promedios = coordenadas;
 	}
 
+	modulo = sqrtl (suma_acumulados_cuadrado);
 }
 
 double Centroide::calcular_coseno(map<int, double>& vector_reducido) {
@@ -89,7 +90,7 @@ double Centroide::calcular_coseno(map<int, double>& vector_reducido) {
 	return (resultado / modulo);
 }
 
-double Centroide::calcular_coseno(Centroide otro_centroide) {
+double Centroide::calcular_coseno(Centroide& otro_centroide) {
 	if (suma_acumulados_cuadrado == 0
 			&& otro_centroide.suma_acumulados_cuadrado == 0)
 		return 1;
