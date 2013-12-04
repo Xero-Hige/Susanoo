@@ -89,16 +89,21 @@ double Centroide::calcular_coseno(Centroide& otro_centroide) {
 	double resultado = 0;
 	for (size_t i = 0; i < promedios.size(); i++) {
 		double valor_propio = promedios[i];
+		valor_propio = (valor_propio/vectores_asociados);
+
 		double valor_otro_centroide = otro_centroide.promedios[i];
+		valor_otro_centroide = (valor_otro_centroide/otro_centroide.vectores_asociados);
 
 		resultado += (valor_propio * valor_otro_centroide);
 	}
 
-	double mod_a = suma_acumulados_cuadrado /(vectores_asociados * vectores_asociados);
+	double mod_a = suma_acumulados_cuadrado;// /(vectores_asociados * vectores_asociados);
 	mod_a = sqrt(mod_a);
+	mod_a = mod_a/vectores_asociados;
 
-	double mod_b = otro_centroide.suma_acumulados_cuadrado /(otro_centroide.vectores_asociados * otro_centroide.vectores_asociados);
+	double mod_b = otro_centroide.suma_acumulados_cuadrado;// /(otro_centroide.vectores_asociados * otro_centroide.vectores_asociados);
 	mod_b = sqrt(mod_b);
+	mod_b = mod_b/otro_centroide.vectores_asociados;
 
 	return (resultado/(mod_a * mod_b));
 }

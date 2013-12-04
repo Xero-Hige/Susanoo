@@ -140,7 +140,7 @@ void Clusterizador::hacer_clusters() {
 		for (int i = 0; i < clusters; i++) {
 
 			//centroides_viejos[i].normalizar(); ya estan normalizados
-			centroides_nuevos[i].normalizar();
+			//centroides_nuevos[i].normalizar();
 			Centroide& viejo = centroides_viejos[i];
 			Centroide& nuevo = centroides_nuevos[i];
 

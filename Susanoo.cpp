@@ -21,6 +21,7 @@
 
 #include <getopt.h>
 #include <stddef.h>
+#include <cmath>
 #include <cstdio>
 #include <cstdlib>
 #include <ctime>
@@ -62,7 +63,7 @@ void indexar(char* optarg) {
 	Vectorizador vectorizador = Vectorizador();
 	size_t dimensiones = 0;
 	vector<string> archivos = vectorizador.vectorizar(directorio, dimensiones);
-	clusterizar(10, archivos, dimensiones);
+	clusterizar(sqrt(archivos.size()/2), archivos, dimensiones);
 }
 
 int main(int argc, char **argv) {
