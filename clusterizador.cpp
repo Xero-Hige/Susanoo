@@ -47,7 +47,17 @@ Clusterizador::Clusterizador(int n_clusters, const string& carpeta_vectores,
 	for (int i = 0; i < n_clusters; i++) {
 		cout << "Inicializando centroide: " << i << endl;
 
-		centroides_nuevos.push_back(Centroide(dimensiones, true));
+		map<int, double> coordenadas = map<int, double>();
+
+		cargar_vector(coordenadas, archivos[rand()%archivos.size()]);
+		Centroide cent = Centroide(dimensiones,false);
+		cout << "Agregando" << endl;
+		cent.agregar_vector(coordenadas);
+		cent.normalizar();
+
+		centroides_nuevos.push_back(cent);
+
+		//centroides_nuevos.push_back(Centroide(dimensiones, true));
 	}
 
 	clusters = n_clusters;
@@ -102,7 +112,7 @@ void Clusterizador::hacer_clusters() {
 	size_t iteracion = 0;
 
 	double distancia_maxima = 0;
-	while (distancia_maxima < 0.95 && iteracion<20){
+	while (distancia_maxima < 0.99 && iteracion<20){
 
 		centroides_viejos = centroides_nuevos;
 
@@ -125,10 +135,8 @@ void Clusterizador::hacer_clusters() {
 				double coseno = centroides_nuevos[i].calcular_coseno(
 						coordenadas);
 
-				cout << "Coseno: " << coseno << endl;
-
 				//TODO: Modificar para tolerancia
-				if (coseno > maximo_coseno) {
+				if (coseno >= maximo_coseno) {
 					maximo_coseno = coseno;
 					centroide = i;
 				}
@@ -139,8 +147,8 @@ void Clusterizador::hacer_clusters() {
 
 		for (int i = 0; i < clusters; i++) {
 
-			//centroides_viejos[i].normalizar(); ya estan normalizados
-			//centroides_nuevos[i].normalizar();
+			centroides_viejos[i].normalizar();
+			centroides_nuevos[i].normalizar();
 			Centroide& viejo = centroides_viejos[i];
 			Centroide& nuevo = centroides_nuevos[i];
 

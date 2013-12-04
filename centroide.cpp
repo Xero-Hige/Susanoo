@@ -36,7 +36,7 @@ Centroide::Centroide(int dimensiones, bool random) {
 	for (int x = 0; x < dimensiones; x++) {
 		double valor = 0;
 		if (random) {
-			valor = ( rand()%1000 ) / 1000.0;
+			valor = (rand() % 1000) / 1000.0;
 		}
 
 		suma_acumulados_cuadrado += (valor * valor);
@@ -58,7 +58,7 @@ Centroide::Centroide(int dimensiones, bool random) {
 		promedios = coordenadas;
 	}
 
-	modulo = sqrtl (suma_acumulados_cuadrado);
+	modulo = sqrtl(suma_acumulados_cuadrado);
 }
 
 double Centroide::calcular_coseno(map<int, double>& vector_reducido) {
@@ -76,7 +76,7 @@ double Centroide::calcular_coseno(map<int, double>& vector_reducido) {
 
 	double modulo = suma_acumulados_cuadrado;
 	modulo = sqrt(modulo);
-	modulo = modulo/vectores_asociados;
+	modulo = modulo / vectores_asociados;
 
 	return (resultado / modulo);
 }
@@ -89,26 +89,28 @@ double Centroide::calcular_coseno(Centroide& otro_centroide) {
 	double resultado = 0;
 	for (size_t i = 0; i < promedios.size(); i++) {
 		double valor_propio = promedios[i];
-		valor_propio = (valor_propio/vectores_asociados);
+		valor_propio = (valor_propio / vectores_asociados);
 
 		double valor_otro_centroide = otro_centroide.promedios[i];
-		valor_otro_centroide = (valor_otro_centroide/otro_centroide.vectores_asociados);
+		valor_otro_centroide = (valor_otro_centroide
+				/ otro_centroide.vectores_asociados);
 
 		resultado += (valor_propio * valor_otro_centroide);
 	}
 
-	double mod_a = suma_acumulados_cuadrado;// /(vectores_asociados * vectores_asociados);
+	double mod_a = suma_acumulados_cuadrado; // /(vectores_asociados * vectores_asociados);
 	mod_a = sqrt(mod_a);
-	mod_a = mod_a/vectores_asociados;
+	mod_a = mod_a / vectores_asociados;
 
-	double mod_b = otro_centroide.suma_acumulados_cuadrado;// /(otro_centroide.vectores_asociados * otro_centroide.vectores_asociados);
+	double mod_b = otro_centroide.suma_acumulados_cuadrado; // /(otro_centroide.vectores_asociados * otro_centroide.vectores_asociados);
 	mod_b = sqrt(mod_b);
-	mod_b = mod_b/otro_centroide.vectores_asociados;
+	mod_b = mod_b / otro_centroide.vectores_asociados;
 
-	return (resultado/(mod_a * mod_b));
+	return (resultado / (mod_a * mod_b));
 }
 
 void Centroide::agregar_vector(map<int, double>& vector_reducido) {
+	std::cout << "init" << std::endl;
 	for (map<int, double>::iterator it = vector_reducido.begin();
 			it != vector_reducido.end(); ++it) {
 		int coordenada = it->first;
@@ -120,16 +122,24 @@ void Centroide::agregar_vector(map<int, double>& vector_reducido) {
 
 		double actual = promedios[coordenada];
 
+		std::cout << "Acumulado ant:" << suma_acumulados_cuadrado << std::endl;
 		suma_acumulados_cuadrado -= (anterior * anterior);
 		suma_acumulados_cuadrado += (actual * actual);
+		std::cout << "Acumulado post:" << suma_acumulados_cuadrado << std::endl;
+
 	}
+	std::cout << "endit" << std::endl;
 	vectores_asociados++;
 }
 
 void Centroide::normalizar() {
-	if (vectores_asociados == 0) return;
+	if (vectores_asociados == 0)
+		return;
 
 	double modulo = suma_acumulados_cuadrado;
+	std::cout << "Acumulado cuadrado inicial: " << suma_acumulados_cuadrado
+			<< std::endl;
+
 	modulo = sqrt(modulo);
 
 	suma_acumulados_cuadrado = 0;
@@ -139,6 +149,7 @@ void Centroide::normalizar() {
 		suma_acumulados_cuadrado += (promedios[i] * promedios[i]);
 	}
 
-	std::cout << "Acumulado cuadrado: " << suma_acumulados_cuadrado << std::endl;
+	std::cout << "Acumulado cuadrado: " << suma_acumulados_cuadrado
+			<< std::endl;
 	vectores_asociados = 1;
 }

@@ -108,6 +108,7 @@ void Vectorizador::reducir_palabras(map<string, int>& palabras,
 			stemword(z, palabra, it->first.size());
 			res = string(palabra);
 			reduccion_palabras[it->first] = res;
+			free(z);
 		} else {
 			res = reduccion_palabras[it->first];
 		}
