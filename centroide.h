@@ -52,6 +52,8 @@ private:
 public:
   
 	Centroide(int dimensiones, bool random = true);
+  
+  
 
 	/**
 	 * Calcula el coseno contra un vector representado por un map

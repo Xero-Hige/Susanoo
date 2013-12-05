@@ -102,7 +102,7 @@ double Centroide::calcular_coseno(Centroide& otro_centroide) {
 
 void Centroide::agregar_vector(map<int, double>& vector_reducido) {
 //	std::cout << "init" << std::endl;
-	//suma_acumulados_cuadrado -= (anterior * anterior);
+//  suma_acumulados_cuadrado -= (anterior * anterior);
 //	double suma_acumulados_cuadrado = 0; //+= (actual * actual);
 
 	for (map<int, double>::iterator it = vector_reducido.begin();

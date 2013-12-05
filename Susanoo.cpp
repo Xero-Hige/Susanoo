@@ -73,7 +73,10 @@ void indexar(const string& directorio, int numero_clusters) {
 void agregar_archivo(const string& archivo) {
 	Vectorizador vectorizador = Vectorizador();
 	vectorizador.agregar_archivo(archivo);
-  
+  vector<string> archivos_centroides;
+  vectorizador.obtener_archivos("./Centroides", archivos_centroides);
+  // vector<Centroide> centroides;
+  // cargar cada centroide
 }
 
 int main(int argc, char **argv) {
