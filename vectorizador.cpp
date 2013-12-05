@@ -255,7 +255,7 @@ void Vectorizador::generar_vector(const string& archivo) {
 	path_vector += "/" + archivo + EXTENSION_VECTORES;
 
 	ofstream vect;
-  
+
 	vect.open(path_vector.c_str(), std::ios::out | std::ios::binary);
 	if (!vect) std::cout << "FALLO EN CREAR UN ARCHIVO" << std::endl;
   //----------------------------------------------------
@@ -378,7 +378,7 @@ void Vectorizador::agregar_stopwords() {
 /**
  * 	Genera los archivos de vectores a utilizar
  */
- 
+
 vector<string> Vectorizador::vectorizar(const string& directorio,size_t& dimensiones) {
 	vector<string>();
 
@@ -413,8 +413,8 @@ void Vectorizador::separar_del_path(const string &path_completo,
   archivo =  path_completo.substr(i+1, path_completo.size());
 }
 
-void Vectorizador::agregar_archivo(const string &archivo){
-  // cargar los 2 hashes
-  
-  generar_vector(archivo);
-}
+//void Vectorizador::agregar_archivo(const string &archivo){
+//  // cargar los 2 hashes
+//
+//  generar_vector(archivo);
+//}
