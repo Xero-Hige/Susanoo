@@ -51,6 +51,8 @@ private:
 
 	std::map<std::string, int> coordenadas_vector;
 	// palabra y devuelve coordenada del vector, cantidad de claves es M
+  
+  size_t cantidad_documentos;
 
 private:
 	void contar(const std::string& directorio, const std::string& archivo,
@@ -58,9 +60,6 @@ private:
 
 	void generar_bases(const std::string& directorio,
 			const std::vector<std::string>& archivos);
-
-	void obtener_archivos(std::string directorio,
-			std::vector<std::string>& archivos);
 
 	/**
 	 * Genera una carpeta en el sistema para agrupar
@@ -101,6 +100,9 @@ public:
 
   //
   void agregar_archivo(const std::string &path_archivo);
+  
+ 	void obtener_archivos(std::string directorio,	std::vector<std::string>& archivos);
+
 
 };
 #endif

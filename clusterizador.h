@@ -32,7 +32,6 @@ class Clusterizador {
 	std::vector<Centroide> centroides_viejos;
 	std::vector<Centroide> centroides_nuevos;
 
-
 	//TODO: ver
 	std::vector<std::vector<std::string> > clusters_viejos;
 	std::vector<std::vector<std::string> > clusters_nuevos;
@@ -45,13 +44,17 @@ class Clusterizador {
 
 private:
 	void cargar_vector(std::map<int, double>& coordenadas, std::string archivo);
-    void crearCarpeta(const std::string& path_carpeta);
+  void crearCarpeta(const std::string& path_carpeta);
+  void obtener_archivos(string directorio, vector<string>& archivos);
+    
 public:
 	Clusterizador(int n_clusters, const std::string& carpeta_vectores,
 			const std::vector<std::string>& archivos, int dimensiones);
 	virtual ~Clusterizador();
 	void hacer_clusters();
 	void guardarClusters(const std::string& ruta_carp_cluster);
+  void cargarClusters(const std::string& ruta_carp_cluster);
+  void agregar_archivo(const std::string archivo);
 };
 
 #endif /* CLUSTERIZADOR_H_ */

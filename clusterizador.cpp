@@ -162,8 +162,6 @@ void Clusterizador::hacer_clusters() {
 
 		}
 
-
-
 		cout << "Finaliza iteracion: " << iteracion << " con " << distancia_maxima << endl;
 	}
 
@@ -196,7 +194,6 @@ void Clusterizador::guardarClusters(const string& ruta_carp_cluster) {
 
 		std::ofstream arch_cluster;
 		arch_cluster.open(ruta_cluster.c_str(), std::ios::binary);
-
 
 		for (size_t archivo = 0; archivo < clusters_nuevos[i].size();
 				archivo++) {

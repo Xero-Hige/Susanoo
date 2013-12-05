@@ -73,6 +73,7 @@ void indexar(const string& directorio, int numero_clusters) {
 void agregar_archivo(const string& archivo) {
 	Vectorizador vectorizador = Vectorizador();
 	vectorizador.agregar_archivo(archivo);
+  
 }
 
 int main(int argc, char **argv) {
