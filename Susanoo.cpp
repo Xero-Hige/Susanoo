@@ -87,6 +87,8 @@ int main(int argc, char **argv) {
 	int cantidad = 0;
 	string directorio = "";
 	string archivo_agregar = "";
+	bool l = false;
+	bool g = false;
 
 	static struct option long_options[] = { { "directorio", 1, 0, 0 }, {
 			"categorias", 1, 0, 0 }, { "multi", 1, 0, 0 },
@@ -116,11 +118,11 @@ int main(int argc, char **argv) {
 			break;
 
 		case 'g':
-			printf("option %c\n", c);
+			g = true;
 			break;
 
 		case 'l':
-			printf("option %c\n", c);
+			l = true;
 			break;
 
 		case 'm':
@@ -149,6 +151,12 @@ int main(int argc, char **argv) {
 		indexar(directorio, cantidad);
 	} else if (archivo_agregar != "") {
 		agregar_archivo(archivo_agregar);
+	} else if (l) {
+
+	} else if (g) {
+
+	} else {
+		printf("No hay opcion especificada");
 	}
 
 	return 0;
