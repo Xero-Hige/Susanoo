@@ -27,6 +27,8 @@
 #include <utility>
 #include <fstream>
 #include <sstream>
+#include <string.h>
+
 using std::map;
 using std::vector;
 using std::string;
@@ -145,6 +147,28 @@ void Centroide::normalizar() {
 	modulo = sqrt(modulo);
 	vectores_asociados = 1;
 }
+
+
+Centroide::Centroide(const std::string& archivo){
+  std::ifstream arch_centroide;
+  arch_centroide.open(archivo.c_str(), std::ios::binary);
+
+  char buffer[BUFFSIZE];
+  
+  arch_centroide.getline(buffer, BUFFSIZE - 1);
+  memcpy(&vectores_asociados, buffer, sizeof(double));
+  arch_centroide.getline(buffer, BUFFSIZE - 1);
+  memcpy(&modulo, buffer, sizeof(double));  
+
+  while (arch_centroide.good()){
+    arch_centroide.getline(buffer, BUFFSIZE - 1);
+    double peso;
+    memcpy(&peso, buffer, sizeof(double));
+    acumulados.push_back(peso);
+  }
+  arch_centroide.close();
+}
+
 
 
 
