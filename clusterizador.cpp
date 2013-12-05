@@ -19,6 +19,7 @@
 
 #include "clusterizador.h"
 
+#include <cstdlib>
 #include <stddef.h>
 #include <cstring>
 #include <fstream>
@@ -36,6 +37,7 @@ using std::ios;
 
 #define CLUSTER_STR "cluster"
 #define CLUSTER_EXT ".res"
+#define CENTROIDE_PATH "./Centroide"
 
 Clusterizador::Clusterizador(int n_clusters, const string& carpeta_vectores,
 		const std::vector<std::string>& archivos, int dimensiones) {
@@ -156,21 +158,18 @@ void Clusterizador::hacer_clusters() {
 			centroides_viejos[i].normalizar();
 			centroides_nuevos[i].normalizar(); //En realidad esto no normaliza
 		}
-#ifdef _DEBUG
-		cout << "Finaliza iteracion: " << iteracion << " con "
-				<< distancia_maxima << endl;
-#endif
+//#ifdef _DEBUG
+//		cout << "Finaliza iteracion: " << iteracion << " con "
+//				<< distancia_maxima << endl;
+//#endif
 	}
-#ifdef _DEBUG
-	for (int i = 0; i < clusters; i++) {
-		cout << "Cluster " << i << ":" << endl;
-
-		for (size_t archivo = 0; archivo < clusters_nuevos[i].size();
-				archivo++) {
-			cout << clusters_nuevos[i][archivo] << endl;
-		}
+	crearCarpeta(CENTROIDE_PATH);
+    for(int i = 0; i < clusters; i++) {
+        centroides_nuevos[i].guardar(CENTROIDE_PATH, i);
+        for (size_t archivo = 0; archivo < clusters_nuevos[i].size(); archivo++) {
+            centroides_nuevos[i].guardarAsociados(CENTROIDE_PATH, i, clusters_nuevos[i]);
+         }
 	}
-#endif
 }
 
 void Clusterizador::crearCarpeta(const string& path_carpeta) {

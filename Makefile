@@ -37,4 +37,4 @@ clean-temp:
 	rm -r temp temp_vects 
 
 run: Susanoo
-	./Susanoo -d ./Pruebas
+	./Susanoo -d ./HardTest

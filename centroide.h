@@ -21,6 +21,7 @@
 
 #include <map>
 #include <vector>
+#include <string>
 
 class Centroide {
 
@@ -50,10 +51,10 @@ private:
 	double modulo;
 
 public:
-  
+
 	Centroide(int dimensiones, bool random = true);
-  
-  
+
+
 
 	/**
 	 * Calcula el coseno contra un vector representado por un map
@@ -70,6 +71,10 @@ public:
 	void agregar_vector(std::map<int, double>& vector_reducido);
 
 	void normalizar();
+
+	void guardar(const std::string& ruta_carp_centroide, int nro_centroide);
+
+	void guardarAsociados(const std::string& ruta_carp_centroide, int nro_centroide, std::vector<std::string> cluster);
 };
 
 #endif /* CENTROIDE_H_ */
