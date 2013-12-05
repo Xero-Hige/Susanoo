@@ -36,9 +36,8 @@ using std::ios;
 
 #define BUFFSIZE 200
 
-#define VECTOR_STR "vector"
-#define VECTOR_EXT ".res"
-#define ALPHA 0.000
+#define CLUSTER_STR "cluster"
+#define CLUSTER_EXT ".res"
 
 Clusterizador::Clusterizador(int n_clusters, const string& carpeta_vectores,
 		const std::vector<std::string>& archivos, int dimensiones) {
@@ -53,7 +52,7 @@ Clusterizador::Clusterizador(int n_clusters, const string& carpeta_vectores,
 		cout << "Inicializando centroide: " << i << endl;
 
 		map<int, double> coordenadas = map<int, double>();
-		cargar_vector(coordenadas, archivos[rand()%archivos.size());
+		cargar_vector(coordenadas, archivos[rand()%archivos.size()]);
 		Centroide cent = Centroide(dimensiones,false);
 //		cout << "Agregando" << endl;
 		cent.agregar_vector(coordenadas);
@@ -184,21 +183,22 @@ void Clusterizador::crearCarpeta(const string& path_carpeta) {
 void Clusterizador::guardarClusters(const string& ruta_carp_cluster) {
 	crearCarpeta(ruta_carp_cluster);
 
-	int nro_vector = 0;
-	for (vector<vector<string>>::iterator it_todos = clusters_viejos.begin();
-			it_todos != clusters_viejos.end(); ++it_todos) {
+	for (int i = 0; i < clusters; i++) {
 		std::stringstream ss;
-		ss << nro_vector++;
+		ss << i;
 		string ruta_cluster = ruta_carp_cluster;
 		ruta_cluster += "/";
-		ruta_cluster += VECTOR_STR + ss.str();
-		ruta_cluster += VECTOR_EXT;
-//        cout<<ruta_cluster;
+		ruta_cluster += CLUSTER_STR + ss.str();
+		ruta_cluster += CLUSTER_EXT;
+
 		std::ofstream arch_cluster;
-		arch_cluster.open(ruta_cluster.c_str(), std::ios::binary | std::ios::out);
-		for (vector<string>::iterator it_cluster = it_todos->begin();
-				it_cluster != it_todos->end(); ++it_cluster)
-			arch_cluster << *it_cluster << std::endl;
+		arch_cluster.open(ruta_cluster.c_str(), std::ios::binary);
+
+
+		for (size_t archivo = 0; archivo < clusters_nuevos[i].size();
+				archivo++) {
+			arch_cluster << clusters_nuevos[i][archivo] << std::endl;
+        }
 		arch_cluster.close();
 	}
 }
