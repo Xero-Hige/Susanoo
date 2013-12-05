@@ -219,6 +219,23 @@ void Vectorizador::generar_bases(const string& directorio,
 	}
 }
 
+void Vectorizador::obtener_archivos(string directorio,
+		vector<string>& archivos) {
+	DIR *dp;
+	struct dirent *dirp;
+
+	if ((dp = opendir(directorio.c_str())) == NULL) {
+		cerr << "Error abriendo " << directorio << endl;
+	}
+
+	while ((dirp = readdir(dp)) != NULL) {
+		if (dirp->d_name[0] == '.')
+			continue;
+		archivos.push_back(string(dirp->d_name));
+	}
+	closedir(dp);
+}
+
 /**
  * Genera una carpeta en el sistema para agrupar
  * diferentes archivos intermedios

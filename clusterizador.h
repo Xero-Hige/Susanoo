@@ -45,7 +45,6 @@ class Clusterizador {
 private:
 	void cargar_vector(std::map<int, double>& coordenadas, std::string archivo);
   void crearCarpeta(const std::string& path_carpeta);
-  void obtener_archivos(string directorio, vector<string>& archivos);
     
 public:
 	Clusterizador(int n_clusters, const std::string& carpeta_vectores,
