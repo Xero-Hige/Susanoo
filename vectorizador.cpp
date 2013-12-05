@@ -34,8 +34,6 @@
 
 #include "Porter.h"
 
-//#define _DEBUG
-
 using std::string;
 using std::vector;
 using std::map;

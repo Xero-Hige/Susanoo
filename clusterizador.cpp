@@ -32,8 +32,6 @@ using std::cout;
 using std::endl;
 using std::ios;
 
-#define _DEBUG
-
 #define BUFFSIZE 200
 
 #define CLUSTER_STR "cluster"
@@ -151,7 +149,7 @@ void Clusterizador::hacer_clusters() {
 			double coseno = nuevo.calcular_coseno(viejo);
 
 			if (coseno <= distancia_maxima) {
-				cout << "Maximo centroide n:" << i << endl;
+			//	cout << "Maximo centroide n:" << i << endl;
 				distancia_maxima = coseno;
 			}
 
