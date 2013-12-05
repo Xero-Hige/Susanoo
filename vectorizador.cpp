@@ -295,8 +295,6 @@ void Vectorizador::generar_vector(const string& archivo) {
 		double peso = frecuencia_termino * log10(M / df) / log10(2);
 		modulo += pow(peso, 2);
     
-    std::cout << "clave = " << clave << "            tf = " << frecuencia_termino << "         df = " << df <<  "              peso = " <<  peso << "      m = " << M << std::endl;
-
 		coordenada_t coordenada_actual;
 		coordenada_actual.peso = peso;
 		coordenada_actual.coordenada = coordenada;
