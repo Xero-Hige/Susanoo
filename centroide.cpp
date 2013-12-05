@@ -94,7 +94,7 @@ double Centroide::calcular_coseno(Centroide& otro_centroide) {
 	double mod_a = modulo;
 	double mod_b = otro_centroide.modulo;
 
-	std::cout << "Coseno C: " << "moda: "<<mod_a<<"modb: "<<mod_b<<" "<<(resultado / (mod_a * mod_b)) << std::endl;
+	std::cout << "Coseno C: " <<(resultado / (mod_a * mod_b)) << std::endl;
 
 	return (resultado / (mod_a * mod_b));
 }
@@ -115,8 +115,9 @@ void Centroide::agregar_vector(map<int, double>& vector_reducido) {
 
 	modulo = 0;
 	for (size_t i = 0; i < acumulados.size(); i++) {
-		double valor = acumulados[i];
-		modulo += (valor * valor);
+		double agregar = acumulados[i] / vectores_asociados;
+        agregar = (agregar * agregar);
+        modulo += agregar;
 	}
 
 	modulo = sqrt(modulo);

@@ -53,9 +53,7 @@ Clusterizador::Clusterizador(int n_clusters, const string& carpeta_vectores,
 		cout << "Inicializando centroide: " << i << endl;
 
 		map<int, double> coordenadas = map<int, double>();
-        string arch(archivos[rand()%archivos.size()]) ;
-        cout << arch;
-		cargar_vector(coordenadas, arch);
+		cargar_vector(coordenadas, archivos[rand()%archivos.size());
 		Centroide cent = Centroide(dimensiones,false);
 //		cout << "Agregando" << endl;
 		cent.agregar_vector(coordenadas);
@@ -195,7 +193,7 @@ void Clusterizador::guardarClusters(const string& ruta_carp_cluster) {
 		ruta_cluster += "/";
 		ruta_cluster += VECTOR_STR + ss.str();
 		ruta_cluster += VECTOR_EXT;
-        cout<<ruta_cluster;
+//        cout<<ruta_cluster;
 		std::ofstream arch_cluster;
 		arch_cluster.open(ruta_cluster.c_str(), std::ios::binary | std::ios::out);
 		for (vector<string>::iterator it_cluster = it_todos->begin();
