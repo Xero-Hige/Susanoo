@@ -37,6 +37,7 @@ using std::string;
 #define ASOCIADOS_EXT ".txt"
 #define CENTROIDE_STR "Centroide"
 #define CENTROIDE_EXT ".vec"
+#define BUFFSIZE 200
 
 Centroide::Centroide(int dimensiones, bool random) {
 	vector<double> coordenadas;
@@ -151,6 +152,7 @@ void Centroide::normalizar() {
 
 Centroide::Centroide(const std::string& archivo){
   std::ifstream arch_centroide;
+  std::cout << "archivo = " << archivo << std::endl;
   arch_centroide.open(archivo.c_str(), std::ios::binary);
 
   char buffer[BUFFSIZE];

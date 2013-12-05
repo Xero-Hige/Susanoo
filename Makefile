@@ -28,7 +28,7 @@ Susanoo: Susanoo.cpp $(OBJECTS)
 	$(CC) $(CPPFLAGS) $(OBJECTS) Susanoo.cpp -o Susanoo
 
 clean:
-	rm -r *.o *.save *~ Susanoo temp temp_vects
+	rm -r *.o *.save *~ Susanoo temp temp_vects Centroide Clusters
 
 clean-o:
 	rm -r *.o *~
