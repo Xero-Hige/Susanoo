@@ -89,6 +89,10 @@ private:
                           std::string &path,
                           std::string &archivo);
 
+  void almacenar_df();
+  
+  void cargar_df();
+
 public:
 
 	Vectorizador();

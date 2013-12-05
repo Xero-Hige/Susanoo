@@ -106,9 +106,10 @@ void Centroide::agregar_vector(map<int, double>& vector_reducido) {
 
 	for (map<int, double>::iterator it = vector_reducido.begin();
 			it != vector_reducido.end(); ++it) {
+
 		int coordenada = it->first;
 		double valor = it->second;
-
+    std::cout << "coordenada = " << coordenada << "                       valor = " << valor << std::endl;
 		acumulados[coordenada] += valor;
 	}
 	vectores_asociados++;

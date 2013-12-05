@@ -380,14 +380,25 @@ void Vectorizador::agregar_stopwords() {
 }
 
 
-
-
-/*
-
-
 //
 void Vectorizador::almacenar_df(){
-  string path_df = CARPETA_TEMPORAL + "/" + DF + EXTENSION_DF;
+  string base = CARPETA_TEMPORAL;
+  string df = DF;
+  string extension = EXTENSION_DF;
+  string path = base + "/" + df + extension;
+  
+  
+  ofstream out;
+	out.open(path.c_str());
+  
+	for (map<string, vector<int>>::iterator it = palabras_archivos.begin();
+			it != palabras_archivos.end(); ++it) {
+		out << it->first << "=" << it->second[0] << endl;
+  }
+	out.close();
+  
+  /*
+  
 	ofstream df;
   df.open(path_vector.c_str(), std::ios::out | std::ios::binary);
   for (map<string, vector<int>>::iterator it=palabras_archivos.begin(); 
@@ -399,10 +410,31 @@ void Vectorizador::almacenar_df(){
     df.write((char*) &doc_frec, sizeof(doc_frec));
     df.write('\n', sizeof(char))
   }
+  */
 }
 
 //
 void Vectorizador::cargar_df(){
+  string base = CARPETA_TEMPORAL;
+  string df = DF;
+  string extension = EXTENSION_DF;
+  string path = base + "/" + df + extension;
+ 	ifstream arch;
+	arch.open(path.c_str());
+	char buffer[BUFFSIZE];
+  while (arch.good()){
+    arch.getline(buffer, BUFFSIZE - 1);
+    string datos = string(buffer);
+    size_t separador = datos.find("=");
+    string clave = datos.substr(0, separador);
+    string valor = datos.substr(separador + 1);
+    int df = atoi(valor.c_str());
+    vector<int> temp;
+    temp.push_back(df);
+    palabras_archivos[clave] = temp;
+  }
+   
+ /*
   string path_df = CARPETA_TEMPORAL + "/" + DF + EXTENSION_DF;
   ifstream df;
 	df.open(path_df.c_str());
@@ -416,13 +448,8 @@ void Vectorizador::cargar_df(){
 		int doc_frec = datos.substr(separador + 1);
     vector<int>
   }
+  */
 }
-
-
-*/
-
-
-
 
 
 /**
@@ -443,6 +470,8 @@ vector<string> Vectorizador::vectorizar(const string& directorio,size_t& dimensi
 
 	generar_carpeta(CARPETA_VECTORES);
 	generar_vectores(archivos, palabras_archivos);
+
+  almacenar_df();
 
 	dimensiones = palabras_archivos.size();
 	return archivos;
@@ -467,11 +496,16 @@ void Vectorizador::separar_del_path(const string &path_completo,
 
 void Vectorizador::agregar_archivo(const string &path_archivo){
   agregar_stopwords();
+  cargar_df();
+  
+  
   string directorio, archivo;
   separar_del_path(path_archivo, directorio, archivo);
   vector<string> aux;
   aux.push_back(archivo);
   generar_bases(directorio, aux);
+  
+  
   generar_vector(archivo);
 }
 
