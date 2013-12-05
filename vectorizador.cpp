@@ -53,6 +53,8 @@ using std::ofstream;
 #define EXTENSION_BASES  ".res"
 
 #define STOP_WORDS "stopwords"
+#define DF "df"
+#define EXTENSION_DF ".frc"
 
 #define BUFFSIZE 200
 
@@ -126,7 +128,7 @@ void Vectorizador::reducir_palabras(map<string, int>& palabras,
 }
 
 void Vectorizador::contar(const string& directorio, const string& archivo,
-		int numero_archivo) {
+                          int numero_archivo) {
 	ifstream arch;
 
 	string path_archivo = directorio + "/";
@@ -176,7 +178,7 @@ void Vectorizador::contar(const string& directorio, const string& archivo,
 }
 
 void Vectorizador::generar_bases(const string& directorio,
-		const vector<string>& archivos) {
+                                 const vector<string>& archivos) {
 
 	double completado = 0;
 	double porcentaje_por_archivo = 100.0 / archivos.size();
@@ -255,9 +257,8 @@ void Vectorizador::generar_vector(const string& archivo) {
 	path_vector += "/" + archivo + EXTENSION_VECTORES;
 
 	ofstream vect;
-
+  
 	vect.open(path_vector.c_str(), std::ios::out | std::ios::binary);
-	if (!vect) std::cout << "FALLO EN CREAR UN ARCHIVO" << std::endl;
   //----------------------------------------------------
 
 	char buffer[BUFFSIZE];
@@ -282,7 +283,7 @@ void Vectorizador::generar_vector(const string& archivo) {
 		string valor = datos.substr(separador + 1);
 
 		double frecuencia_documento = atoi(valor.c_str());
-
+    
 		if (coordenadas_vector.count(clave) == 0)
 			continue;
 
@@ -290,8 +291,8 @@ void Vectorizador::generar_vector(const string& archivo) {
 		float frecuencia_termino = frecuencia_documento
 				/ (palabras_totales + 0.0);
 		double documentos_totales = archivos.size();
-		double peso = frecuencia_termino
-				* log10(documentos_totales / frecuencia_documento) / log10(2);
+    int df = palabras_archivos[clave][0];
+		double peso = frecuencia_termino * log10(documentos_totales / df) / log10(2);
 		modulo += pow(peso, 2);
 
 		coordenada_t coordenada_actual;
@@ -315,6 +316,7 @@ void Vectorizador::guardar_vector(double modulo,
 		pesos_vector.pop_back();
 
 		actual.peso = actual.peso / modulo;
+    
    // cout << actual.coordenada << "-" << actual.peso << endl;
 
 #ifdef _DEBUG
@@ -375,10 +377,56 @@ void Vectorizador::agregar_stopwords() {
 	arch.close();
 }
 
+
+
+
+/*
+
+
+//
+void Vectorizador::almacenar_df(){
+  string path_df = CARPETA_TEMPORAL + "/" + DF + EXTENSION_DF;
+	ofstream df;
+  df.open(path_vector.c_str(), std::ios::out | std::ios::binary);
+  for (map<string, vector<int>>::iterator it=palabras_archivos.begin(); 
+  it!=palabras_archivos.end(); ++it){
+    string palabra_temp = it->first;
+    int doc_frec = it->second[0];
+    df.write(palabra_temp.c_str(), palabra_temp.size());
+    df.write('=', sizeof(char));
+    df.write((char*) &doc_frec, sizeof(doc_frec));
+    df.write('\n', sizeof(char))
+  }
+}
+
+//
+void Vectorizador::cargar_df(){
+  string path_df = CARPETA_TEMPORAL + "/" + DF + EXTENSION_DF;
+  ifstream df;
+	df.open(path_df.c_str());
+  
+  char buffer[BUFFSIZE];
+	while (df.good()){
+    df.getline(buffer, BUFFSIZE - 1);
+    string linea = string(buffer);
+		size_t separador = datos.find("=");
+		string palabra_temp = datos.substr(0, separador);
+		int doc_frec = datos.substr(separador + 1);
+    vector<int>
+  }
+}
+
+
+*/
+
+
+
+
+
 /**
  * 	Genera los archivos de vectores a utilizar
  */
-
+ 
 vector<string> Vectorizador::vectorizar(const string& directorio,size_t& dimensiones) {
 	vector<string>();
 
@@ -402,6 +450,8 @@ Vectorizador::Vectorizador() {
 	archivos = vector<string>();
 }
 
+
+
 void Vectorizador::separar_del_path(const string &path_completo,
                                     string &path,
                                     string &archivo){
@@ -413,8 +463,13 @@ void Vectorizador::separar_del_path(const string &path_completo,
   archivo =  path_completo.substr(i+1, path_completo.size());
 }
 
-//void Vectorizador::agregar_archivo(const string &archivo){
-//  // cargar los 2 hashes
-//
-//  generar_vector(archivo);
-//}
+void Vectorizador::agregar_archivo(const string &path_archivo){
+  agregar_stopwords();
+  string directorio, archivo;
+  separar_del_path(path_archivo, directorio, archivo);
+  vector<string> aux;
+  aux.push_back(archivo);
+  generar_bases(directorio, aux);
+  generar_vector(archivo);
+}
+

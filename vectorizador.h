@@ -32,6 +32,7 @@
 #define CARPETA_VECTORES "./temp_vects"
 #define EXTENSION_VECTORES  ".vec"
 
+
 typedef struct _coordenada {
 	int coordenada;
 	double peso;
@@ -82,19 +83,20 @@ private:
 	// almacena el contenido del pesos_vector en el archivo abierto vect.
 	void guardar_vector(double modulo, std::vector<coordenada_t> &pesos_vector,
 			std::ofstream &vect);
-      
-  std::string quitar_path(const std::string &path);
-
+  
+  //
   void separar_del_path(const std::string &arch_completo,
-                        std::string &path,
-                        std::string &archivo);
-
+                          std::string &path,
+                          std::string &archivo);
 
 public:
 
 	Vectorizador();
 
 	std::vector<std::string> vectorizar(const std::string& directorio, size_t& dimensiones);
+
+  //
+  void agregar_archivo(const std::string &path_archivo);
 
 };
 #endif

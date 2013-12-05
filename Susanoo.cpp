@@ -67,24 +67,22 @@ void indexar(char* optarg) {
 }
 
 //
-//void agregar_archivo(char *optarg){
-//  string archivo = string(optarg);
-//  Vectorizador vectorizador = Vectorizador();
-//  vectorizador.agregar_archivo(archivo);
-//
-//  // agregar archivo al clusterizador, hay que asociarlo al centroide con menor distancia nomas
-//}
+void agregar_archivo(char *optarg){
+  string archivo = string(optarg);
+  Vectorizador vectorizador = Vectorizador();
+  vectorizador.agregar_archivo(archivo);
+}
 
 int main(int argc, char **argv) {
 	srand(time(NULL)); //inicializo el random
 
 	int c;
 
-	static struct option long_options[] = {
-    { "directorio", 1, 0, 0 },{"categorias", 1, 0, 0 },
-    { "multi", 1, 0, 0 }, { "agregar", 1, 0, 0 },
-    { "listar", 0, 0, 0 }, { "grupos", 0, 0, 0 },
-    { "help", 0, 0, 0 }, { NULL, 0, NULL, 0 }
+	static struct option long_options[] = { 
+    { "directorio", 1, 0, 0 },{"categorias", 1, 0, 0 }, 
+    { "multi", 1, 0, 0 }, { "agregar", 1, 0, 0 }, 
+    { "listar", 0, 0, 0 }, { "grupos", 0, 0, 0 }, 
+    { "help", 0, 0, 0 }, { NULL, 0, NULL, 0 } 
   };
 
 	int option_index = 0;
@@ -99,7 +97,7 @@ int main(int argc, char **argv) {
 
 		case 'a':
       printf("option %c with value '%s'\n", c, optarg);
-//			agregar_archivo(optarg);
+			agregar_archivo(optarg);
 			break;
 
 		case 'c':
