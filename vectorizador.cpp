@@ -289,12 +289,16 @@ void Vectorizador::generar_vector(const string& archivo) {
 
 		int coordenada = coordenadas_vector[clave];
 		//float frecuencia_termino = frecuencia_documento	/ (palabras_totales + 0.0);
-		double M = coordenadas_vector.size();
+		double documentos_totales = archivos.size();
     double df = palabras_archivos[clave][0];
    
-		double peso = frecuencia_termino * log10(M / df) / log10(2);
+		double peso = frecuencia_termino * log10(documentos_totales / df) / log10(2);
 		modulo += pow(peso, 2);
     
+    if (peso == 0) continue;
+    
+    std::cout << "clave = " << clave << "            tf = " << frecuencia_termino << "         df = " << df <<  "              peso = " <<  peso << "      m = " << documentos_totales << std::endl;
+
 		coordenada_t coordenada_actual;
 		coordenada_actual.peso = peso;
 		coordenada_actual.coordenada = coordenada;
