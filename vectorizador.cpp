@@ -170,10 +170,11 @@ void Vectorizador::contar(const string& directorio, const string& archivo,
 	string path = CARPETA_TEMPORAL;
 	path += "/" + archivo + EXTENSION_BASES;
 	out.open(path.c_str());
+  
 	for (map<string, int>::iterator it = palabras_reducidas.begin();
 			it != palabras_reducidas.end(); ++it) {
 		out << it->first << "=" << it->second << endl;
-	}
+  }
 	out.close();
 }
 
@@ -266,8 +267,8 @@ void Vectorizador::generar_vector(const string& archivo) {
 	arch.getline(buffer, BUFFSIZE - 1);
 	string datos = string(buffer);
 
-	size_t separador = datos.find("=");
-	unsigned int palabras_totales = atoi(datos.substr(separador + 1).c_str());
+	//size_t separador = datos.find("=");
+	//unsigned int palabras_totales = atoi(datos.substr(separador + 1).c_str());
 
 	// vector donde se guardara el peso de la correspondiente coordenada
 	vector<coordenada_t> pesos_vector;
@@ -282,16 +283,15 @@ void Vectorizador::generar_vector(const string& archivo) {
 		string clave = datos.substr(0, separador);
 		string valor = datos.substr(separador + 1);
 
-		double frecuencia_documento = atoi(valor.c_str());
-    
+		double frecuencia_termino = atoi(valor.c_str());
 		if (coordenadas_vector.count(clave) == 0)
 			continue;
 
 		int coordenada = coordenadas_vector[clave];
-		float frecuencia_termino = frecuencia_documento
-				/ (palabras_totales + 0.0);
+		//float frecuencia_termino = frecuencia_documento	/ (palabras_totales + 0.0);
 		double documentos_totales = archivos.size();
-    int df = palabras_archivos[clave][0];
+    double df = palabras_archivos[clave][0];
+   
 		double peso = frecuencia_termino * log10(documentos_totales / df) / log10(2);
 		modulo += pow(peso, 2);
 
@@ -317,8 +317,6 @@ void Vectorizador::guardar_vector(double modulo,
 
 		actual.peso = actual.peso / modulo;
     
-   // cout << actual.coordenada << "-" << actual.peso << endl;
-
 #ifdef _DEBUG
 		vect << actual.coordenada << "-" << actual.peso << endl;
 #endif //_DEBUG
