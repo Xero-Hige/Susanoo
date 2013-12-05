@@ -255,8 +255,10 @@ void Vectorizador::generar_vector(const string& archivo) {
 	path_vector += "/" + archivo + EXTENSION_VECTORES;
 
 	ofstream vect;
+  
 	vect.open(path_vector.c_str(), std::ios::out | std::ios::binary);
-	//----------------------------------------------------
+	if (!vect) std::cout << "FALLO EN CREAR UN ARCHIVO" << std::endl;
+  //----------------------------------------------------
 
 	char buffer[BUFFSIZE];
 
@@ -400,18 +402,19 @@ Vectorizador::Vectorizador() {
 	archivos = vector<string>();
 }
 
-vector<string> Vectorizador::agregar_archivo(const string &archivo){
-  // agregar_stopwords();      ?????????????????????????????
-  
-  generar_vector(archivo);  
-  
-  // ESTA CROTADA LA HICE PARA PROBAR NADA MAS, HAY QUE PREGUNTARLE A GASTON SI MODIFICAR EL OBTENER_ARCHIVOS
-  obtener_archivos(CARPETA_VECTORES, archivos);
-  for (size_t i = 0; i < archivos.size(); i++){
-    string archivo_temp = archivos[i];
-    archivos[i] = archivo_temp.substr(0,archivo_temp.size() - 4);
+void Vectorizador::separar_del_path(const string &path_completo,
+                                    string &path,
+                                    string &archivo){
+  size_t i = path_completo.size() - 1;
+  while (i > 0 && path_completo[i] != '/'){
+    i--;
   }
-  // LA CROTADA TERMINA AQUI
+  path = path_completo.substr(0, i);
+  archivo =  path_completo.substr(i+1, path_completo.size());
+}
+
+void Vectorizador::agregar_archivo(const string &archivo){
+  // cargar los 2 hashes
   
-  return archivos;
+  generar_vector(archivo);
 }

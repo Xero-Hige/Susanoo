@@ -63,12 +63,6 @@ void indexar(char* optarg) {
 	Vectorizador vectorizador = Vectorizador();
 	size_t dimensiones = 0;
 	vector<string> archivos = vectorizador.vectorizar(directorio, dimensiones);
-
-  // BORRAR LO SGUIENTE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  for (size_t i = 0; i < archivos.size(); i++){
-    std::cout << archivos[i] << std::endl;
-  }
-
 	clusterizar(10,archivos,dimensiones);//sqrt(archivos.size()/2), archivos, dimensiones);
 }
 
@@ -76,17 +70,9 @@ void indexar(char* optarg) {
 void agregar_archivo(char *optarg){
   string archivo = string(optarg);
   Vectorizador vectorizador = Vectorizador();
-  vector<string> archivos = vectorizador.agregar_archivo(archivo);
+  vectorizador.agregar_archivo(archivo);
 
-
-// BORRAR LO SGUIENTE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  for (size_t i = 0; i < archivos.size(); i++){
-    std::cout << archivos[i] << std::endl;
-  }
-
-
-  size_t dimensiones = 0;                               //  va igual que el anterior?
-  clusterizar(10,archivos,dimensiones);
+  // agregar archivo al clusterizador, hay que asociarlo al centroide con menor distancia nomas
 }
 
 int main(int argc, char **argv) {
