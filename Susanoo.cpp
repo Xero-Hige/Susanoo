@@ -63,7 +63,7 @@ void indexar(char* optarg) {
 	Vectorizador vectorizador = Vectorizador();
 	size_t dimensiones = 0;
 	vector<string> archivos = vectorizador.vectorizar(directorio, dimensiones);
-	clusterizar(10,archivos,dimensiones);//sqrt(archivos.size()/2), archivos, dimensiones);
+	clusterizar(sqrt(archivos.size()), archivos, dimensiones);
 }
 
 //

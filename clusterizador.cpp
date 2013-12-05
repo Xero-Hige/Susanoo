@@ -116,7 +116,7 @@ void Clusterizador::hacer_clusters() {
 
 		cout << "Inicio teracion: " << ++iteracion << " con " << distancia_maxima << endl;
 
-		distancia_maxima = 1;
+		distancia_maxima = 1.0/0.0;;
 
 		clusters_nuevos.clear();
 		clusters_nuevos.resize(dimensiones);
@@ -126,7 +126,7 @@ void Clusterizador::hacer_clusters() {
 
 			cargar_vector(coordenadas, archivos[n_archivo]);
 
-			double maximo_coseno = 0;
+			double minimo_coseno = 0;
 			int centroide = 0;
 
 			for (size_t i = 0; i < centroides_nuevos.size(); i++) {
@@ -135,8 +135,8 @@ void Clusterizador::hacer_clusters() {
 						coordenadas);
 
 				//TODO: Modificar para tolerancia
-				if (coseno >= maximo_coseno) {
-					maximo_coseno = coseno;
+				if (coseno >= minimo_coseno) {
+					minimo_coseno = coseno;
 					centroide = i;
 				}
 			}
@@ -146,8 +146,6 @@ void Clusterizador::hacer_clusters() {
 
 		for (int i = 0; i < clusters; i++) {
 
-			//centroides_viejos[i].normalizar();
-			//centroides_nuevos[i].normalizar();
 			Centroide& viejo = centroides_viejos[i];
 			Centroide& nuevo = centroides_nuevos[i];
 
@@ -159,7 +157,12 @@ void Clusterizador::hacer_clusters() {
 				distancia_maxima = coseno;
 			}
 
+			centroides_viejos[i].normalizar();
+			centroides_nuevos[i].normalizar(); //En realidad esto no normaliza
+
 		}
+
+
 
 		cout << "Finaliza iteracion: " << iteracion << " con " << distancia_maxima << endl;
 	}

@@ -297,7 +297,7 @@ void Vectorizador::generar_vector(const string& archivo) {
     
     if (peso == 0) continue;
     
-    std::cout << "clave = " << clave << "            tf = " << frecuencia_termino << "         df = " << df <<  "              peso = " <<  peso << "      m = " << documentos_totales << std::endl;
+    //std::cout << "clave = " << clave << "            tf = " << frecuencia_termino << "         df = " << df <<  "              peso = " <<  peso << "      m = " << documentos_totales << std::endl;
 
 		coordenada_t coordenada_actual;
 		coordenada_actual.peso = peso;

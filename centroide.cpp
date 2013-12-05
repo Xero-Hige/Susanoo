@@ -20,7 +20,7 @@
 #include "centroide.h"
 
 #include <stddef.h>
-#include <time.h>
+//#include <time.h>
 #include <cmath>
 #include <cstdlib>
 #include <iostream>
@@ -76,7 +76,7 @@ double Centroide::calcular_coseno(map<int, double>& vector_reducido) {
 		modulo_vector += valor * valor;
 	}
     modulo_vector = sqrt(modulo_vector);
-	//std::cout << "Coseno V: " << resultado / (modulo * modulo_vector) << std::endl;
+	std::cout << "Coseno V: " << resultado / (modulo * modulo_vector) << std::endl;
 
 	return (resultado / (modulo * modulo_vector));
 }
@@ -109,7 +109,7 @@ void Centroide::agregar_vector(map<int, double>& vector_reducido) {
 
 		int coordenada = it->first;
 		double valor = it->second;
-    std::cout << "coordenada = " << coordenada << "                       valor = " << valor << std::endl;
+//    std::cout << "coordenada = " << coordenada << "                       valor = " << valor << std::endl;
 		acumulados[coordenada] += valor;
 	}
 	vectores_asociados++;
@@ -125,22 +125,16 @@ void Centroide::agregar_vector(map<int, double>& vector_reducido) {
 }
 
 void Centroide::normalizar() {
-	if (vectores_asociados == 0)
+	if (vectores_asociados == 0 || vectores_asociados == 1)
 		return;
 
-	double suma_acumulado_cuadrados = 0;
-
+	modulo = 0;
 	for (size_t i = 0; i < acumulados.size(); i++) {
-		double valor = acumulados[i] / modulo;
+		double valor = acumulados[i] / vectores_asociados;
 		acumulados[i] = valor;
-
-		suma_acumulado_cuadrados += (valor*valor);
+		modulo += (valor*valor);
 	}
 
-	modulo = sqrt(suma_acumulado_cuadrados);
-	if (modulo != 1)
-	{
-		std::cout << "Bad Module: " << modulo << std::endl;
-	}
+	modulo = sqrt(modulo);
 	vectores_asociados = 1;
 }
