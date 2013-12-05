@@ -27,6 +27,8 @@
 #include <ctime>
 #include <string>
 #include <vector>
+#include <string.h>
+#include <fstream>
 
 #include "clusterizador.h"
 #include "vectorizador.h"
@@ -53,7 +55,7 @@ void print_help() {
 
 void cargar_vector(std::map<int, double>& coordenadas, std::string archivo) {
 	string path_archivo = "./temp_vects/" + archivo + ".vec";
-	ifstream arch(path_archivo.c_str(), ios::in | ios::binary);
+	std::ifstream arch(path_archivo.c_str(), std::ios::in | std::ios::binary);
 
 	int coordenada = 1;
 	double valor = 1;
@@ -133,6 +135,7 @@ void agregar_archivo(const string& archivo) {
       if (temp >= distancia){
         distancia = temp;
         subindice = i;
+      }
     }
   }
   Centroide cercano = centroides[subindice];
