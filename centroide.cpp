@@ -76,7 +76,8 @@ double Centroide::calcular_coseno(map<int, double>& vector_reducido) {
 		modulo_vector += valor * valor;
 	}
     modulo_vector = sqrt(modulo_vector);
-	std::cout << "Coseno V: " << resultado / (modulo * modulo_vector) << std::endl;
+
+    //std::cout << "Coseno V: " << resultado / (modulo * modulo_vector) << std::endl;
 
 	return (resultado / (modulo * modulo_vector));
 }

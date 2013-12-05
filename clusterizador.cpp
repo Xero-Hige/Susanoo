@@ -20,11 +20,9 @@
 #include "clusterizador.h"
 
 #include <stddef.h>
-//#include <cstdlib>
 #include <cstring>
 #include <fstream>
 #include <iostream>
-//#include <map>
 
 using std::vector;
 using std::string;
@@ -34,6 +32,8 @@ using std::cout;
 using std::endl;
 using std::ios;
 
+#define _DEBUG
+
 #define BUFFSIZE 200
 
 #define CLUSTER_STR "cluster"
@@ -41,7 +41,7 @@ using std::ios;
 
 Clusterizador::Clusterizador(int n_clusters, const string& carpeta_vectores,
 		const std::vector<std::string>& archivos, int dimensiones) {
-	cout << "Inicializacion" << endl;
+	cout << "Inicializacion" << endl << endl;
 
 	clusters = n_clusters;
 	carpeta_origen = carpeta_vectores;
@@ -52,18 +52,14 @@ Clusterizador::Clusterizador(int n_clusters, const string& carpeta_vectores,
 		cout << "Inicializando centroide: " << i << endl;
 
 		map<int, double> coordenadas = map<int, double>();
-		cargar_vector(coordenadas, archivos[rand()%archivos.size()]);
-		Centroide cent = Centroide(dimensiones,false);
-//		cout << "Agregando" << endl;
+		cargar_vector(coordenadas, archivos[rand() % archivos.size()]);
+		Centroide cent = Centroide(dimensiones, false);
 		cent.agregar_vector(coordenadas);
-//		cent.normalizar();
 
 		centroides_nuevos.push_back(cent);
-
-		//centroides_nuevos.push_back(Centroide(dimensiones, true));
 	}
 
-	cout << "Fin inicializacion" << endl;
+	cout  << endl << "Fin inicializacion" << endl;
 }
 
 Clusterizador::~Clusterizador() {
@@ -110,13 +106,17 @@ void Clusterizador::hacer_clusters() {
 	size_t iteracion = 0;
 
 	double distancia_maxima = 0;
-	while (distancia_maxima < 0.99 && iteracion<20){
+	while (distancia_maxima < 0.99 && iteracion < 20) {
 
 		centroides_viejos = centroides_nuevos;
 
-		cout << "Inicio teracion: " << ++iteracion << " con " << distancia_maxima << endl;
+#ifdef _DEBUG
+		cout << "Inicio teracion: " << ++iteracion << " con "
+				<< distancia_maxima << endl;
+#endif
 
-		distancia_maxima = 1.0/0.0;;
+		distancia_maxima = 1.0 / 0.0;
+		;
 
 		clusters_nuevos.clear();
 		clusters_nuevos.resize(dimensiones);
@@ -130,7 +130,6 @@ void Clusterizador::hacer_clusters() {
 			int centroide = 0;
 
 			for (size_t i = 0; i < centroides_nuevos.size(); i++) {
-				//cout << "Archivo: " << archivos[n_archivo] << endl;
 				double coseno = centroides_nuevos[i].calcular_coseno(
 						coordenadas);
 
@@ -151,20 +150,20 @@ void Clusterizador::hacer_clusters() {
 
 			double coseno = nuevo.calcular_coseno(viejo);
 
-			if (coseno <= distancia_maxima)
-			{
+			if (coseno <= distancia_maxima) {
 				cout << "Maximo centroide n:" << i << endl;
 				distancia_maxima = coseno;
 			}
 
 			centroides_viejos[i].normalizar();
 			centroides_nuevos[i].normalizar(); //En realidad esto no normaliza
-
 		}
-
-		cout << "Finaliza iteracion: " << iteracion << " con " << distancia_maxima << endl;
+#ifdef _DEBUG
+		cout << "Finaliza iteracion: " << iteracion << " con "
+				<< distancia_maxima << endl;
+#endif
 	}
-
+#ifdef _DEBUG
 	for (int i = 0; i < clusters; i++) {
 		cout << "Cluster " << i << ":" << endl;
 
@@ -173,6 +172,7 @@ void Clusterizador::hacer_clusters() {
 			cout << clusters_nuevos[i][archivo] << endl;
 		}
 	}
+#endif
 }
 
 void Clusterizador::crearCarpeta(const string& path_carpeta) {
@@ -198,7 +198,7 @@ void Clusterizador::guardarClusters(const string& ruta_carp_cluster) {
 		for (size_t archivo = 0; archivo < clusters_nuevos[i].size();
 				archivo++) {
 			arch_cluster << clusters_nuevos[i][archivo] << std::endl;
-        }
+		}
 		arch_cluster.close();
 	}
 }

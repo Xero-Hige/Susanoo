@@ -122,7 +122,6 @@ int main(int argc, char **argv) {
 
 		case 'm':
 		case 'o':
-			printf("option %c with value '%s'\n", c, optarg);
 			break;
 
 		case 'h':
