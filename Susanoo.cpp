@@ -58,19 +58,21 @@ void clusterizar(int n_clusters, const vector<string>& archivos,
 	c.guardarClusters("./Clusters");
 }
 
-void indexar(char* optarg) {
-	string directorio = string(optarg);
+void indexar(const string& directorio, int numero_clusters) {
 	Vectorizador vectorizador = Vectorizador();
 	size_t dimensiones = 0;
 	vector<string> archivos = vectorizador.vectorizar(directorio, dimensiones);
-	clusterizar(sqrt(archivos.size()), archivos, dimensiones);
+
+	if (numero_clusters == 0) {
+		numero_clusters = sqrt(archivos.size());
+	}
+
+	clusterizar(numero_clusters, archivos, dimensiones);
 }
 
-//
-void agregar_archivo(char *optarg){
-  string archivo = string(optarg);
-  Vectorizador vectorizador = Vectorizador();
-  vectorizador.agregar_archivo(archivo);
+void agregar_archivo(const string& archivo) {
+	Vectorizador vectorizador = Vectorizador();
+	vectorizador.agregar_archivo(archivo);
 }
 
 int main(int argc, char **argv) {
@@ -78,12 +80,14 @@ int main(int argc, char **argv) {
 
 	int c;
 
-	static struct option long_options[] = { 
-    { "directorio", 1, 0, 0 },{"categorias", 1, 0, 0 }, 
-    { "multi", 1, 0, 0 }, { "agregar", 1, 0, 0 }, 
-    { "listar", 0, 0, 0 }, { "grupos", 0, 0, 0 }, 
-    { "help", 0, 0, 0 }, { NULL, 0, NULL, 0 } 
-  };
+	int cantidad = 0;
+	string directorio = "";
+	string archivo_agregar = "";
+
+	static struct option long_options[] = { { "directorio", 1, 0, 0 }, {
+			"categorias", 1, 0, 0 }, { "multi", 1, 0, 0 },
+			{ "agregar", 1, 0, 0 }, { "listar", 0, 0, 0 },
+			{ "grupos", 0, 0, 0 }, { "help", 0, 0, 0 }, { NULL, 0, NULL, 0 } };
 
 	int option_index = 0;
 
@@ -96,16 +100,15 @@ int main(int argc, char **argv) {
 		switch (c) {
 
 		case 'a':
-      printf("option %c with value '%s'\n", c, optarg);
-			agregar_archivo(optarg);
+			archivo_agregar = string(optarg);
 			break;
 
 		case 'c':
-			printf("option %c with value '%s'\n", c, optarg);
+			cantidad = atoi(optarg);
 			break;
 
 		case 'd':
-			indexar(optarg);
+			directorio = string(optarg);
 			break;
 
 		case 'g':
@@ -137,6 +140,12 @@ int main(int argc, char **argv) {
 		while (optind < argc)
 			printf("%s ", argv[optind++]);
 		printf("\n");
+	}
+
+	if (directorio != "") {
+		indexar(directorio, cantidad);
+	} else if (archivo_agregar != "") {
+		agregar_archivo(archivo_agregar);
 	}
 
 	return 0;
