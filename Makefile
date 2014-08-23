@@ -2,19 +2,18 @@ CC = gcc
 CFLAGS = -Wall -Wextra -g -pedantic
 CPPFLAGS = -Wall -Wextra -g -pedantic -lstdc++ -lm -std=c++11 -O3
 
-OBJECTS = vectorizador.o vector_modelo.o medidor_distancia.o clusterizador.o centroide.o
+OBJECTS = libstemmer.o vectorizador.o vector_modelo.o medidor_distancia.o clusterizador.o centroide.o
 
 all: Susanoo
 
-Snowball: Snowball/Makefile
-	cd ./Snowball	
-	make
-	cd ..
+libstemmer.o:
+	cp ./Snowball/include/libstemmer.h ./libstemmer.h
+	cp ./Snowball/libstemmer/libstemmer.o ./libstemmer.o
 	
 vector_modelo.o: vector_modelo.cpp vector_modelo.h
 	$(CC) $(CPPFLAGS) -c vector_modelo.cpp
 
-vectorizador.o: vectorizador.cpp vectorizador.h Snowball vector_modelo.o
+vectorizador.o: vectorizador.cpp vectorizador.h libstemmer.o vector_modelo.o
 	$(CC) $(CPPFLAGS) -c vectorizador.cpp
 
 medidor_distancia.o: medidor_distancia.cpp medidor_distancia.h
