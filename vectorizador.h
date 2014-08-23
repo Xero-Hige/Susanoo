@@ -27,11 +27,8 @@
 #include <string>
 #include <vector>
 
-//#include "vector_modelo.h"
-
 #define CARPETA_VECTORES "./temp_vects"
 #define EXTENSION_VECTORES  ".vec"
-
 
 typedef struct _coordenada {
 	int coordenada;
@@ -51,8 +48,8 @@ private:
 
 	std::map<std::string, int> coordenadas_vector;
 	// palabra y devuelve coordenada del vector, cantidad de claves es M
-  
-  size_t cantidad_documentos;
+
+	size_t cantidad_documentos;
 
 private:
 	void contar(const std::string& directorio, const std::string& archivo,
@@ -82,27 +79,27 @@ private:
 	// almacena el contenido del pesos_vector en el archivo abierto vect.
 	void guardar_vector(double modulo, std::vector<coordenada_t> &pesos_vector,
 			std::ofstream &vect);
-  
-  //
-  void separar_del_path(const std::string &arch_completo,
-                          std::string &path,
-                          std::string &archivo);
 
-  void almacenar_df();
-  
-  void cargar_df();
+	//
+	void separar_del_path(const std::string &arch_completo, std::string &path,
+			std::string &archivo);
+
+	void almacenar_df();
+
+	void cargar_df();
 
 public:
 
 	Vectorizador();
 
-	std::vector<std::string> vectorizar(const std::string& directorio, size_t& dimensiones);
+	std::vector<std::string> vectorizar(const std::string& directorio,
+			size_t& dimensiones);
 
-  //
-  void agregar_archivo(const std::string &path_archivo);
-  
- 	void obtener_archivos(std::string directorio,	std::vector<std::string>& archivos);
+	//
+	void agregar_archivo(const std::string &path_archivo);
 
+	void obtener_archivos(std::string directorio,
+			std::vector<std::string>& archivos);
 
 };
 #endif

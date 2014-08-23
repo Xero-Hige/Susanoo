@@ -2,18 +2,16 @@ CC = gcc
 CFLAGS = -Wall -Wextra -g -pedantic
 CPPFLAGS = -Wall -Wextra -g -pedantic -lstdc++ -lm -std=c++11 -O3
 
-OBJECTS = libstemmer.o vectorizador.o vector_modelo.o medidor_distancia.o clusterizador.o centroide.o
+STEMMER = ./Snowball/libstemmer/libstemmer.o
+
+OBJECTS = $(STEMMER) vectorizador.o vector_modelo.o medidor_distancia.o clusterizador.o centroide.o
 
 all: Susanoo
-
-libstemmer.o:
-	cp ./Snowball/include/libstemmer.h ./libstemmer.h
-	cp ./Snowball/libstemmer/libstemmer.o ./libstemmer.o
 	
 vector_modelo.o: vector_modelo.cpp vector_modelo.h
 	$(CC) $(CPPFLAGS) -c vector_modelo.cpp
 
-vectorizador.o: vectorizador.cpp vectorizador.h libstemmer.o vector_modelo.o
+vectorizador.o: vectorizador.cpp vectorizador.h $(STEMMER) vector_modelo.o
 	$(CC) $(CPPFLAGS) -c vectorizador.cpp
 
 medidor_distancia.o: medidor_distancia.cpp medidor_distancia.h
@@ -25,11 +23,11 @@ clusterizador.o: clusterizador.cpp clusterizador.h
 centroide.o: centroide.cpp centroide.h
 	$(CC) $(CPPFLAGS) -c centroide.cpp
 	
-Susanoo: Susanoo.cpp Snowball $(OBJECTS)
+Susanoo: Susanoo.cpp $(STEMMER) $(OBJECTS)
 	$(CC) $(CPPFLAGS) $(OBJECTS) Susanoo.cpp -o Susanoo
 
 clean:
-	rm -r *.o *.save *~ Susanoo temp temp_vects Centroide Clusters
+	rm -r *.o *.save *~ Susanoo temp temp_vects Centroide Clusters src_c
 
 clean-o:
 	rm -r *.o *~
