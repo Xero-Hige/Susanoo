@@ -27,8 +27,6 @@
 #include <ctime>
 #include <string>
 #include <vector>
-#include <string.h>
-#include <fstream>
 
 #include "clusterizador.h"
 #include "vectorizador.h"
@@ -38,7 +36,7 @@ using std::vector;
 
 void print_help() {
 	printf(
-			"Modo de uso: Susanoo [opciones] argumentos \n\n\
+			"Modo de uso: TpGrupoX [opciones] argumentos \n\n\
     *Opciones de construccion de grupos: \n\
         Opciones: --directorio|-d <path> --multi|-o <Y/N> [--categorias|-c] <cantidad>\n\
         [-d] Indica el path a donde están almacenados los documentos.\n\
@@ -50,40 +48,6 @@ void print_help() {
         [-g] Lista los grupos o categorías existentes y los documentos dentro de cada grupo o categoría.\n\
         [-a] Agrega y clasifica el texto pasado como parametro e indica a que grupo lo ha agregado\n\
              (a partir de aqui debería aparecer al listad con -l o -g)\n\n");
-}
-
-void cargar_vector(std::map<int, double>& coordenadas, std::string archivo) {
-	string path_archivo = "./temp_vects/" + archivo + ".vec";
-	std::ifstream arch(path_archivo.c_str(), std::ios::in | std::ios::binary);
-
-	int coordenada = 1;
-	double valor = 1;
-
-	int pos = arch.tellg();
-	if (arch.get() != EOF) {
-		arch.seekg(pos);
-	}
-	while (arch.good()) {
-		char buff_a[sizeof(int)];
-		char buff_b[sizeof(double)];
-
-		for (size_t i = 0; i < sizeof(int); i++) {
-			buff_a[i] = arch.get();
-		}
-		memcpy(&coordenada, buff_a, sizeof(int));
-
-		for (size_t i = 0; i < sizeof(double); i++) {
-			buff_b[i] = arch.get();
-		}
-		memcpy(&valor, buff_b, sizeof(double));
-
-		coordenadas[coordenada] = valor;
-
-		int pos = arch.tellg();
-		if (arch.get() != EOF) {
-			arch.seekg(pos);
-		}
-	}
 }
 
 void clusterizar(int n_clusters, const vector<string>& archivos,
@@ -106,38 +70,13 @@ void indexar(const string& directorio, int numero_clusters) {
 	clusterizar(numero_clusters, archivos, dimensiones);
 }
 
-string devolver_extension(const string arch) {
-	size_t separador = arch.find(".");
-	return arch.substr(separador, arch.size());
-}
-
 void agregar_archivo(const string& archivo) {
 	Vectorizador vectorizador = Vectorizador();
 	vectorizador.agregar_archivo(archivo);
-	vector<string> archivos_centroides;
-	vectorizador.obtener_archivos("./Centroides", archivos_centroides);
-	vector<Centroide> centroides;
-
-	double distancia = 0;
-	double temp = 0;
-	size_t subindice = 0;
-	std::map<int, double> vector;
-	cargar_vector(vector, archivo);
-
-	for (size_t i = 0; i < archivos_centroides.size(); i++) {
-		string extension = devolver_extension(archivos_centroides[i]);
-		if (extension == "vec") {
-			Centroide actual("./Centroides/" + archivos_centroides[i]);
-			centroides.push_back(actual);
-			temp = actual.calcular_coseno(vector);
-			if (temp >= distancia) {
-				distancia = temp;
-				subindice = i;
-			}
-		}
-	}
-	Centroide cercano = centroides[subindice];
-
+  vector<string> archivos_centroides;
+  vectorizador.obtener_archivos("./Centroides", archivos_centroides);
+  // vector<Centroide> centroides;
+  // cargar cada centroide
 }
 
 int main(int argc, char **argv) {
@@ -192,7 +131,7 @@ int main(int argc, char **argv) {
 
 		case 'h':
 			print_help();
-			return 0;
+			break;
 
 		case '?':
 			break;
@@ -217,7 +156,7 @@ int main(int argc, char **argv) {
 	} else if (g) {
 
 	} else {
-		printf("No hay opcion especificada. Utilice -h para ver la ayuda\n");
+		printf("No hay opcion especificada");
 	}
 
 	return 0;

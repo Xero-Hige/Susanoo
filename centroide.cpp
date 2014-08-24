@@ -20,14 +20,13 @@
 #include "centroide.h"
 
 #include <stddef.h>
+//#include <time.h>
 #include <cmath>
 #include <cstdlib>
 #include <iostream>
 #include <utility>
 #include <fstream>
 #include <sstream>
-#include <string.h>
-
 using std::map;
 using std::vector;
 using std::string;
@@ -36,7 +35,6 @@ using std::string;
 #define ASOCIADOS_EXT ".txt"
 #define CENTROIDE_STR "Centroide"
 #define CENTROIDE_EXT ".vec"
-#define BUFFSIZE 200
 
 Centroide::Centroide(int dimensiones, bool random) {
 	vector<double> coordenadas;
@@ -55,8 +53,7 @@ Centroide::Centroide(int dimensiones, bool random) {
 
 	modulo = sqrt(modulo);
 
-	//Si no es random el centroide no tiene vectores asociados
-	vectores_asociados = random ? 1 : 0; 
+	vectores_asociados = random ? 1 : 0;
 
 	double suma_acumulados_cuadrado = 0;
 
@@ -69,6 +66,8 @@ Centroide::Centroide(int dimensiones, bool random) {
 	} else {
 		acumulados = coordenadas;
 	}
+//
+//	modulo = sqrt(suma_acumulados_cuadrado);
 }
 
 double Centroide::calcular_coseno(map<int, double>& vector_reducido) {
@@ -83,6 +82,8 @@ double Centroide::calcular_coseno(map<int, double>& vector_reducido) {
 		modulo_vector += valor * valor;
 	}
     modulo_vector = sqrt(modulo_vector);
+
+    //std::cout << "Coseno V: " << resultado / (modulo * modulo_vector) << std::endl;
 
 	return (resultado / (modulo * modulo_vector));
 }
@@ -100,17 +101,22 @@ double Centroide::calcular_coseno(Centroide& otro_centroide) {
 	double mod_a = modulo;
 	double mod_b = otro_centroide.modulo;
 
+//	std::cout << "Coseno C: " <<(resultado / (mod_a * mod_b)) << std::endl;
+
 	return (resultado / (mod_a * mod_b));
 }
 
 void Centroide::agregar_vector(map<int, double>& vector_reducido) {
+//	std::cout << "init" << std::endl;
+//  suma_acumulados_cuadrado -= (anterior * anterior);
+//	double suma_acumulados_cuadrado = 0; //+= (actual * actual);
 
 	for (map<int, double>::iterator it = vector_reducido.begin();
 			it != vector_reducido.end(); ++it) {
 
 		int coordenada = it->first;
 		double valor = it->second;
-
+//    std::cout << "coordenada = " << coordenada << "                       valor = " << valor << std::endl;
 		acumulados[coordenada] += valor;
 	}
 	vectores_asociados++;
@@ -141,26 +147,6 @@ void Centroide::normalizar() {
 }
 
 
-Centroide::Centroide(const std::string& archivo){
-  std::ifstream arch_centroide;
-  std::cout << "archivo = " << archivo << std::endl;
-  arch_centroide.open(archivo.c_str(), std::ios::binary);
-
-  char buffer[BUFFSIZE];
-  
-  arch_centroide.getline(buffer, BUFFSIZE - 1);
-  memcpy(&vectores_asociados, buffer, sizeof(double));
-  arch_centroide.getline(buffer, BUFFSIZE - 1);
-  memcpy(&modulo, buffer, sizeof(double));  
-
-  while (arch_centroide.good()){
-    arch_centroide.getline(buffer, BUFFSIZE - 1);
-    double peso;
-    memcpy(&peso, buffer, sizeof(double));
-    acumulados.push_back(peso);
-  }
-  arch_centroide.close();
-}
 
 void Centroide::guardar(const string& ruta_carp_centroide, int nro_centroide) {
     normalizar();

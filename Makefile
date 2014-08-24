@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -g -pedantic
-CPPFLAGS = -Wall -Wextra -g -pedantic -lstdc++ -lm -std=c++11 -O3
+CPPFLAGS = -Wall -Wextra -g -pedantic -lstdc++ -lm -std=c++11 #-O3
 
 OBJECTS = Porter.o vectorizador.o vector_modelo.o medidor_distancia.o clusterizador.o centroide.o
 
@@ -28,7 +28,7 @@ Susanoo: Susanoo.cpp $(OBJECTS)
 	$(CC) $(CPPFLAGS) $(OBJECTS) Susanoo.cpp -o Susanoo
 
 clean:
-	rm -r *.o *.save *~ Susanoo temp temp_vects Centroide Clusters
+	rm -r *.o *.save *~ Susanoo temp temp_vects
 
 clean-o:
 	rm -r *.o *~
