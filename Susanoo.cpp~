@@ -115,9 +115,15 @@ string devolver_extension(const string arch) {
 void agregar_archivo(const string& archivo) {
 	Vectorizador vectorizador = Vectorizador();
 	vectorizador.agregar_archivo(archivo);
+<<<<<<< HEAD
+	vector<string> archivos_centroides;
+	vectorizador.obtener_archivos("./Centroides", archivos_centroides);
+	vector<Centroide> centroides;
+=======
 	vector < string > archivos_centroides;
 	vectorizador.obtener_archivos("./Centroides", archivos_centroides);
 	vector < Centroide > centroides;
+>>>>>>> Snowball-Tryout
 
 	double distancia = 0;
 	double temp = 0;
