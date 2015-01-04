@@ -24,8 +24,7 @@ double Medidor_Distancia::producto_interno(const std::vector<int>& vect_1,
 		const std::vector<int>& vect_2) {
 	double acumulador = 0;
 
-	for (size_t i=0; i<vect_1.size(); i++)
-	{
+	for (size_t i = 0; i < vect_1.size(); i++) {
 		acumulador += (vect_1[i] * vect_2[i]);
 	}
 
@@ -35,13 +34,13 @@ double Medidor_Distancia::producto_interno(const std::vector<int>& vect_1,
 double Medidor_Distancia::medir_distancia(const vector<int>& vect_1,
 		const vector<int>& vect_2) {
 
-		double producto = producto_interno(vect_1,vect_2);
-		double a_cuadrado = producto_interno(vect_1,vect_1);
-		double b_cuadrado = producto_interno(vect_2,vect_2);
+	double producto = producto_interno(vect_1, vect_2);
+	double a_cuadrado = producto_interno(vect_1, vect_1);
+	double b_cuadrado = producto_interno(vect_2, vect_2);
 
-		double a = sqrt (a_cuadrado);
-		double b = sqrt (b_cuadrado);
+	double a = sqrt(a_cuadrado);
+	double b = sqrt(b_cuadrado);
 
-		return (producto / (a*b));
+	return (producto / (a * b));
 
 }

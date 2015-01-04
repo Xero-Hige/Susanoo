@@ -15,7 +15,7 @@ vector_modelo.o: vector_modelo.cpp vector_modelo.h
 	$(CC) $(CPPFLAGS) -c vector_modelo.cpp
 
 vectorizador.o: vectorizador.cpp vectorizador.h libstemmer.o vector_modelo.o
-	$(CC) $(CPPFLAGS) -c  vectorizador.cpp
+	$(CC) $(CPPFLAGS) -c vectorizador.cpp
 
 medidor_distancia.o: medidor_distancia.cpp medidor_distancia.h
 	$(CC) $(CPPFLAGS) -c medidor_distancia.cpp

@@ -22,8 +22,6 @@
 #include <map>
 #include <string>
 #include <vector>
-#include <sstream>
-#include <fstream>
 
 #include "centroide.h"
 
@@ -44,16 +42,16 @@ class Clusterizador {
 
 private:
 	void cargar_vector(std::map<int, double>& coordenadas, std::string archivo);
-  void crearCarpeta(const std::string& path_carpeta);
-    
+	void crearCarpeta(const std::string& path_carpeta);
+
 public:
 	Clusterizador(int n_clusters, const std::string& carpeta_vectores,
 			const std::vector<std::string>& archivos, int dimensiones);
 	virtual ~Clusterizador();
 	void hacer_clusters();
 	void guardarClusters(const std::string& ruta_carp_cluster);
-  void cargarClusters(const std::string& ruta_carp_cluster);
-  void agregar_archivo(const std::string archivo);
+	void cargarClusters(const std::string& ruta_carp_cluster);
+	void agregar_archivo(const std::string archivo);
 };
 
 #endif /* CLUSTERIZADOR_H_ */

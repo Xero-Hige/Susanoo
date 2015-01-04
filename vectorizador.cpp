@@ -114,7 +114,7 @@ void Vectorizador::reducir_palabras(map<string, int>& palabras,
 			palabra = (unsigned char*) sb_stemmer_stem(z, palabra,
 					it->first.size());
 
-			res = string((char*)palabra);
+			res = string((char*) palabra);
 			reduccion_palabras[it->first] = res;
 		} else {
 			res = reduccion_palabras[it->first];
@@ -131,7 +131,7 @@ void Vectorizador::reducir_palabras(map<string, int>& palabras,
 		}
 	}
 
-    sb_stemmer_delete(z);
+	sb_stemmer_delete(z);
 }
 
 void Vectorizador::contar(const string& directorio, const string& archivo,

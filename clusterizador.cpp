@@ -59,7 +59,7 @@ Clusterizador::Clusterizador(int n_clusters, const string& carpeta_vectores,
 		centroides_nuevos.push_back(cent);
 	}
 
-	cout  << endl << "Fin inicializacion" << endl;
+	cout << endl << "Fin inicializacion" << endl;
 }
 
 Clusterizador::~Clusterizador() {
@@ -112,7 +112,7 @@ void Clusterizador::hacer_clusters() {
 
 #ifdef _DEBUG
 		cout << "Inicio teracion: " << ++iteracion << " con "
-				<< distancia_maxima << endl;
+		<< distancia_maxima << endl;
 #endif
 
 		distancia_maxima = 1.0 / 0.0;
@@ -151,7 +151,7 @@ void Clusterizador::hacer_clusters() {
 			double coseno = nuevo.calcular_coseno(viejo);
 
 			if (coseno <= distancia_maxima) {
-			//	cout << "Maximo centroide n:" << i << endl;
+				//	cout << "Maximo centroide n:" << i << endl;
 				distancia_maxima = coseno;
 			}
 
@@ -164,11 +164,13 @@ void Clusterizador::hacer_clusters() {
 //#endif
 	}
 	crearCarpeta(CENTROIDE_PATH);
-    for(int i = 0; i < clusters; i++) {
-        centroides_nuevos[i].guardar(CENTROIDE_PATH, i);
-        for (size_t archivo = 0; archivo < clusters_nuevos[i].size(); archivo++) {
-            centroides_nuevos[i].guardarAsociados(CENTROIDE_PATH, i, clusters_nuevos[i]);
-         }
+	for (int i = 0; i < clusters; i++) {
+		centroides_nuevos[i].guardar(CENTROIDE_PATH, i);
+		for (size_t archivo = 0; archivo < clusters_nuevos[i].size();
+				archivo++) {
+			centroides_nuevos[i].guardarAsociados(CENTROIDE_PATH, i,
+					clusters_nuevos[i]);
+		}
 	}
 }
 

@@ -39,7 +39,6 @@ private:
 	 * promedios al cuadrado
 	 */
 //	double suma_acumulados_cuadrado;
-
 	/**
 	 * Cantidad de vectores asociados
 	 */
@@ -54,7 +53,7 @@ public:
 
 	Centroide(int dimensiones, bool random = true);
 
-  Centroide(const std::string& archivo);
+	Centroide(const std::string& archivo);
 
 	/**
 	 * Calcula el coseno contra un vector representado por un map
@@ -74,7 +73,8 @@ public:
 
 	void guardar(const std::string& ruta_carp_centroide, int nro_centroide);
 
-	void guardarAsociados(const std::string& ruta_carp_centroide, int nro_centroide, std::vector<std::string> cluster);
+	void guardarAsociados(const std::string& ruta_carp_centroide,
+			int nro_centroide, std::vector<std::string> cluster);
 };
 
 #endif /* CENTROIDE_H_ */

@@ -56,7 +56,7 @@ Centroide::Centroide(int dimensiones, bool random) {
 	modulo = sqrt(modulo);
 
 	//Si no es random el centroide no tiene vectores asociados
-	vectores_asociados = random ? 1 : 0; 
+	vectores_asociados = random ? 1 : 0;
 
 	double suma_acumulados_cuadrado = 0;
 
@@ -82,7 +82,7 @@ double Centroide::calcular_coseno(map<int, double>& vector_reducido) {
 		resultado += ((acumulados[coordenada] / vectores_asociados) * valor);
 		modulo_vector += valor * valor;
 	}
-    modulo_vector = sqrt(modulo_vector);
+	modulo_vector = sqrt(modulo_vector);
 
 	return (resultado / (modulo * modulo_vector));
 }
@@ -118,8 +118,8 @@ void Centroide::agregar_vector(map<int, double>& vector_reducido) {
 	modulo = 0;
 	for (size_t i = 0; i < acumulados.size(); i++) {
 		double agregar = acumulados[i] / vectores_asociados;
-        agregar = (agregar * agregar);
-        modulo += agregar;
+		agregar = (agregar * agregar);
+		modulo += agregar;
 	}
 
 	modulo = sqrt(modulo);
@@ -133,51 +133,50 @@ void Centroide::normalizar() {
 	for (size_t i = 0; i < acumulados.size(); i++) {
 		double valor = acumulados[i] / vectores_asociados;
 		acumulados[i] = valor;
-		modulo += (valor*valor);
+		modulo += (valor * valor);
 	}
 
 	modulo = sqrt(modulo);
 	vectores_asociados = 1;
 }
 
+Centroide::Centroide(const std::string& archivo) {
+	std::ifstream arch_centroide;
+	std::cout << "archivo = " << archivo << std::endl;
+	arch_centroide.open(archivo.c_str(), std::ios::binary);
 
-Centroide::Centroide(const std::string& archivo){
-  std::ifstream arch_centroide;
-  std::cout << "archivo = " << archivo << std::endl;
-  arch_centroide.open(archivo.c_str(), std::ios::binary);
+	char buffer[BUFFSIZE];
 
-  char buffer[BUFFSIZE];
-  
-  arch_centroide.getline(buffer, BUFFSIZE - 1);
-  memcpy(&vectores_asociados, buffer, sizeof(double));
-  arch_centroide.getline(buffer, BUFFSIZE - 1);
-  memcpy(&modulo, buffer, sizeof(double));  
+	arch_centroide.getline(buffer, BUFFSIZE - 1);
+	memcpy(&vectores_asociados, buffer, sizeof(double));
+	arch_centroide.getline(buffer, BUFFSIZE - 1);
+	memcpy(&modulo, buffer, sizeof(double));
 
-  while (arch_centroide.good()){
-    arch_centroide.getline(buffer, BUFFSIZE - 1);
-    double peso;
-    memcpy(&peso, buffer, sizeof(double));
-    acumulados.push_back(peso);
-  }
-  arch_centroide.close();
+	while (arch_centroide.good()) {
+		arch_centroide.getline(buffer, BUFFSIZE - 1);
+		double peso;
+		memcpy(&peso, buffer, sizeof(double));
+		acumulados.push_back(peso);
+	}
+	arch_centroide.close();
 }
 
 void Centroide::guardar(const string& ruta_carp_centroide, int nro_centroide) {
-    normalizar();
+	normalizar();
 
-    std::ofstream arch_centroide;
-    std::stringstream ss;
-    ss << nro_centroide;
-    string ruta_centroide = ruta_carp_centroide;
-    ruta_centroide += "/";
-    ruta_centroide += CENTROIDE_STR + ss.str();
-    ruta_centroide += CENTROIDE_EXT;
-    arch_centroide.open(ruta_centroide.c_str(),  std::ios::out | std::ios::binary);
+	std::ofstream arch_centroide;
+	std::stringstream ss;
+	ss << nro_centroide;
+	string ruta_centroide = ruta_carp_centroide;
+	ruta_centroide += "/";
+	ruta_centroide += CENTROIDE_STR + ss.str();
+	ruta_centroide += CENTROIDE_EXT;
+	arch_centroide.open(ruta_centroide.c_str(),
+			std::ios::out | std::ios::binary);
 
-
-    arch_centroide << vectores_asociados << "-" << modulo;
-    arch_centroide.write((char*) &vectores_asociados, sizeof(double));
-    arch_centroide.write((char*) &modulo, sizeof(double));
+	arch_centroide << vectores_asociados << "-" << modulo;
+	arch_centroide.write((char*) &vectores_asociados, sizeof(double));
+	arch_centroide.write((char*) &modulo, sizeof(double));
 
 	for (size_t i = 0; i < acumulados.size(); i++) {
 		arch_centroide << acumulados[i] << std::endl;
@@ -187,15 +186,16 @@ void Centroide::guardar(const string& ruta_carp_centroide, int nro_centroide) {
 	arch_centroide.close();
 }
 
-void Centroide::guardarAsociados(const string& ruta_carp_centroide, int nro_centroide, std::vector<std::string> cluster) {
-    std::ofstream arch_asociados;
-    std::stringstream ss;
-    ss << nro_centroide;
-    string ruta_asociados = ruta_carp_centroide;
-    ruta_asociados += "/";
-    ruta_asociados += ASOCIADOS_STR + ss.str();
-    ruta_asociados += ASOCIADOS_EXT;
-    arch_asociados.open(ruta_asociados.c_str(), std::ios::binary);
+void Centroide::guardarAsociados(const string& ruta_carp_centroide,
+		int nro_centroide, std::vector<std::string> cluster) {
+	std::ofstream arch_asociados;
+	std::stringstream ss;
+	ss << nro_centroide;
+	string ruta_asociados = ruta_carp_centroide;
+	ruta_asociados += "/";
+	ruta_asociados += ASOCIADOS_STR + ss.str();
+	ruta_asociados += ASOCIADOS_EXT;
+	arch_asociados.open(ruta_asociados.c_str(), std::ios::binary);
 
 	for (size_t i = 0; i < cluster.size(); i++) {
 		arch_asociados << cluster[i] << std::endl;

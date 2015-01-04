@@ -26,12 +26,12 @@
 
 class Vector_Modelo {
 private:
-	std::map<std::string,int> _coordenadas;
+	std::map<std::string, int> _coordenadas;
 
 public:
 	Vector_Modelo(std::vector<std::string>& coordenadas);
 	void guardar_en_archivo(std::ofstream& salida);
-	void set_coordenada(std::string coordenada,int valor);
+	void set_coordenada(std::string coordenada, int valor);
 };
 
 #endif /* VECTORMODELO_H_ */

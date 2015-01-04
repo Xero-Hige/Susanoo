@@ -25,22 +25,22 @@ using std::map;
 using std::endl;
 
 Vector_Modelo::Vector_Modelo(vector<string>& coordenadas) {
-	for (size_t i = 0; i<coordenadas.size();i++)
-	{
+	for (size_t i = 0; i < coordenadas.size(); i++) {
 		_coordenadas[coordenadas[i]] = 0;
 	}
 
 }
 
 void Vector_Modelo::guardar_en_archivo(ofstream& salida) {
-	for (map<string, int>::iterator it = _coordenadas.begin(); it != _coordenadas.end();
-				++it) {
+	for (map<string, int>::iterator it = _coordenadas.begin();
+			it != _coordenadas.end(); ++it) {
 		salida << _coordenadas[it->first] << endl;
 	}
 }
 
-void Vector_Modelo::set_coordenada(string coordenada,int valor) {
+void Vector_Modelo::set_coordenada(string coordenada, int valor) {
 	//Si no existe en el vector como coordenada no lo agrega
-	if (_coordenadas.count(coordenada) == 0) return;
+	if (_coordenadas.count(coordenada) == 0)
+		return;
 	_coordenadas[coordenada] = valor;
 }
