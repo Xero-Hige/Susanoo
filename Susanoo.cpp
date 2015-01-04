@@ -97,7 +97,8 @@ void clusterizar(int n_clusters, const vector<string>& archivos,
 void indexar(const string& directorio, int numero_clusters) {
 	Vectorizador vectorizador = Vectorizador();
 	size_t dimensiones = 0;
-	vector<string> archivos = vectorizador.vectorizar(directorio, dimensiones);
+	vector < string > archivos = vectorizador.vectorizar(directorio,
+			dimensiones);
 
 	if (numero_clusters == 0) {
 		numero_clusters = sqrt(archivos.size());
@@ -114,9 +115,9 @@ string devolver_extension(const string arch) {
 void agregar_archivo(const string& archivo) {
 	Vectorizador vectorizador = Vectorizador();
 	vectorizador.agregar_archivo(archivo);
-	vector<string> archivos_centroides;
+	vector < string > archivos_centroides;
 	vectorizador.obtener_archivos("./Centroides", archivos_centroides);
-	vector<Centroide> centroides;
+	vector < Centroide > centroides;
 
 	double distancia = 0;
 	double temp = 0;
@@ -141,9 +142,9 @@ void agregar_archivo(const string& archivo) {
 }
 
 int main(int argc, char **argv) {
-	srand(time(NULL)); //inicializo el random
+	srand (time(NULL)); //inicializo el random -->Esto aca no va
 
-	int c;
+	int	c;
 
 	int cantidad = 0;
 	string directorio = "";
@@ -151,10 +152,10 @@ int main(int argc, char **argv) {
 	bool l = false;
 	bool g = false;
 
-	static struct option long_options[] = { { "directorio", 1, 0, 0 }, {
-			"categorias", 1, 0, 0 }, { "multi", 1, 0, 0 },
-			{ "agregar", 1, 0, 0 }, { "listar", 0, 0, 0 },
-			{ "grupos", 0, 0, 0 }, { "help", 0, 0, 0 }, { NULL, 0, NULL, 0 } };
+	static struct option long_options[] = { {"directorio", 1, 0, 0}, {
+			"categorias", 1, 0, 0}, {"multi", 1, 0, 0},
+			{	"agregar", 1, 0, 0}, {"listar", 0, 0, 0},
+			{	"grupos", 0, 0, 0}, {"help", 0, 0, 0}, {NULL, 0, NULL, 0}};
 
 	int option_index = 0;
 
