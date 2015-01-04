@@ -61,7 +61,8 @@ void clusterizar(int n_clusters, const vector<string>& archivos,
 void indexar(const string& directorio, int numero_clusters) {
 	Vectorizador vectorizador = Vectorizador();
 	size_t dimensiones = 0;
-	vector<string> archivos = vectorizador.vectorizar(directorio, dimensiones);
+	vector < string > archivos = vectorizador.vectorizar(directorio,
+			dimensiones);
 
 	if (numero_clusters == 0) {
 		numero_clusters = sqrt(archivos.size());
@@ -73,16 +74,35 @@ void indexar(const string& directorio, int numero_clusters) {
 void agregar_archivo(const string& archivo) {
 	Vectorizador vectorizador = Vectorizador();
 	vectorizador.agregar_archivo(archivo);
-  vector<string> archivos_centroides;
-  vectorizador.obtener_archivos("./Centroides", archivos_centroides);
-  // vector<Centroide> centroides;
-  // cargar cada centroide
+	vector < string > archivos_centroides;
+	vectorizador.obtener_archivos("./Centroides", archivos_centroides);
+	vector < Centroide > centroides;
+
+	double distancia = 0;
+	double temp = 0;
+	size_t subindice = 0;
+	std::map<int, double> vector;
+	cargar_vector(vector, archivo);
+
+	for (size_t i = 0; i < archivos_centroides.size(); i++) {
+		string extension = devolver_extension(archivos_centroides[i]);
+		if (extension == "vec") {
+			Centroide actual("./Centroides/" + archivos_centroides[i]);
+			centroides.push_back(actual);
+			temp = actual.calcular_coseno(vector);
+			if (temp >= distancia) {
+				distancia = temp;
+				subindice = i;
+			}
+		}
+	}
+	Centroide cercano = centroides[subindice];
 }
 
 int main(int argc, char **argv) {
-	srand(time(NULL)); //inicializo el random
+	srand (time(NULL)); //inicializo el random -->Esto aca no va
 
-	int c;
+	int	c;
 
 	int cantidad = 0;
 	string directorio = "";
@@ -90,10 +110,10 @@ int main(int argc, char **argv) {
 	bool l = false;
 	bool g = false;
 
-	static struct option long_options[] = { { "directorio", 1, 0, 0 }, {
-			"categorias", 1, 0, 0 }, { "multi", 1, 0, 0 },
-			{ "agregar", 1, 0, 0 }, { "listar", 0, 0, 0 },
-			{ "grupos", 0, 0, 0 }, { "help", 0, 0, 0 }, { NULL, 0, NULL, 0 } };
+	static struct option long_options[] = { {"directorio", 1, 0, 0}, {
+			"categorias", 1, 0, 0}, {"multi", 1, 0, 0},
+			{	"agregar", 1, 0, 0}, {"listar", 0, 0, 0},
+			{	"grupos", 0, 0, 0}, {"help", 0, 0, 0}, {NULL, 0, NULL, 0}};
 
 	int option_index = 0;
 
